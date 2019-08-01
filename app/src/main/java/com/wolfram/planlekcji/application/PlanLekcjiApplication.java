@@ -1,8 +1,14 @@
 package com.wolfram.planlekcji.application;
 
 import android.app.Application;
+import android.os.AsyncTask;
+import android.util.Log;
 
 import com.wolfram.planlekcji.database.AppDatabase;
+import com.wolfram.planlekcji.database.UserDao;
+import com.wolfram.planlekcji.database.entities.Subject;
+
+import java.io.File;
 
 /**
  * @author Wolfram
@@ -12,6 +18,20 @@ public class PlanLekcjiApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        AppDatabase.getInstance(getApplicationContext());
+        AppDatabase appDatabase = AppDatabase.getInstance(getApplicationContext());
+
+        File dbFile = getApplicationContext().getDatabasePath(AppDatabase.APPDATABASE_NAME);
+
+        Log.e("exist","");
+
+        if (!dbFile.exists()) {
+            Log.e("exist","");
+            AsyncTask.execute(() -> {
+                UserDao dao = appDatabase.getUserDao();
+
+            });
+        }
+
+
     }
 }

@@ -1,7 +1,7 @@
 package com.wolfram.planlekcji.database.entities;
 
-import java.sql.Time;
-
+import androidx.room.ColumnInfo;
+import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -9,17 +9,20 @@ import androidx.room.PrimaryKey;
  * @author Wolfram
  * @date 2019-07-31
  */
-@Entity
+@Entity(tableName = "subjects")
 public class Subject {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    @PrimaryKey
+    @ColumnInfo(name = "id")
+    private Integer subject_id;
 
     private String subject;
 
     private String teacher;
 
+    @Embedded(prefix = "start_")
     private Time start_time;
 
+    @Embedded(prefix = "end_")
     private Time end_time;
 
     private String localization; //make second table in relation with this
@@ -28,15 +31,40 @@ public class Subject {
 
     private String type;
 
-    public Subject() {
+    public Subject(){
+
     }
 
-    public int getId() {
-        return id;
+    public Subject(Integer s) {
+        this.subject = "Matematyka";
+        this.teacher = "cwel";
+        this.start_time = new Time(13,15);
+        this.end_time = new Time(14,0);
+        this.localization = "B4";
+        this.additional_info = "cos";
+        this.type = "audytoria";
     }
 
-    public void setId(int id) {
-        this.id = id;
+    @Override
+    public String toString() {
+        return "Subject{" +
+                "subject_id=" + subject_id +
+                ", subject='" + subject + '\'' +
+                ", teacher='" + teacher + '\'' +
+                ", start_time=" + start_time +
+                ", end_time=" + end_time +
+                ", localization='" + localization + '\'' +
+                ", additional_info='" + additional_info + '\'' +
+                ", type='" + type + '\'' +
+                '}';
+    }
+
+    public Integer getSubject_id() {
+        return subject_id;
+    }
+
+    public void setSubject_id(Integer subject_id) {
+        this.subject_id = subject_id;
     }
 
     public String getSubject() {
