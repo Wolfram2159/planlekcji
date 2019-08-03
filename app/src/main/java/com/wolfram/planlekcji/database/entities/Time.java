@@ -15,7 +15,10 @@ public class Time {
 
     @Override
     public String toString() {
-        return hour + ":" + minute;
+        if (minute <= 9)
+            return hour + ":0" + minute;
+        else
+            return hour + ":" + minute;
     }
 
     public int getHour() {

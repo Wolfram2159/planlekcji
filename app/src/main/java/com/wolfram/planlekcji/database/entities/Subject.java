@@ -17,7 +17,7 @@ public class Subject {
 
     private String subject;
 
-    private String teacher;
+    //private String teacher;
 
     @Embedded(prefix = "start_")
     private Time start_time;
@@ -37,7 +37,7 @@ public class Subject {
 
     public Subject(Integer s) {
         this.subject = "Matematyka";
-        this.teacher = "cwel";
+        //this.teacher = "cwel";
         this.start_time = new Time(13,15);
         this.end_time = new Time(14,0);
         this.localization = "B4";
@@ -50,7 +50,7 @@ public class Subject {
         return "Subject{" +
                 "subject_id=" + subject_id +
                 ", subject='" + subject + '\'' +
-                ", teacher='" + teacher + '\'' +
+                //", teacher='" + teacher + '\'' +
                 ", start_time=" + start_time +
                 ", end_time=" + end_time +
                 ", localization='" + localization + '\'' +
@@ -75,13 +75,13 @@ public class Subject {
         this.subject = subject;
     }
 
-    public String getTeacher() {
+    /*public String getTeacher() {
         return teacher;
     }
 
     public void setTeacher(String teacher) {
         this.teacher = teacher;
-    }
+    }*/
 
     public Time getStart_time() {
         return start_time;

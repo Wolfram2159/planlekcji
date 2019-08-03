@@ -9,6 +9,7 @@ import com.wolfram.planlekcji.database.AppDatabase;
 import com.wolfram.planlekcji.database.UserDao;
 import com.wolfram.planlekcji.database.entities.Grade;
 import com.wolfram.planlekcji.database.entities.Subject;
+import com.wolfram.planlekcji.dialogs.SimpleDialog;
 
 import java.util.Date;
 import java.util.List;
@@ -29,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
 
         Button btn = findViewById(R.id.button);
 
+        d.setHours(15);
+        d.setMinutes(0);
+
         AsyncTask.execute(()->{
             dao.setSubject(new Subject(1));
             dao.setSubject(new Subject(3));
@@ -39,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btn.setOnClickListener((v) -> {
-            Log.w("date", d.toString());
+            Log.w("date", ""+d+"");
             LiveData<List<Subject>> sub = dao.getSubjects();
             sub.observe(this, subjects -> {
                 Log.e("subject_size", "" + subjects.size() + "");
@@ -54,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
                     Log.e("grade", grade.toString());
                 }
             });
+            SimpleDialog dialog = new SimpleDialog();
+            dialog.show(getSupportFragmentManager(), "Dialog");
         });
 
 
