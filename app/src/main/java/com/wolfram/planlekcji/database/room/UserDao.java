@@ -1,7 +1,7 @@
-package com.wolfram.planlekcji.database;
+package com.wolfram.planlekcji.database.room;
 
-import com.wolfram.planlekcji.database.entities.Grade;
-import com.wolfram.planlekcji.database.entities.Subject;
+import com.wolfram.planlekcji.database.room.entities.Grade;
+import com.wolfram.planlekcji.database.room.entities.Subject;
 
 import java.util.List;
 

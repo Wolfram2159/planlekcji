@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/root_item">
+
+    <ImageView
+        android:id="@+id/item_logo"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/star_on"/>
+
+    <TextView
+        android:id="@+id/item_subject"
+        style="@style/item"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/item_logo"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Matematyka"/>
+
+    <TextView
+        android:id="@+id/item_time"
+        style="@style/secondaryItem"
+        android:layout_width="wrap_content"
+        android:layout_height="22dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="24dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/item_localization"
+        app:layout_constraintStart_toEndOf="@+id/item_logo"
+        app:layout_constraintTop_toTopOf="@+id/guideline"
+        tools:text="13:15 - 14:00"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.51"/>
+
+    <TextView
+        android:id="@+id/item_localization"
+        style="@style/secondaryItem"
+        android:layout_width="wrap_content"
+        android:layout_height="22dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/item_time"
+        app:layout_constraintTop_toTopOf="@+id/guideline"
+        tools:text="s. 112"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

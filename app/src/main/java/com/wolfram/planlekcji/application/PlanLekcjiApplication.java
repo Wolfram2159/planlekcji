@@ -4,9 +4,8 @@ import android.app.Application;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.wolfram.planlekcji.database.AppDatabase;
-import com.wolfram.planlekcji.database.UserDao;
-import com.wolfram.planlekcji.database.entities.Subject;
+import com.wolfram.planlekcji.database.room.AppDatabase;
+import com.wolfram.planlekcji.database.room.UserDao;
 
 import java.io.File;
 

@@ -1,4 +1,4 @@
-package com.wolfram.planlekcji.database.entities;
+package com.wolfram.planlekcji.database.room.entities;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Embedded;
@@ -27,7 +27,9 @@ public class Subject {
 
     private String localization; //make second table in relation with this
 
-    private String additional_info;
+    private String additional_info; //consider this field
+
+    //private DayOfWeek day;
 
     private String type;
 
@@ -35,14 +37,13 @@ public class Subject {
 
     }
 
-    public Subject(Integer s) {
-        this.subject = "Matematyka";
-        //this.teacher = "cwel";
-        this.start_time = new Time(13,15);
-        this.end_time = new Time(14,0);
-        this.localization = "B4";
-        this.additional_info = "cos";
-        this.type = "audytoria";
+    public Subject(String subject, Time start_time, Time end_time, String localization, String additional_info, String type) {
+        this.subject = subject;
+        this.start_time = start_time;
+        this.end_time = end_time;
+        this.localization = localization;
+        this.additional_info = additional_info;
+        this.type = type;
     }
 
     @Override
@@ -57,6 +58,10 @@ public class Subject {
                 ", additional_info='" + additional_info + '\'' +
                 ", type='" + type + '\'' +
                 '}';
+    }
+
+    public String getTimeString(){
+        return start_time.toString() + " - " + end_time.toString();
     }
 
     public Integer getSubject_id() {

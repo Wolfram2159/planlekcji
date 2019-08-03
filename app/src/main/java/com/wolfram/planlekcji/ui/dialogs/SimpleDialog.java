@@ -1,4 +1,4 @@
-package com.wolfram.planlekcji.dialogs;
+package com.wolfram.planlekcji.ui.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

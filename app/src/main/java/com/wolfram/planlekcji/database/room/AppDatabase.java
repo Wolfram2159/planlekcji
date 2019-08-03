@@ -1,9 +1,9 @@
-package com.wolfram.planlekcji.database;
+package com.wolfram.planlekcji.database.room;
 
 import android.content.Context;
 
-import com.wolfram.planlekcji.database.entities.Grade;
-import com.wolfram.planlekcji.database.entities.Subject;
+import com.wolfram.planlekcji.database.room.entities.Grade;
+import com.wolfram.planlekcji.database.room.entities.Subject;
 
 import androidx.room.Database;
 import androidx.room.Ignore;

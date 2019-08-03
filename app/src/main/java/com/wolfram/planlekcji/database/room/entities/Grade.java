@@ -1,4 +1,4 @@
-package com.wolfram.planlekcji.database.entities;
+package com.wolfram.planlekcji.database.room.entities;
 
 import java.util.Date;
 

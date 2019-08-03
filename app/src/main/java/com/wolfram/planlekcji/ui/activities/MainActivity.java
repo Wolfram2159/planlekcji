@@ -1,30 +1,45 @@
-package com.wolfram.planlekcji;
+package com.wolfram.planlekcji.ui.activities;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Button;
+import android.view.LayoutInflater;
 
-import com.wolfram.planlekcji.database.AppDatabase;
-import com.wolfram.planlekcji.database.UserDao;
-import com.wolfram.planlekcji.database.entities.Grade;
-import com.wolfram.planlekcji.database.entities.Subject;
-import com.wolfram.planlekcji.dialogs.SimpleDialog;
+import com.wolfram.planlekcji.R;
+import com.wolfram.planlekcji.adapters.SubjectAdapter;
+import com.wolfram.planlekcji.database.Database;
+import com.wolfram.planlekcji.database.mock.MockDatabase;
+import com.wolfram.planlekcji.database.room.entities.Subject;
 
-import java.util.Date;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class MainActivity extends AppCompatActivity {
 
+    private RecyclerView recycler;
+    private LayoutInflater layoutInflater;
+    private SubjectAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.subjects_activity);
 
-        UserDao dao = AppDatabase.getInstance(getApplicationContext()).getUserDao();
+        recycler = findViewById(R.id.subjects_recycler);
+        layoutInflater = getLayoutInflater();
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+
+        recycler.setLayoutManager(layoutManager);
+
+        Database db = new MockDatabase();
+
+        List<Subject> data = db.getSubjectList();
+
+        adapter = new SubjectAdapter(layoutInflater, data);
+
+        recycler.setAdapter(adapter);
+        /*UserDao dao = AppDatabase.getInstance(getApplicationContext()).getUserDao();
 
         Date d = new Date();
 
@@ -32,17 +47,17 @@ public class MainActivity extends AppCompatActivity {
 
         d.setHours(15);
         d.setMinutes(0);
-
-        AsyncTask.execute(()->{
+*/
+        /*AsyncTask.execute(()->{
             dao.setSubject(new Subject(1));
             dao.setSubject(new Subject(3));
             dao.setGrade(new Grade(1));
             dao.setGrade(new Grade(2));
             dao.setGrade(new Grade(2));
             //dao.setGrade(new Grade(10));
-        });
+        });*/
 
-        btn.setOnClickListener((v) -> {
+        /*btn.setOnClickListener((v) -> {
             Log.w("date", ""+d+"");
             LiveData<List<Subject>> sub = dao.getSubjects();
             sub.observe(this, subjects -> {
@@ -60,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             });
             SimpleDialog dialog = new SimpleDialog();
             dialog.show(getSupportFragmentManager(), "Dialog");
-        });
+        });*/
 
 
         /*sub.observe(this, (list) -> {
