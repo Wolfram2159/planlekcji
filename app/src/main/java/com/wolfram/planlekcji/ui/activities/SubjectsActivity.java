@@ -3,6 +3,8 @@ package com.wolfram.planlekcji.ui.activities;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.adapters.SubjectAdapter;
 import com.wolfram.planlekcji.database.Database;
@@ -15,11 +17,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class MainActivity extends AppCompatActivity {
+public class SubjectsActivity extends AppCompatActivity {
 
     private RecyclerView recycler;
     private LayoutInflater layoutInflater;
     private SubjectAdapter adapter;
+
+    private FloatingActionButton fab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +44,14 @@ public class MainActivity extends AppCompatActivity {
         adapter = new SubjectAdapter(layoutInflater, data);
 
         recycler.setAdapter(adapter);
+
+        fab = findViewById(R.id.subjects_fab);
+
+        fab.setOnClickListener((v)->{
+            Snackbar.make(findViewById(R.id.root_subjects), "Successfuly added new record!", Snackbar.LENGTH_LONG).show();
+        });
+
+
         /*UserDao dao = AppDatabase.getInstance(getApplicationContext()).getUserDao();
 
         Date d = new Date();
