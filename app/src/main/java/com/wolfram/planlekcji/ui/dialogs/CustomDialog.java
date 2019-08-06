@@ -14,7 +14,7 @@ import androidx.fragment.app.DialogFragment;
  * @author Wolfram
  * @date 2019-08-05
  */
-public abstract class DialogCreator extends DialogFragment {
+public abstract class CustomDialog extends DialogFragment {
 
     //Wzorzec - Metoda Szablonowa ? :)
 

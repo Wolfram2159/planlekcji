@@ -1,6 +1,5 @@
 package com.wolfram.planlekcji.database.room;
 
-import com.wolfram.planlekcji.database.room.entities.Grade;
 import com.wolfram.planlekcji.database.room.entities.Subject;
 
 import java.util.List;
@@ -19,12 +18,12 @@ public interface UserDao {
     @Query("SELECT * FROM subjects")
     LiveData<List<Subject>> getSubjects();
 
-    @Query("SELECT * FROM grades")
-    LiveData<List<Grade>> getGrades();
+    /*@Query("SELECT * FROM grades")
+    LiveData<List<Grade>> getGrades();*/
 
     @Insert
-    void setSubject(Subject s);
+    void insertSubject(Subject s);
 
-    @Insert
-    void setGrade(Grade g);
+    /*@Insert
+    void setGrade(Grade g);*/
 }

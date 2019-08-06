@@ -2,58 +2,62 @@ package com.wolfram.planlekcji.ui.activities;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.adapters.SubjectAdapter;
-import com.wolfram.planlekcji.database.Database;
-import com.wolfram.planlekcji.database.mock.MockDatabase;
 import com.wolfram.planlekcji.database.room.entities.Subject;
 import com.wolfram.planlekcji.ui.dialogs.AddingSubjectDialog;
 
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class SubjectsActivity extends AppCompatActivity {
 
-
-    private RecyclerView recycler;
-    private LayoutInflater layoutInflater;
-    private SubjectAdapter adapter;
-
-    private FloatingActionButton fab;
-
+    @BindView(R.id.subjects_fab)
+    FloatingActionButton fab;
+    @BindView(R.id.subjects_recycler)
+    RecyclerView recycler;
+    @BindView(R.id.root_subjects)
+    ConstraintLayout root;
+    @OnClick(R.id.subjects_fab)
+    void onClick(View view){
+        DialogFragment dialog = new AddingSubjectDialog(viewModel, value -> {
+            Snackbar sn = Snackbar.make(root, value, Snackbar.LENGTH_LONG);
+            sn.show();
+        });
+        dialog.show(getSupportFragmentManager(), "Dialog");
+    }
+    private SubjectsViewModel viewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.subjects_activity);
+        ButterKnife.bind(this);
 
-        recycler = findViewById(R.id.subjects_recycler);
-        layoutInflater = getLayoutInflater();
+        viewModel = ViewModelProviders.of(this).get(SubjectsViewModel.class);
 
+        LayoutInflater layoutInflater = getLayoutInflater();
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-
         recycler.setLayoutManager(layoutManager);
 
-        Database db = new MockDatabase();
+        LiveData<List<Subject>> subjectList = viewModel.getSubjects();
 
-        List<Subject> data = db.getSubjectList();
-
-        adapter = new SubjectAdapter(layoutInflater, data);
-
-        recycler.setAdapter(adapter);
-
-        fab = findViewById(R.id.subjects_fab);
-
-        DialogFragment dialog = new AddingSubjectDialog();
-
-        fab.setOnClickListener((v)->{
-            dialog.show(getSupportFragmentManager(), "Dialog");
-        });
-
+        subjectList.observe(this, (subjects -> {
+            SubjectAdapter adapter = new SubjectAdapter(layoutInflater, subjects);
+            recycler.setAdapter(adapter);
+        }));
     }
 }

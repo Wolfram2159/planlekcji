@@ -54,4 +54,29 @@
         app:layout_constraintStart_toEndOf="@+id/subject_time_start"
         app:layout_constraintTop_toBottomOf="@+id/subject_name"/>
 
+    <Spinner
+        android:id="@+id/subject_day"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subject_time_end"/>
+
+    <com.reginald.editspinner.EditSpinner
+        android:id="@+id/subject_localization"
+        android:text="Localization"
+        android:gravity="center"
+        app:dropDownDrawable="@drawable/plus"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subject_day"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

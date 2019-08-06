@@ -1,4 +1,4 @@
-package com.wolfram.planlekcji.database;
+package com.wolfram.planlekcji.database.mock;
 
 import com.wolfram.planlekcji.database.room.entities.Grade;
 import com.wolfram.planlekcji.database.room.entities.Subject;

@@ -2,7 +2,6 @@ package com.wolfram.planlekcji.database.room;
 
 import android.content.Context;
 
-import com.wolfram.planlekcji.database.room.entities.Grade;
 import com.wolfram.planlekcji.database.room.entities.Subject;
 
 import androidx.room.Database;
@@ -13,7 +12,7 @@ import androidx.room.RoomDatabase;
  * @author Wolfram
  * @date 2019-07-31
  */
-@Database(entities = {Subject.class, Grade.class}, version = 1)
+@Database(entities = {Subject.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
     @Ignore
     public final static String APPDATABASE_NAME = "plan.db";

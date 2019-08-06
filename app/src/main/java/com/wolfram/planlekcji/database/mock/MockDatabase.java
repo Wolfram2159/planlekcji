@@ -1,9 +1,9 @@
 package com.wolfram.planlekcji.database.mock;
 
-import com.wolfram.planlekcji.database.Database;
 import com.wolfram.planlekcji.database.room.entities.Grade;
 import com.wolfram.planlekcji.database.room.entities.Subject;
 import com.wolfram.planlekcji.database.room.entities.Time;
+import com.wolfram.planlekcji.utils.enums.Day;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,18 +45,11 @@ public class MockDatabase implements Database {
             "s. 712"
     };
 
-    private final String[] addInfoArray = new String[]{
-            "",
-            "",
-            "",
-            "",
-    };
-
-    private final String[] typeArray = new String[]{
-            "Ćwiczenia audytoryjne",
-            "Ćwiczenia laboratoryjne",
-            "Lekcja",
-            "Ćwiczenia projektowe"
+    private final Day[] dayArray = new Day[]{
+            Day.Monday,
+            Day.Thursday,
+            Day.Wednesday,
+            Day.Friday
     };
 
     @Override
@@ -71,8 +64,7 @@ public class MockDatabase implements Database {
                     startTimeArray[randomNumber],
                     endTimeArray[randomNumber],
                     localizationArray[randomNumber],
-                    addInfoArray[randomNumber],
-                    typeArray[randomNumber]
+                    dayArray[randomNumber]
             ));
         }
         return subjectsList;

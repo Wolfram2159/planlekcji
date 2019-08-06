@@ -1,6 +1,7 @@
 package com.wolfram.planlekcji.database.room.entities;
 
-import androidx.room.ColumnInfo;
+import com.wolfram.planlekcji.utils.enums.Day;
+
 import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -12,12 +13,9 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "subjects")
 public class Subject {
     @PrimaryKey
-    @ColumnInfo(name = "id")
     private Integer subject_id;
 
     private String subject;
-
-    //private String teacher;
 
     @Embedded(prefix = "start_")
     private Time start_time;
@@ -25,25 +23,24 @@ public class Subject {
     @Embedded(prefix = "end_")
     private Time end_time;
 
-    private String localization; //make second table in relation with this
+    private String localization; //make second table in relation with this or not ?
 
-    private String additional_info; //consider this field
+    //private String additional_info; //consider this field
 
-    //private DayOfWeek day;
+    private String day;
 
-    private String type;
+    //private String type;
 
     public Subject(){
 
     }
 
-    public Subject(String subject, Time start_time, Time end_time, String localization, String additional_info, String type) {
+    public Subject(String subject, Time start_time, Time end_time, String localization, Day day) {
         this.subject = subject;
         this.start_time = start_time;
         this.end_time = end_time;
         this.localization = localization;
-        this.additional_info = additional_info;
-        this.type = type;
+        this.day = day.toString();
     }
 
     @Override
@@ -51,12 +48,10 @@ public class Subject {
         return "Subject{" +
                 "subject_id=" + subject_id +
                 ", subject='" + subject + '\'' +
-                //", teacher='" + teacher + '\'' +
                 ", start_time=" + start_time +
                 ", end_time=" + end_time +
                 ", localization='" + localization + '\'' +
-                ", additional_info='" + additional_info + '\'' +
-                ", type='" + type + '\'' +
+                ", day='" + day + '\'' +
                 '}';
     }
 
@@ -79,14 +74,6 @@ public class Subject {
     public void setSubject(String subject) {
         this.subject = subject;
     }
-
-    /*public String getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(String teacher) {
-        this.teacher = teacher;
-    }*/
 
     public Time getStart_time() {
         return start_time;
@@ -112,19 +99,15 @@ public class Subject {
         this.localization = localization;
     }
 
-    public String getAdditional_info() {
-        return additional_info;
+    public String getDay() {
+        return day;
     }
 
-    public void setAdditional_info(String additional_info) {
-        this.additional_info = additional_info;
+    public void setDay(String day) {
+        this.day = day;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+    public void setDay(Day day) {
+        this.day = day.toString();
     }
 }

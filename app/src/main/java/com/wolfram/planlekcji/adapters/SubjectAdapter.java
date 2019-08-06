@@ -74,5 +74,4 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectV
             Subject s = subjectsList.get(this.getAdapterPosition());
         }
     }
-
 }

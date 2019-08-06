@@ -1,6 +1,7 @@
 package com.wolfram.planlekcji.ui.activities;
 
 import android.app.Application;
+import android.os.AsyncTask;
 
 import com.wolfram.planlekcji.database.room.AppDatabase;
 import com.wolfram.planlekcji.database.room.UserDao;
@@ -18,7 +19,10 @@ import androidx.lifecycle.LiveData;
  */
 public class SubjectsViewModel extends AndroidViewModel {
 
+    //With android view model i can get Application in constructor and then get context for getting appDatabase instance
+
     private UserDao dao;
+    private LiveData<List<Subject>> subjects;
 
     public SubjectsViewModel(@NonNull Application application) {
         super(application);
@@ -26,7 +30,15 @@ public class SubjectsViewModel extends AndroidViewModel {
         dao = appDatabase.getUserDao();
     }
 
-    LiveData<List<Subject>> getSubjects(){
-        return dao.getSubjects();
+    public LiveData<List<Subject>> getSubjects() {
+        if (subjects == null) {
+            subjects = dao.getSubjects();
+        }
+        return subjects;
+    }
+
+    public void insertSubject(Subject subject) {
+        AsyncTask.execute(() -> dao.insertSubject(subject));
+
     }
 }
