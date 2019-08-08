@@ -39,6 +39,9 @@ public class SubjectsViewModel extends AndroidViewModel {
 
     public void insertSubject(Subject subject) {
         AsyncTask.execute(() -> dao.insertSubject(subject));
+    }
 
+    public void deleteSubject(Subject subject) {
+        AsyncTask.execute(() -> dao.deleteSubject(subject));
     }
 }

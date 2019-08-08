@@ -7,7 +7,9 @@ import android.widget.TextView;
 
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.database.room.entities.Subject;
+import com.wolfram.planlekcji.ui.activities.SubjectsViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -19,12 +21,25 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectViewHolder>{
 
+    private onDeleted onDeleted;
     private LayoutInflater layoutInflater;
     private List<Subject> subjectsList;
+    private SubjectsViewModel viewModel;
 
-    public SubjectAdapter(LayoutInflater layoutInflater, List<Subject> subjectsList) {
+    public interface onDeleted{
+        void delete(Subject s, int position);
+    }
+
+    public SubjectAdapter(LayoutInflater layoutInflater, SubjectsViewModel viewModel, onDeleted onDeleted) {
         this.layoutInflater = layoutInflater;
+        subjectsList = new ArrayList<>();
+        this.viewModel = viewModel;
+        this.onDeleted = onDeleted;
+    }
+
+    public void setSubjectsList(List<Subject> subjectsList) {
         this.subjectsList = subjectsList;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -52,6 +67,14 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectV
     @Override
     public int getItemCount() {
         return subjectsList.size();
+    }
+
+    public void deleteItem(int position){
+        Subject subject = subjectsList.get(position);
+        subjectsList.remove(position);
+        notifyItemRemoved(position);
+        viewModel.deleteSubject(subject);
+        onDeleted.delete(subject, position);
     }
 
     public class SubjectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

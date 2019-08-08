@@ -19,7 +19,7 @@ import androidx.fragment.app.DialogFragment;
  */
 public class AddingSubjectDialog extends CustomDialog {
 
-    public interface SnackbarMaker{
+    public interface SnackbarMaker {
         void makeSnackbar(String value);
     }
 
@@ -43,10 +43,10 @@ public class AddingSubjectDialog extends CustomDialog {
         EditSpinner subjectName = root.findViewById(R.id.subject_name);
 
         EditText editTimeStart = root.findViewById(R.id.subject_time_start);
-        final Time[] timeStart = new Time[1];
+        final Time[] timeStart = new Time[]{new Time(12, 12)};
 
         EditText editTimeEnd = root.findViewById(R.id.subject_time_end);
-        final Time[] timeEnd = new Time[1];
+        final Time[] timeEnd = new Time[]{new Time(13, 13)};
 
         Spinner daySpinner = root.findViewById(R.id.subject_day);
 
