@@ -22,7 +22,7 @@ public interface UserDao {
     /*@Query("SELECT * FROM grades")
     LiveData<List<Grade>> getGrades();*/
 
-    @Query("SELECT * FROM SUBJECTS WHERE day = (:day)")
+    @Query("SELECT * FROM SUBJECTS WHERE day = (:day) ORDER BY start_hour ASC")
     LiveData<List<Subject>> getSubjectsFromDay(String day);
 
     @Insert
@@ -30,6 +30,7 @@ public interface UserDao {
 
     @Delete
     void deleteSubject(Subject s);
+
     /*@Insert
     void setGrade(Grade g);*/
 }

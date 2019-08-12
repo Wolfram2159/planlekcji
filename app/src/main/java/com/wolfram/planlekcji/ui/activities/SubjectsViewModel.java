@@ -8,7 +8,7 @@ import com.wolfram.planlekcji.database.room.UserDao;
 import com.wolfram.planlekcji.database.room.entities.Subject;
 import com.wolfram.planlekcji.utils.enums.Day;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -25,14 +25,14 @@ public class SubjectsViewModel extends AndroidViewModel {
 
     private UserDao dao;
     private LiveData<List<Subject>> subjects;
-    private HashMap<String, LiveData<List<Subject>>> subjectsFromDay;
-
+    //private HashMap<Day, LiveData<List<Subject>>> subjectsFromDay;
+    private EnumMap<Day, LiveData<List<Subject>>> subjectsFromDay;
 
     public SubjectsViewModel(@NonNull Application application) {
         super(application);
         AppDatabase appDatabase = AppDatabase.getInstance(application.getApplicationContext());
         dao = appDatabase.getUserDao();
-        subjectsFromDay = new HashMap<>();
+        subjectsFromDay = new EnumMap<>(Day.class);
     }
 
     public LiveData<List<Subject>> getSubjects() {
@@ -43,12 +43,11 @@ public class SubjectsViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Subject>> getSubjects(Day day) {
-        //Log.e("cos tam", "" + subjectsFromDay.get(Day.Monday.toString()));
-        if (subjectsFromDay.get(day.toString()) == null){
+        if (subjectsFromDay.get(day) == null){
             LiveData<List<Subject>> temporaryList = dao.getSubjectsFromDay(day.toString());
-            subjectsFromDay.put(day.toString(), temporaryList);
+            subjectsFromDay.put(day, temporaryList);
         }
-        return subjectsFromDay.get(day.toString());
+        return subjectsFromDay.get(day);
     }
 
 

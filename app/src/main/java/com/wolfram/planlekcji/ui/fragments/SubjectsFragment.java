@@ -32,7 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class SubjectsFragment extends Fragment {
 
-    public static final String ARG_OBJECT = "object";
+    public static final String POSITION = "POSITION";
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -43,7 +43,7 @@ public class SubjectsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Bundle args = getArguments();
-        int pos = args.getInt(ARG_OBJECT);
+        int pos = args.getInt(POSITION);
 
         RecyclerView recycler = view.findViewById(R.id.subjects_recycler);
         FloatingActionButton fab = view.findViewById(R.id.subjects_fab);
@@ -79,7 +79,7 @@ public class SubjectsFragment extends Fragment {
         recycler.setItemAnimator(new DefaultItemAnimator());
         recycler.setAdapter(adapter);
 
-        subjectList.observe(this, (adapter::setSubjectsList)); //todo: what is this ?*/
+        subjectList.observe(this, (adapter::setSubjectsList));
     }
 
 }

@@ -24,7 +24,7 @@ public class SubjectsPagerAdapter extends FragmentStatePagerAdapter {
         Fragment fragment = new SubjectsFragment();
         Bundle args = new Bundle();
         // Our object is just an integer :-P
-        args.putInt(SubjectsFragment.ARG_OBJECT, i);
+        args.putInt(SubjectsFragment.POSITION, i);
         fragment.setArguments(args);
         return fragment;
     }
