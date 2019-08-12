@@ -22,6 +22,9 @@ public interface UserDao {
     /*@Query("SELECT * FROM grades")
     LiveData<List<Grade>> getGrades();*/
 
+    @Query("SELECT * FROM SUBJECTS WHERE day = (:day)")
+    LiveData<List<Subject>> getSubjectsFromDay(String day);
+
     @Insert
     void insertSubject(Subject s);
 

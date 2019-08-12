@@ -1,38 +1,20 @@
 package com.wolfram.planlekcji.ui.activities;
 
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.TypedValue;
-import android.view.LayoutInflater;
-import android.view.View;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.adapters.SubjectAdapter;
-import com.wolfram.planlekcji.database.room.entities.Subject;
-import com.wolfram.planlekcji.ui.dialogs.AddingSubjectDialog;
-import com.wolfram.planlekcji.ui.recyclerView.GridSpacingItemDecoration;
-import com.wolfram.planlekcji.ui.recyclerView.SwipeToDeleteCallback;
-
-import java.util.List;
+import com.wolfram.planlekcji.adapters.SubjectsPagerAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class SubjectsActivity extends AppCompatActivity {
 
-    @BindView(R.id.subjects_fab)
+    /*@BindView(R.id.subjects_fab)
     FloatingActionButton fab;
     @BindView(R.id.subjects_recycler)
     RecyclerView recycler;
@@ -48,13 +30,31 @@ public class SubjectsActivity extends AppCompatActivity {
         dialog.show(getSupportFragmentManager(), "Dialog");
     }
 
-    private SubjectsViewModel viewModel;
+    private SubjectsViewModel viewModel;*/
+
+    @BindView(R.id.subjects_toolbar)
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.subjects_activity);
         ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
+
+
+        ViewPager viewPager = findViewById(R.id.subjects_view_pager);
+
+        SubjectsPagerAdapter subjectsPagerAdapter = new SubjectsPagerAdapter(getSupportFragmentManager());
+
+        viewPager.setAdapter(subjectsPagerAdapter);
+
+        TabLayout tabLayout = findViewById(R.id.subjects_tab_layout);
+        tabLayout.setupWithViewPager(viewPager);
+
+
+        /*ButterKnife.bind(this);
+
 
         viewModel = ViewModelProviders.of(this).get(SubjectsViewModel.class);
 
@@ -77,11 +77,12 @@ public class SubjectsActivity extends AppCompatActivity {
         recycler.setItemAnimator(new DefaultItemAnimator());
         recycler.setAdapter(adapter);
 
-        subjectList.observe(this, (adapter::setSubjectsList)); //todo: what is this ?
+        subjectList.observe(this, (adapter::setSubjectsList));
     }
 
-    private int dpToPx(int dp) {
+    /*private int dpToPx(int dp) {
         Resources r = getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+    }*/
     }
 }

@@ -10,4 +10,4 @@ public enum Day {
     Wednesday,
     Thursday,
     Friday
-}
+    }
