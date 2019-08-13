@@ -23,13 +23,9 @@ public class Subject {
     @Embedded(prefix = "end_")
     private Time end_time;
 
-    private String localization; //make second table in relation with this or not ?
-
-    //private String additional_info; //consider this field
+    private String localization;
 
     private String day;
-
-    //private String type;
 
     public Subject(){
 

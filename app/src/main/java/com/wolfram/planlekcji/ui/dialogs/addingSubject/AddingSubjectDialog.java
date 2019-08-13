@@ -1,4 +1,4 @@
-package com.wolfram.planlekcji.ui.dialogs;
+package com.wolfram.planlekcji.ui.dialogs.addingSubject;
 
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -8,7 +8,7 @@ import com.reginald.editspinner.EditSpinner;
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.database.room.entities.Subject;
 import com.wolfram.planlekcji.database.room.entities.Time;
-import com.wolfram.planlekcji.ui.activities.SubjectsViewModel;
+import com.wolfram.planlekcji.ui.dialogs.CustomDialog;
 import com.wolfram.planlekcji.utils.enums.Day;
 
 import androidx.fragment.app.DialogFragment;
@@ -19,16 +19,14 @@ import androidx.fragment.app.DialogFragment;
  */
 public class AddingSubjectDialog extends CustomDialog {
 
-    public interface SnackbarMaker {
-        void makeSnackbar(String value);
+    public interface AddingSubjectDialogCallback {
+        void onSubjectCreateSucces(Subject subject, String textValue);
     }
 
-    private SubjectsViewModel viewModel;
-    private SnackbarMaker snackbarMaker;
+    private AddingSubjectDialogCallback addingSubjectDialogCallback;
 
-    public AddingSubjectDialog(SubjectsViewModel viewModel, SnackbarMaker snackbarMaker) {
-        this.viewModel = viewModel;
-        this.snackbarMaker = snackbarMaker;
+    public AddingSubjectDialog(AddingSubjectDialogCallback addingSubjectDialogCallback) {
+        this.addingSubjectDialogCallback = addingSubjectDialogCallback;
     }
 
 
@@ -85,11 +83,10 @@ public class AddingSubjectDialog extends CustomDialog {
                             localization,
                             day
                     );
-                    viewModel.insertSubject(subject);
-                    snackbarMaker.makeSnackbar("Record save in database");
+                    addingSubjectDialogCallback.onSubjectCreateSucces(subject, "Record save in database");
                 })
                 .setNegativeButton("Cancel", (d, id) -> {
-                    snackbarMaker.makeSnackbar("Operation canceled");
+
                 });
     }
 }

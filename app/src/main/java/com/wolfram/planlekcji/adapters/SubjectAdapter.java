@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.database.room.entities.Subject;
-import com.wolfram.planlekcji.ui.activities.SubjectsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,20 +20,19 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectViewHolder>{
 
-    private onDeleted onDeleted;
+    private RecyclerViewAdapterCallback recyclerViewAdapterCallback;
     private LayoutInflater layoutInflater;
     private List<Subject> subjectsList;
-    private SubjectsViewModel viewModel;
 
-    public interface onDeleted{
-        void delete(Subject s, int position);
+    public interface RecyclerViewAdapterCallback {
+        void onDelete(Subject s, int position);
+        void onItemClick(Subject subject, int position);
     }
 
-    public SubjectAdapter(LayoutInflater layoutInflater, SubjectsViewModel viewModel, onDeleted onDeleted) {
+    public SubjectAdapter(LayoutInflater layoutInflater, RecyclerViewAdapterCallback recyclerViewAdapterCallback) {
         this.layoutInflater = layoutInflater;
         subjectsList = new ArrayList<>();
-        this.viewModel = viewModel;
-        this.onDeleted = onDeleted;
+        this.recyclerViewAdapterCallback = recyclerViewAdapterCallback;
     }
 
     public void setSubjectsList(List<Subject> subjectsList) {
@@ -73,8 +71,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectV
         Subject subject = subjectsList.get(position);
         subjectsList.remove(position);
         notifyItemRemoved(position);
-        viewModel.deleteSubject(subject);
-        onDeleted.delete(subject, position);
+        recyclerViewAdapterCallback.onDelete(subject, position);
     }
 
     public class SubjectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -83,7 +80,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectV
         private TextView time;
         private TextView localization;
         private ViewGroup container;
-        public SubjectViewHolder(@NonNull View itemView) {
+        SubjectViewHolder(@NonNull View itemView) {
             super(itemView);
             this.subject = itemView.findViewById(R.id.item_subject);
             this.time = itemView.findViewById(R.id.item_time);
@@ -94,7 +91,8 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectV
 
         @Override
         public void onClick(View view) {
-            Subject s = subjectsList.get(this.getAdapterPosition());
+            int position = getAdapterPosition();
+            recyclerViewAdapterCallback.onItemClick(subjectsList.get(position), position);
         }
     }
 }

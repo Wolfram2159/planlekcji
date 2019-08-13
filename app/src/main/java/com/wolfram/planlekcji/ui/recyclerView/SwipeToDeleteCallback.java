@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
  * @author Wolfram
  * @date 2019-08-06
  */
+//todo: dont needed class
 public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
 
     private SubjectAdapter adapter;
@@ -29,7 +30,7 @@ public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
     public SwipeToDeleteCallback(SubjectAdapter adapter, Context context) {
         super(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
         this.adapter = adapter;
-        icon = ContextCompat.getDrawable(context, R.drawable.icon_delete);
+        icon = ContextCompat.getDrawable(context, R.drawable.icon_delete_white);
         background = new ColorDrawable(Color.RED);
     }
 

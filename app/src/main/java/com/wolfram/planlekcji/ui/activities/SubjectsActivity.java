@@ -8,6 +8,7 @@ import com.wolfram.planlekcji.adapters.SubjectsPagerAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,7 +22,6 @@ public class SubjectsActivity extends AppCompatActivity {
     @BindView(R.id.subjects_tab_layout)
     TabLayout tabLayout;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +32,9 @@ public class SubjectsActivity extends AppCompatActivity {
 
         viewPager = findViewById(R.id.subjects_view_pager);
 
-        SubjectsPagerAdapter subjectsPagerAdapter = new SubjectsPagerAdapter(getSupportFragmentManager());
+        SubjectsViewModel viewModel = ViewModelProviders.of(this).get(SubjectsViewModel.class);
+
+        SubjectsPagerAdapter subjectsPagerAdapter = new SubjectsPagerAdapter(getSupportFragmentManager(), viewModel);
 
         viewPager.setAdapter(subjectsPagerAdapter);
 

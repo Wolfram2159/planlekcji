@@ -25,7 +25,6 @@ public class SubjectsViewModel extends AndroidViewModel {
 
     private UserDao dao;
     private LiveData<List<Subject>> subjects;
-    //private HashMap<Day, LiveData<List<Subject>>> subjectsFromDay;
     private EnumMap<Day, LiveData<List<Subject>>> subjectsFromDay;
 
     public SubjectsViewModel(@NonNull Application application) {
