@@ -9,6 +9,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 /**
  * @author Wolfram
@@ -24,6 +25,9 @@ public interface UserDao {
 
     @Query("SELECT * FROM SUBJECTS WHERE day = (:day) ORDER BY start_hour ASC")
     LiveData<List<Subject>> getSubjectsFromDay(String day);
+
+    @Update
+    int updateSubject(Subject... subject);
 
     @Insert
     void insertSubject(Subject s);

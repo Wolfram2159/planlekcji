@@ -1,7 +1,6 @@
 package com.wolfram.planlekcji.ui.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +58,7 @@ public class SubjectsFragment extends Fragment {
                 Snackbar sn = Snackbar.make(root, textValue, Snackbar.LENGTH_LONG);
                 sn.show();
             });
-            dialog.show(getFragmentManager(), "Dialog");
+            dialog.show(getFragmentManager(), "AddingDialog");
         });
 
         LayoutInflater layoutInflater = getLayoutInflater();
@@ -81,16 +80,24 @@ public class SubjectsFragment extends Fragment {
 
             @Override
             public void onItemClick(Subject subject, int position) {
-                DialogFragment dialogFragment = new ActionDialog(() -> {
-                    viewModel.deleteSubject(subject);
+                DialogFragment dialogFragment = new ActionDialog(new ActionDialog.ActionDialogCallback() {
+                    @Override
+                    public void onDelete() {
+                        viewModel.deleteSubject(subject);
+                    }
+
+                    @Override
+                    public void onUpdate(Subject s, String textValue) {
+                        s.setSubject_id(subject.getSubject_id());
+                        viewModel.updateSubject(s);
+
+                        Snackbar snackbar = Snackbar.make(root, "You have updated " + s.getSubject(), Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                    }
                 });
                 dialogFragment.show(getFragmentManager(), "ActionDialog");
-                Log.e("Position", "" + position);
             }
         });
-
-        //ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(adapter, getContext()));
-        //itemTouchHelper.attachToRecyclerView(recycler);
 
         recycler.setItemAnimator(new DefaultItemAnimator());
         recycler.setAdapter(adapter);

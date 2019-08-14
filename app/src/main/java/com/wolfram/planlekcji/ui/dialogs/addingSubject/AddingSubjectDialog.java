@@ -19,14 +19,14 @@ import androidx.fragment.app.DialogFragment;
  */
 public class AddingSubjectDialog extends CustomDialog {
 
-    public interface AddingSubjectDialogCallback {
-        void onSubjectCreateSucces(Subject subject, String textValue);
+    public interface SubjectDialogCallback {
+        void onSubjectAction(Subject subject, String textValue);
     }
 
-    private AddingSubjectDialogCallback addingSubjectDialogCallback;
+    private SubjectDialogCallback mSubjectDialogCallback;
 
-    public AddingSubjectDialog(AddingSubjectDialogCallback addingSubjectDialogCallback) {
-        this.addingSubjectDialogCallback = addingSubjectDialogCallback;
+    public AddingSubjectDialog(SubjectDialogCallback subjectDialogCallback) {
+        this.mSubjectDialogCallback = subjectDialogCallback;
     }
 
 
@@ -37,7 +37,6 @@ public class AddingSubjectDialog extends CustomDialog {
 
     @Override
     protected void customizeDialog() {
-
         EditSpinner subjectName = root.findViewById(R.id.subject_name);
 
         EditText editTimeStart = root.findViewById(R.id.subject_time_start);
@@ -83,7 +82,7 @@ public class AddingSubjectDialog extends CustomDialog {
                             localization,
                             day
                     );
-                    addingSubjectDialogCallback.onSubjectCreateSucces(subject, "Record save in database");
+                    mSubjectDialogCallback.onSubjectAction(subject, "Record save in database");
                 })
                 .setNegativeButton("Cancel", (d, id) -> {
 

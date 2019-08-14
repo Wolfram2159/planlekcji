@@ -42,13 +42,16 @@ public class SubjectsViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Subject>> getSubjects(Day day) {
-        if (subjectsFromDay.get(day) == null){
+        if (subjectsFromDay.get(day) == null) {
             LiveData<List<Subject>> temporaryList = dao.getSubjectsFromDay(day.toString());
             subjectsFromDay.put(day, temporaryList);
         }
         return subjectsFromDay.get(day);
     }
 
+    public void updateSubject(Subject subject) {
+        AsyncTask.execute(() -> dao.updateSubject(subject));
+    }
 
     public void insertSubject(Subject subject) {
         AsyncTask.execute(() -> dao.insertSubject(subject));

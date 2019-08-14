@@ -15,6 +15,7 @@ public class ActionDialog extends CustomDialog {
 
     public interface ActionDialogCallback{
         void onDelete();
+        void onUpdate(Subject subject, String textValue);
     }
 
     private ActionDialogCallback actionDialogCallback;
@@ -32,12 +33,9 @@ public class ActionDialog extends CustomDialog {
     protected void customizeDialog() {
         MaterialButton editButton = root.findViewById(R.id.action_edit_btn);
         editButton.setOnClickListener(view -> {
-            //create editDialog, which is exacly addingSubjectDialog
-            DialogFragment dialogFragment = new AddingSubjectDialog(new AddingSubjectDialog.AddingSubjectDialogCallback() {
-                @Override
-                public void onSubjectCreateSucces(Subject subject, String textValue) {
-                    //todo:reproject this
-                }
+            DialogFragment dialogFragment = new AddingSubjectDialog((subject, textValue) -> {
+                actionDialogCallback.onUpdate(subject, textValue);
+                this.dismiss();
             });
             dialogFragment.show(getFragmentManager(), "EditDialog");
         });

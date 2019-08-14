@@ -92,7 +92,8 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectV
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            recyclerViewAdapterCallback.onItemClick(subjectsList.get(position), position);
+            Subject s = subjectsList.get(position);
+            recyclerViewAdapterCallback.onItemClick(s, position);
         }
     }
 }
