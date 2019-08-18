@@ -18,10 +18,12 @@ public class ActionDialog extends CustomDialog {
         void onUpdate(Subject subject, String textValue);
     }
 
+    private Subject subject;
     private ActionDialogCallback actionDialogCallback;
 
-    public ActionDialog(ActionDialogCallback actionDialogCallback) {
+    public ActionDialog(Subject subject, ActionDialogCallback actionDialogCallback) {
         this.actionDialogCallback = actionDialogCallback;
+        this.subject = subject;
     }
 
     @Override
@@ -36,7 +38,7 @@ public class ActionDialog extends CustomDialog {
             DialogFragment dialogFragment = new AddingSubjectDialog((subject, textValue) -> {
                 actionDialogCallback.onUpdate(subject, textValue);
                 this.dismiss();
-            });
+            }, subject);
             dialogFragment.show(getFragmentManager(), "EditDialog");
         });
         MaterialButton deleteButton = root.findViewById(R.id.action_delete_btn);

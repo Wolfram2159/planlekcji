@@ -80,7 +80,7 @@ public class SubjectsFragment extends Fragment {
 
             @Override
             public void onItemClick(Subject subject, int position) {
-                DialogFragment dialogFragment = new ActionDialog(new ActionDialog.ActionDialogCallback() {
+                DialogFragment dialogFragment = new ActionDialog(subject, new ActionDialog.ActionDialogCallback() {
                     @Override
                     public void onDelete() {
                         viewModel.deleteSubject(subject);

@@ -1,5 +1,6 @@
 package com.wolfram.planlekcji.ui.dialogs.addingSubject;
 
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -23,12 +24,18 @@ public class AddingSubjectDialog extends CustomDialog {
         void onSubjectAction(Subject subject, String textValue);
     }
 
-    private SubjectDialogCallback mSubjectDialogCallback;
+    private SubjectDialogCallback subjectDialogCallback;
+    private Subject editSubject;
 
     public AddingSubjectDialog(SubjectDialogCallback subjectDialogCallback) {
-        this.mSubjectDialogCallback = subjectDialogCallback;
+        this.subjectDialogCallback = subjectDialogCallback;
+        editSubject = null;
     }
 
+    public AddingSubjectDialog(SubjectDialogCallback subjectDialogCallback, Subject editSubject) {
+        this.subjectDialogCallback = subjectDialogCallback;
+        this.editSubject = editSubject;
+    }
 
     @Override
     protected void setResource() {
@@ -82,10 +89,18 @@ public class AddingSubjectDialog extends CustomDialog {
                             localization,
                             day
                     );
-                    mSubjectDialogCallback.onSubjectAction(subject, "Record save in database");
+                    subjectDialogCallback.onSubjectAction(subject, "Record save in database");
                 })
-                .setNegativeButton("Cancel", (d, id) -> {
+                .setNegativeButton("Cancel", (d, id) -> {});
 
-                });
+        Log.e("TAG", getTag());
+
+        if (getTag().equals("EditDialog")){
+            Log.e("Subject", "" + editSubject.toString());
+            subjectName.setText(editSubject.getSubject());
+            editTimeStart.setText(editSubject.getStart_time().toString());
+            editTimeEnd.setText(editSubject.getEnd_time().toString());
+            subjectLocalization.setText(editSubject.getLocalization());
+        }
     }
 }
