@@ -1,18 +1,10 @@
 package com.wolfram.planlekcji.ui.dialogs.addingSubject;
 
-import android.os.Build;
-import android.widget.TimePicker;
-
-import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.database.room.entities.Time;
-import com.wolfram.planlekcji.ui.dialogs.CustomDialog;
-
-import androidx.annotation.RequiresApi;
-
 /**
  * @author Wolfram
  * @date 2019-08-05
  */
+/*
 public class TimePickerDialog extends CustomDialog {
 
     public interface TimeCallback {
@@ -44,3 +36,4 @@ public class TimePickerDialog extends CustomDialog {
                 });
     }
 }
+*/

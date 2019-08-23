@@ -2,100 +2,108 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
                                                    xmlns:app="http://schemas.android.com/apk/res-auto"
                                                    xmlns:tools="http://schemas.android.com/tools"
-                                                   android:layout_width="wrap_content"
-                                                   android:layout_height="wrap_content"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="match_parent"
                                                    android:orientation="vertical">
 
-
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/subject_name_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginHorizontal="8dp"
+        android:layout_marginEnd="8dp"
         android:hint="Subject Name"
-        android:gravity="center"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/subject_localization">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <EditText
+            android:id="@+id/subject_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="match_parent"
+            android:gravity="center"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/subject_day_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:hint="Day"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subject_name_layout">
+
+        <AutoCompleteTextView
+            android:id="@+id/subject_day"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:completionThreshold="0"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.reginald.editspinner.EditSpinner
-        android:id="@+id/subject_name"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/subject_time_start_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:gravity="center"
-        android:text="Subject Name"
-        app:dropDownDrawable="@drawable/icon_arrow_down"
-        app:dropDownDrawableHeight="25dp"
-        app:dropDownDrawableSpacing="15dp"
-        app:dropDownDrawableWidth="25dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="4dp"
+        android:hint="Time start"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subject_day_layout">
+
+        <EditText
+            android:id="@+id/subject_time_start"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:focusable="false"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/subject_time_end_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="8dp"
+        android:hint="Time end"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/subject_day_layout">
+
+        <EditText
+            android:id="@+id/subject_time_end"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:focusable="false"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/subject_localization_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:hint="Localization"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/subject_time_start_layout">
 
-    <EditText
-        android:id="@+id/subject_time_start"
+        <EditText
+            android:id="@+id/subject_localization"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:focusable="false"
-        android:ems="6"
-        android:gravity="center"
-        android:inputType="time"
-        android:text="Time Start"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/subject_name"/>
-
-    <EditText
-        android:id="@+id/subject_time_end"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:focusable="false"
-        android:ems="6"
-        android:gravity="center"
-        android:inputType="time"
-        android:text="Time End"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/subject_time_start"
-        app:layout_constraintTop_toBottomOf="@+id/subject_name"/>
-
-    <Spinner
-        android:id="@+id/subject_day"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/subject_time_end"/>
-
-    <com.reginald.editspinner.EditSpinner
-        android:id="@+id/subject_localization"
-        android:text="Localization"
-        android:gravity="center"
-        app:dropDownDrawable="@drawable/icon_arrow_down"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/subject_day"/>
-
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

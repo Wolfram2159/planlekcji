@@ -5,14 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.adapters.SubjectAdapter;
 import com.wolfram.planlekcji.database.room.entities.Subject;
 import com.wolfram.planlekcji.ui.activities.SubjectsViewModel;
 import com.wolfram.planlekcji.ui.dialogs.ActionDialog;
-import com.wolfram.planlekcji.ui.dialogs.addingSubject.AddingSubjectDialog;
 import com.wolfram.planlekcji.utils.enums.Day;
 
 import java.util.List;
@@ -49,17 +47,7 @@ public class SubjectsFragment extends Fragment {
         int pos = args.getInt(POSITION);
 
         RecyclerView recycler = view.findViewById(R.id.subjects_recycler);
-        FloatingActionButton fab = view.findViewById(R.id.subjects_fab);
         ConstraintLayout root = view.findViewById(R.id.root_subjects);
-
-        fab.setOnClickListener(w -> {
-            DialogFragment dialog = new AddingSubjectDialog((subject, textValue) -> {
-                viewModel.insertSubject(subject);
-                Snackbar sn = Snackbar.make(root, textValue, Snackbar.LENGTH_LONG);
-                sn.show();
-            });
-            dialog.show(getFragmentManager(), "AddingDialog");
-        });
 
         LayoutInflater layoutInflater = getLayoutInflater();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
