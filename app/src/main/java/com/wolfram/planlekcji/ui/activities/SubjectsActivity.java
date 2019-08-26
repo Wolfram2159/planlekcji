@@ -3,6 +3,7 @@ package com.wolfram.planlekcji.ui.activities;
 import android.os.Bundle;
 import android.view.View;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
@@ -28,6 +29,8 @@ public class SubjectsActivity extends AppCompatActivity {
     TabLayout tabLayout;
     @BindView(R.id.subjects_fab)
     FloatingActionButton fab;
+    @BindView(R.id.subject_bottom_sheet)
+    View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +44,17 @@ public class SubjectsActivity extends AppCompatActivity {
 
         View root = findViewById(R.id.root_subjects);
 
+        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(view);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
         fab.setOnClickListener(w -> {
             DialogFragment dialog = new AddingSubjectDialog((subject, textValue) -> {
                 viewModel.insertSubject(subject);
                 Snackbar sn = Snackbar.make(root, textValue, Snackbar.LENGTH_LONG);
                 sn.show();
             });
-            dialog.show(getSupportFragmentManager(), "AddingDialog");
+            //dialog.show(getSupportFragmentManager(), "AddingDialog");
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
 
         viewPager = findViewById(R.id.subjects_view_pager);
@@ -59,5 +66,8 @@ public class SubjectsActivity extends AppCompatActivity {
 
         tabLayout = findViewById(R.id.subjects_tab_layout);
         tabLayout.setupWithViewPager(viewPager);
+
+
+
     }
 }
