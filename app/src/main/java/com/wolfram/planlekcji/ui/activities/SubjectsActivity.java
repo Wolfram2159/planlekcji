@@ -43,7 +43,7 @@ public class SubjectsActivity extends AppCompatActivity {
 
         bottomSheetDialog.setModify((viewModel::insertSubject));
 
-        fab.setOnClickListener(w -> bottomSheetDialog.show(getSupportFragmentManager(), "asd"));//bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED));
+        fab.setOnClickListener(w -> bottomSheetDialog.show(getSupportFragmentManager(), "AddBottomSheet"));//bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED));
 
         viewPager = findViewById(R.id.subjects_view_pager);
 

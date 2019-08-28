@@ -20,24 +20,25 @@ import java.util.Date;
  */
 public class ModifySubjectBottomSheet extends CustomBottomSheet {
 
-    private ModifyInterface modify;
+    private OnModifyListener modify;
     private Subject editSubject;
     @Override
     protected int getResource() {
         return R.layout.bottom_sheet;
     }
-    public interface ModifyInterface{
+
+    public void setEditSubject(Subject subject) {
+        this.editSubject = subject;
+    }
+
+    public interface OnModifyListener {
         void onModify(Subject subject);
     }
 
     public ModifySubjectBottomSheet() {
     }
 
-    public ModifySubjectBottomSheet(Subject editSubject) {
-        this.editSubject = editSubject;
-    }
-
-    public void setModify(ModifyInterface modify) {
+    public void setModify(OnModifyListener modify) {
         this.modify = modify;
     }
 

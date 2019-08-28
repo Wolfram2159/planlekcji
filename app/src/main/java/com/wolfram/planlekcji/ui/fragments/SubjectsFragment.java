@@ -68,7 +68,14 @@ public class SubjectsFragment extends Fragment {
             @Override
             public void onItemClick(Subject subject, int position) {
                 ActionBottomSheet actionBottomSheet = new ActionBottomSheet();
-                actionBottomSheet.show(getFragmentManager(), "asd");
+                actionBottomSheet.setOnDeleteListener(() ->{
+                    viewModel.deleteSubject(subject);
+                });
+                actionBottomSheet.setOnModifyListener((editedSubject) -> {
+                    editedSubject.setSubject_id(subject.getSubject_id());
+                    viewModel.updateSubject(editedSubject);
+                }, subject);
+                actionBottomSheet.show(getFragmentManager(), "ActionBottomSheet");
                 /*DialogFragment dialogFragment = new ActionDialog(subject, new ActionDialog.ActionDialogCallback() {
                     @Override
                     public void onDelete() {
