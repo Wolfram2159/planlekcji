@@ -8,18 +8,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/subjects_fab"
-        android:layout_gravity="bottom|end"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="40dp"
-        android:src="@drawable/icon_add"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/subjects_toolbar"
@@ -48,5 +37,17 @@
 
     </androidx.viewpager.widget.ViewPager>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/subjects_fab"
+        style="@style/Widget.MaterialComponents.FloatingActionButton"
+        app:layout_anchor="@+id/subject_bottom_sheet"
+        app:layout_anchorGravity="top|end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:src="@drawable/icon_add"
+        android:clickable="true"
+        android:focusable="true" />
     <include layout="@layout/bottom_sheet"/>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

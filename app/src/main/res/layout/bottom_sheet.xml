@@ -5,7 +5,7 @@
     android:id="@+id/subject_bottom_sheet"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimary"
+    android:padding="6dp"
     android:clipToPadding="true"
     app:behavior_peekHeight="0dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
@@ -19,7 +19,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/subject_cancel"
-        style="@style/MaterialButtonAccent"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -35,7 +35,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/subject_save"
-        style="@style/MaterialButtonAccent"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

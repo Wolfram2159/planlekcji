@@ -10,7 +10,7 @@ import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.adapters.SubjectAdapter;
 import com.wolfram.planlekcji.database.room.entities.Subject;
 import com.wolfram.planlekcji.ui.activities.SubjectsViewModel;
-import com.wolfram.planlekcji.ui.dialogs.ActionDialog;
+import com.wolfram.planlekcji.ui.bottomSheets.ActionBottomSheet;
 import com.wolfram.planlekcji.utils.enums.Day;
 
 import java.util.List;
@@ -18,7 +18,6 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -68,7 +67,9 @@ public class SubjectsFragment extends Fragment {
 
             @Override
             public void onItemClick(Subject subject, int position) {
-                DialogFragment dialogFragment = new ActionDialog(subject, new ActionDialog.ActionDialogCallback() {
+                ActionBottomSheet actionBottomSheet = new ActionBottomSheet();
+                actionBottomSheet.show(getFragmentManager(), "asd");
+                /*DialogFragment dialogFragment = new ActionDialog(subject, new ActionDialog.ActionDialogCallback() {
                     @Override
                     public void onDelete() {
                         viewModel.deleteSubject(subject);
@@ -83,7 +84,7 @@ public class SubjectsFragment extends Fragment {
                         snackbar.show();
                     }
                 });
-                dialogFragment.show(getFragmentManager(), "ActionDialog");
+                dialogFragment.show(getFragmentManager(), "ActionDialog");*/
             }
         });
 

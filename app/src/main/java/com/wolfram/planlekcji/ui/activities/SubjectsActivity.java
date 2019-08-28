@@ -3,17 +3,14 @@ package com.wolfram.planlekcji.ui.activities;
 import android.os.Bundle;
 import android.view.View;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.adapters.SubjectsPagerAdapter;
-import com.wolfram.planlekcji.ui.dialogs.addingSubject.AddingSubjectDialog;
+import com.wolfram.planlekcji.ui.bottomSheets.ModifySubjectBottomSheet;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
@@ -42,23 +39,13 @@ public class SubjectsActivity extends AppCompatActivity {
 
         SubjectsViewModel viewModel = ViewModelProviders.of(this).get(SubjectsViewModel.class);
 
-        View root = findViewById(R.id.root_subjects);
+        ModifySubjectBottomSheet bottomSheetDialog = new ModifySubjectBottomSheet();
 
-        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(view);
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        bottomSheetDialog.setModify((viewModel::insertSubject));
 
-        fab.setOnClickListener(w -> {
-            DialogFragment dialog = new AddingSubjectDialog((subject, textValue) -> {
-                viewModel.insertSubject(subject);
-                Snackbar sn = Snackbar.make(root, textValue, Snackbar.LENGTH_LONG);
-                sn.show();
-            });
-            //dialog.show(getSupportFragmentManager(), "AddingDialog");
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-        });
+        fab.setOnClickListener(w -> bottomSheetDialog.show(getSupportFragmentManager(), "asd"));//bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED));
 
         viewPager = findViewById(R.id.subjects_view_pager);
-
 
         SubjectsPagerAdapter subjectsPagerAdapter = new SubjectsPagerAdapter(getSupportFragmentManager(), viewModel);
 
@@ -66,8 +53,5 @@ public class SubjectsActivity extends AppCompatActivity {
 
         tabLayout = findViewById(R.id.subjects_tab_layout);
         tabLayout.setupWithViewPager(viewPager);
-
-
-
     }
 }
