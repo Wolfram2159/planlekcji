@@ -5,100 +5,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.adapters.SubjectAdapter;
-import com.wolfram.planlekcji.database.room.entities.Subject;
-import com.wolfram.planlekcji.ui.activities.SubjectsViewModel;
-import com.wolfram.planlekcji.ui.bottomSheets.ActionBottomSheet;
-import com.wolfram.planlekcji.utils.enums.Day;
-
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-
+/**
+ * @author Wolfram
+ * @date 2019-08-30
+ */
 public class SubjectsFragment extends Fragment {
 
-    public static final String POSITION = "POSITION";
-    private SubjectsViewModel viewModel;
-
-    public SubjectsFragment(SubjectsViewModel viewModel) {
-        this.viewModel = viewModel;
-    }
-
+    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_subjects, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_subjects, null);
+        return view;
     }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Bundle args = getArguments();
-        int pos = args.getInt(POSITION);
-
-        RecyclerView recycler = view.findViewById(R.id.subjects_recycler);
-        ConstraintLayout root = view.findViewById(R.id.root_subjects);
-
-        LayoutInflater layoutInflater = getLayoutInflater();
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recycler.setLayoutManager(layoutManager);
-
-        Day day = Day.values()[pos];
-        LiveData<List<Subject>> subjectList = viewModel.getSubjects(day);
-
-        SubjectAdapter adapter = new SubjectAdapter(layoutInflater, new SubjectAdapter.RecyclerViewAdapterCallback() {
-            @Override
-            public void onDelete(Subject subject, int position) {
-                viewModel.deleteSubject(subject);
-                Snackbar snackbar = Snackbar.make(root, "You have deleted " + subject.getSubject(), Snackbar.LENGTH_LONG);
-
-                snackbar.setAction(R.string.undo, v -> viewModel.insertSubject(subject));
-                snackbar.show();
-            }
-
-            @Override
-            public void onItemClick(Subject subject, int position) {
-                ActionBottomSheet actionBottomSheet = new ActionBottomSheet();
-                actionBottomSheet.setOnDeleteListener(() ->{
-                    viewModel.deleteSubject(subject);
-                });
-                actionBottomSheet.setOnModifyListener((editedSubject) -> {
-                    editedSubject.setSubject_id(subject.getSubject_id());
-                    viewModel.updateSubject(editedSubject);
-                }, subject);
-                actionBottomSheet.show(getFragmentManager(), "ActionBottomSheet");
-                /*DialogFragment dialogFragment = new ActionDialog(subject, new ActionDialog.ActionDialogCallback() {
-                    @Override
-                    public void onDelete() {
-                        viewModel.deleteSubject(subject);
-                    }
-
-                    @Override
-                    public void onUpdate(Subject s, String textValue) {
-                        s.setSubject_id(subject.getSubject_id());
-                        viewModel.updateSubject(s);
-
-                        Snackbar snackbar = Snackbar.make(root, "You have updated " + s.getSubject(), Snackbar.LENGTH_LONG);
-                        snackbar.show();
-                    }
-                });
-                dialogFragment.show(getFragmentManager(), "ActionDialog");*/
-            }
-        });
-
-        recycler.setItemAnimator(new DefaultItemAnimator());
-        recycler.setAdapter(adapter);
-
-        subjectList.observe(this, (adapter::setSubjectsList));
-    }
-
 }

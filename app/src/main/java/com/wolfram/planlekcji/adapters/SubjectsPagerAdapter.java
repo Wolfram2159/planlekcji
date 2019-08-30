@@ -3,7 +3,7 @@ package com.wolfram.planlekcji.adapters;
 import android.os.Bundle;
 
 import com.wolfram.planlekcji.ui.activities.SubjectsViewModel;
-import com.wolfram.planlekcji.ui.fragments.SubjectsFragment;
+import com.wolfram.planlekcji.ui.fragments.OldSubjectsFragment;
 import com.wolfram.planlekcji.utils.enums.Day;
 import com.wolfram.planlekcji.utils.enums.ShortDay;
 
@@ -26,10 +26,10 @@ public class SubjectsPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int i) {
-        Fragment fragment = new SubjectsFragment(viewModel);
+        Fragment fragment = new OldSubjectsFragment(viewModel);
         Bundle args = new Bundle();
         // Our object is just an integer :-P
-        args.putInt(SubjectsFragment.POSITION, i);
+        args.putInt(OldSubjectsFragment.POSITION, i);
         fragment.setArguments(args);
         return fragment;
     }

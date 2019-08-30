@@ -1,4 +1,16 @@
 <resources>
     <string name="app_name">PlanLekcji</string>
     <string name="undo">UNDO</string>
+    <string name="nav_header_desc">Navigation Header</string>
+    <string name="nav_header_subtitle">jakub.podsiadlo2159@gmail.com</string>
+    <string name="nav_header_title">@string/app_name</string>
+    <string name="nav_subjects">Subjects</string>
+    <string name="nav_grades">Grades</string>
+    <string name="Communicate">Communicate</string>
+    <string name="nav_share">Share</string>
+    <string name="nav_github">Github</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

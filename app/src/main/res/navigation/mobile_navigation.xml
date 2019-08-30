@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation android:id="@+id/mobile_navigation"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@+id/nav_subjects">
+
+    <fragment android:id="@+id/nav_subjects"
+        android:name="com.wolfram.planlekcji.ui.fragments.SubjectsFragment"
+        android:label="@string/nav_subjects"
+        tools:layout="@layout/old_fragment_subjects"/>
+
+    <fragment android:id="@+id/nav_grades"
+        android:name="com.wolfram.planlekcji.ui.fragments.GradesFragment"
+        android:label="@string/nav_grades"
+        tools:layout="@layout/fragment_grades"/>
+
+    <fragment android:id="@+id/nav_share"
+        android:name="com.wolfram.planlekcji.ui.fragments.ShareFragment"
+        android:label="@string/nav_share"
+        tools:layout="@layout/fragment_share"/>
+
+    <fragment android:id="@+id/nav_github"
+        android:name="com.wolfram.planlekcji.ui.fragments.GitHubFragment"
+        android:label="@string/nav_github"
+        tools:layout="@layout/fragment_github"/>
+
+</navigation>

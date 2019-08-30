@@ -1,4 +1,4 @@
-package com.wolfram.planlekcji.ui.activities;
+package com.wolfram.planlekcji.ui.bottomSheets;
 
 import android.app.TimePickerDialog;
 import android.content.Context;

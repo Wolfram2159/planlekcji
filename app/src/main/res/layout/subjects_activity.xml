@@ -8,8 +8,6 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/subjects_toolbar"
         android:layout_width="match_parent"
