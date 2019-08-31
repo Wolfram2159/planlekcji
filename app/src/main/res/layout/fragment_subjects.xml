@@ -3,11 +3,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragments.SubjectsFragment">
 
-    <TextView
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/root_subjects"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/nav_subjects" />
+        android:fitsSystemWindows="true">
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/subjects_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/subjects_tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </androidx.viewpager.widget.ViewPager>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/subjects_fab"
+            style="@style/Widget.MaterialComponents.FloatingActionButton"
+            app:layout_anchor="@+id/subject_bottom_sheet"
+            app:layout_anchorGravity="top|end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:src="@drawable/icon_add"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <include layout="@layout/bottom_sheet"/>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </FrameLayout>

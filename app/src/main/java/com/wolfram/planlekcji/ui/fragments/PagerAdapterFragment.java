@@ -7,9 +7,8 @@ import android.view.ViewGroup;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.adapters.SubjectAdapter;
+import com.wolfram.planlekcji.adapters.SubjectsRecyclerViewAdapter;
 import com.wolfram.planlekcji.database.room.entities.Subject;
-import com.wolfram.planlekcji.ui.activities.SubjectsViewModel;
 import com.wolfram.planlekcji.ui.bottomSheets.ActionBottomSheet;
 import com.wolfram.planlekcji.utils.enums.Day;
 
@@ -20,33 +19,34 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
-public class OldSubjectsFragment extends Fragment {
+public class PagerAdapterFragment extends Fragment {
 
     public static final String POSITION = "POSITION";
-    private SubjectsViewModel viewModel;
 
-    public OldSubjectsFragment(SubjectsViewModel viewModel) {
-        this.viewModel = viewModel;
-    }
+    @BindView(R.id.subjects_recycler)
+    RecyclerView recycler;
+    @BindView(R.id.root_subjects)
+    ConstraintLayout root;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.old_fragment_subjects, container, false);
-    }
+        View view = inflater.inflate(R.layout.pager_adapter_fragment, container, false);
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Bundle args = getArguments();
         int pos = args.getInt(POSITION);
 
-        RecyclerView recycler = view.findViewById(R.id.subjects_recycler);
-        ConstraintLayout root = view.findViewById(R.id.root_subjects);
+        ButterKnife.bind(this, view);
+
+        SubjectsFragmentViewModel viewModel = ViewModelProviders.of(this).get(SubjectsFragmentViewModel.class);
 
         LayoutInflater layoutInflater = getLayoutInflater();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -55,7 +55,7 @@ public class OldSubjectsFragment extends Fragment {
         Day day = Day.values()[pos];
         LiveData<List<Subject>> subjectList = viewModel.getSubjects(day);
 
-        SubjectAdapter adapter = new SubjectAdapter(layoutInflater, new SubjectAdapter.RecyclerViewAdapterCallback() {
+        SubjectsRecyclerViewAdapter adapter = new SubjectsRecyclerViewAdapter(layoutInflater, new SubjectsRecyclerViewAdapter.RecyclerViewAdapterCallback() {
             @Override
             public void onDelete(Subject subject, int position) {
                 viewModel.deleteSubject(subject);
@@ -76,22 +76,6 @@ public class OldSubjectsFragment extends Fragment {
                     viewModel.updateSubject(editedSubject);
                 }, subject);
                 actionBottomSheet.show(getFragmentManager(), "ActionBottomSheet");
-                /*DialogFragment dialogFragment = new ActionDialog(subject, new ActionDialog.ActionDialogCallback() {
-                    @Override
-                    public void onDelete() {
-                        viewModel.deleteSubject(subject);
-                    }
-
-                    @Override
-                    public void onUpdate(Subject s, String textValue) {
-                        s.setSubject_id(subject.getSubject_id());
-                        viewModel.updateSubject(s);
-
-                        Snackbar snackbar = Snackbar.make(root, "You have updated " + s.getSubject(), Snackbar.LENGTH_LONG);
-                        snackbar.show();
-                    }
-                });
-                dialogFragment.show(getFragmentManager(), "ActionDialog");*/
             }
         });
 
@@ -99,6 +83,12 @@ public class OldSubjectsFragment extends Fragment {
         recycler.setAdapter(adapter);
 
         subjectList.observe(this, (adapter::setSubjectsList));
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
     }
 
 }

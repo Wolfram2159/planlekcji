@@ -82,15 +82,5 @@
             app:layout_constraintTop_toTopOf="@+id/guideline"
             tools:text="s. 112"/>
 
-        <!--<View
-            android:layout_width="wrap_content"
-            android:layout_height="1dp"
-            android:layout_marginBottom="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:background="@color/BLACK"
-            />-->
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

@@ -1,4 +1,4 @@
-package com.wolfram.planlekcji.ui.activities;
+package com.wolfram.planlekcji.ui.fragments;
 
 import android.app.Application;
 import android.os.AsyncTask;
@@ -17,28 +17,19 @@ import androidx.lifecycle.LiveData;
 
 /**
  * @author Wolfram
- * @date 2019-08-04
+ * @date 2019-08-31
  */
-public class SubjectsViewModel extends AndroidViewModel {
-
-    //With android view model i can get Application in constructor and then get context for getting appDatabase instance
+public class SubjectsFragmentViewModel extends AndroidViewModel {
 
     private UserDao dao;
     private LiveData<List<Subject>> subjects;
     private EnumMap<Day, LiveData<List<Subject>>> subjectsFromDay;
 
-    public SubjectsViewModel(@NonNull Application application) {
+    public SubjectsFragmentViewModel(@NonNull Application application) {
         super(application);
         AppDatabase appDatabase = AppDatabase.getInstance(application.getApplicationContext());
         dao = appDatabase.getUserDao();
         subjectsFromDay = new EnumMap<>(Day.class);
-    }
-
-    public LiveData<List<Subject>> getSubjects() {
-        if (subjects == null) {
-            subjects = dao.getSubjects();
-        }
-        return subjects;
     }
 
     public LiveData<List<Subject>> getSubjects(Day day) {

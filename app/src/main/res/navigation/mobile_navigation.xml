@@ -8,7 +8,7 @@
     <fragment android:id="@+id/nav_subjects"
         android:name="com.wolfram.planlekcji.ui.fragments.SubjectsFragment"
         android:label="@string/nav_subjects"
-        tools:layout="@layout/old_fragment_subjects"/>
+        tools:layout="@layout/pager_adapter_fragment"/>
 
     <fragment android:id="@+id/nav_grades"
         android:name="com.wolfram.planlekcji.ui.fragments.GradesFragment"

@@ -2,11 +2,11 @@ package com.wolfram.planlekcji.adapters;
 
 import android.os.Bundle;
 
-import com.wolfram.planlekcji.ui.activities.SubjectsViewModel;
-import com.wolfram.planlekcji.ui.fragments.OldSubjectsFragment;
+import com.wolfram.planlekcji.ui.fragments.PagerAdapterFragment;
 import com.wolfram.planlekcji.utils.enums.Day;
 import com.wolfram.planlekcji.utils.enums.ShortDay;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -15,21 +15,19 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
  * @author Wolfram
  * @date 2019-08-10
  */
-public class SubjectsPagerAdapter extends FragmentStatePagerAdapter {
+public class SubjectsViewPagerAdapter extends FragmentStatePagerAdapter {
 
-    private SubjectsViewModel viewModel;
 
-    public SubjectsPagerAdapter(FragmentManager fm, SubjectsViewModel viewModel) {
+    public SubjectsViewPagerAdapter(@NonNull FragmentManager fm) {
         super(fm);
-        this.viewModel = viewModel;
     }
 
+    @NonNull
     @Override
     public Fragment getItem(int i) {
-        Fragment fragment = new OldSubjectsFragment(viewModel);
+        Fragment fragment = new PagerAdapterFragment();
         Bundle args = new Bundle();
-        // Our object is just an integer :-P
-        args.putInt(OldSubjectsFragment.POSITION, i);
+        args.putInt(PagerAdapterFragment.POSITION, i);
         fragment.setArguments(args);
         return fragment;
     }

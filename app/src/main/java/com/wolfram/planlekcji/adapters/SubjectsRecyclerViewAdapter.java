@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
  * @author Wolfram
  * @date 2019-08-03
  */
-public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectViewHolder>{
+public class SubjectsRecyclerViewAdapter extends RecyclerView.Adapter<SubjectsRecyclerViewAdapter.SubjectViewHolder>{
 
     private RecyclerViewAdapterCallback recyclerViewAdapterCallback;
     private LayoutInflater layoutInflater;
@@ -29,7 +29,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectV
         void onItemClick(Subject subject, int position);
     }
 
-    public SubjectAdapter(LayoutInflater layoutInflater, RecyclerViewAdapterCallback recyclerViewAdapterCallback) {
+    public SubjectsRecyclerViewAdapter(LayoutInflater layoutInflater, RecyclerViewAdapterCallback recyclerViewAdapterCallback) {
         this.layoutInflater = layoutInflater;
         subjectsList = new ArrayList<>();
         this.recyclerViewAdapterCallback = recyclerViewAdapterCallback;
