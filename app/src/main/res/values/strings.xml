@@ -4,8 +4,9 @@
     <string name="nav_header_desc">Navigation Header</string>
     <string name="nav_header_subtitle">jakub.podsiadlo2159@gmail.com</string>
     <string name="nav_header_title">@string/app_name</string>
-    <string name="nav_subjects">Subjects</string>
+    <string name="nav_events">Events</string>
     <string name="nav_grades">Grades</string>
+    <string name="nav_subjects">Subjects</string>
     <string name="Communicate">Communicate</string>
     <string name="nav_share">Share</string>
     <string name="nav_github">Github</string>

@@ -4,12 +4,15 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
-        <item android:id="@+id/nav_subjects"
-            android:icon="@drawable/ic_menu_subjects"
-            android:title="@string/nav_subjects"/>
+        <item android:id="@+id/nav_events"
+            android:icon="@drawable/ic_menu_events"
+            android:title="@string/nav_events"/>
         <item android:id="@+id/nav_grades"
             android:icon="@drawable/ic_menu_grades"
             android:title="@string/nav_grades"/>
+        <item android:id="@+id/nav_subjects"
+            android:icon="@drawable/ic_menu_subjects"
+            android:title="@string/nav_subjects"/>
     </group>
 
     <item android:title="@string/Communicate">

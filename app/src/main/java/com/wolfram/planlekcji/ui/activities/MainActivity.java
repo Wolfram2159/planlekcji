@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_subjects, R.id.nav_grades,
+                R.id.nav_events, R.id.nav_grades, R.id.nav_subjects,
                 R.id.nav_share, R.id.nav_github)
                 .setDrawerLayout(drawerLayout)
                 .build();
