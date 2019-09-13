@@ -2,7 +2,7 @@ package com.wolfram.planlekcji.ui.bottomSheets;
 
 import com.google.android.material.button.MaterialButton;
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.database.room.entities.Subject;
+import com.wolfram.planlekcji.database.room.entities.EventDisplay;
 
 /**
  * @author Wolfram
@@ -14,17 +14,15 @@ public class ActionBottomSheet extends CustomBottomSheet {
         return R.layout.action_bottom_sheet;
     }
 
-    private ModifySubjectBottomSheet.OnModifyListener modifyListener;
     private OnDeleteListener onDeleteListener;
-    private Subject editSubject;
+    private EventDisplay editEvent;
 
     public interface OnDeleteListener {
         void onDelete();
     }
 
-    public void setOnModifyListener(ModifySubjectBottomSheet.OnModifyListener modifyListener, Subject subject) {
-        this.modifyListener = modifyListener;
-        this.editSubject = subject;
+    public void setOnModifyListener(EventDisplay editEvent) {
+        this.editEvent = editEvent;
     }
 
     public void setOnDeleteListener(OnDeleteListener onDeleteListener) {
@@ -38,8 +36,7 @@ public class ActionBottomSheet extends CustomBottomSheet {
 
         edit.setOnClickListener(view -> {
             ModifySubjectBottomSheet modifySubjectBottomSheet = new ModifySubjectBottomSheet();
-            modifySubjectBottomSheet.setModify(modifyListener);
-            modifySubjectBottomSheet.setEditSubject(editSubject);
+            modifySubjectBottomSheet.setEditEvent(editEvent);
             modifySubjectBottomSheet.show(getFragmentManager(), "EditBottomSheet");
             dismiss();
         });

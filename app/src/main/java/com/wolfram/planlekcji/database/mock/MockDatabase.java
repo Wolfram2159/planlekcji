@@ -1,7 +1,7 @@
 package com.wolfram.planlekcji.database.mock;
 
+import com.wolfram.planlekcji.database.room.entities.Event;
 import com.wolfram.planlekcji.database.room.entities.Grade;
-import com.wolfram.planlekcji.database.room.entities.Subject;
 import com.wolfram.planlekcji.database.room.entities.Time;
 import com.wolfram.planlekcji.utils.enums.Day;
 
@@ -53,25 +53,19 @@ public class MockDatabase implements Database {
     };
 
     @Override
-    public List<Subject> getSubjectList() {
-        ArrayList<Subject> subjectsList = new ArrayList<>();
+    public List<Event> getSubjectList() {
+        ArrayList<Event> subjectsList = new ArrayList<>();
 
         for (int i = 0; i < 12; i++) {
             int randomNumber = random.nextInt(4);
 
-            subjectsList.add(new Subject(
-                    subjectArray[randomNumber],
-                    startTimeArray[randomNumber],
-                    endTimeArray[randomNumber],
-                    localizationArray[randomNumber],
-                    dayArray[randomNumber]
-            ));
+
         }
         return subjectsList;
     }
 
     @Override
-    public List<Grade> getSubjectGrade(Subject s) {
+    public List<Grade> getSubjectGrade(Event s) {
         return null;
     }
 }

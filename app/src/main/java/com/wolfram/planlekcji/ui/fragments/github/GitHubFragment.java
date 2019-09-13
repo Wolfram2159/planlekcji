@@ -1,4 +1,4 @@
-package com.wolfram.planlekcji.ui.fragments;
+package com.wolfram.planlekcji.ui.fragments.github;
 
 
 import android.os.Bundle;

@@ -6,22 +6,22 @@
     app:startDestination="@+id/nav_subjects">
 
     <fragment android:id="@+id/nav_subjects"
-        android:name="com.wolfram.planlekcji.ui.fragments.SubjectsFragment"
+        android:name="com.wolfram.planlekcji.ui.fragments.events.EventFragment"
         android:label="@string/nav_subjects"
         tools:layout="@layout/pager_adapter_fragment"/>
 
     <fragment android:id="@+id/nav_grades"
-        android:name="com.wolfram.planlekcji.ui.fragments.GradesFragment"
+        android:name="com.wolfram.planlekcji.ui.fragments.grades.GradesFragment"
         android:label="@string/nav_grades"
         tools:layout="@layout/fragment_grades"/>
 
     <fragment android:id="@+id/nav_share"
-        android:name="com.wolfram.planlekcji.ui.fragments.ShareFragment"
+        android:name="com.wolfram.planlekcji.ui.fragments.share.ShareFragment"
         android:label="@string/nav_share"
         tools:layout="@layout/fragment_share"/>
 
     <fragment android:id="@+id/nav_github"
-        android:name="com.wolfram.planlekcji.ui.fragments.GitHubFragment"
+        android:name="com.wolfram.planlekcji.ui.fragments.github.GitHubFragment"
         android:label="@string/nav_github"
         tools:layout="@layout/fragment_github"/>
 

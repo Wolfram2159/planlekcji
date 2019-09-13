@@ -2,6 +2,8 @@ package com.wolfram.planlekcji.database.room;
 
 import android.content.Context;
 
+import com.wolfram.planlekcji.database.room.entities.Event;
+import com.wolfram.planlekcji.database.room.entities.Grade;
 import com.wolfram.planlekcji.database.room.entities.Subject;
 
 import androidx.room.Database;
@@ -12,7 +14,7 @@ import androidx.room.RoomDatabase;
  * @author Wolfram
  * @date 2019-07-31
  */
-@Database(entities = {Subject.class}, version = 1)
+@Database(entities = {Event.class, Subject.class, Grade.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
     @Ignore
     public final static String APPDATABASE_NAME = "plan.db";
@@ -20,7 +22,7 @@ public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase appDatabase;
 
     public abstract UserDao getUserDao();
-
+    //todo: make few userdaos
     public static synchronized AppDatabase getInstance(Context context){
         if (appDatabase==null){
             appDatabase = Room

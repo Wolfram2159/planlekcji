@@ -1,12 +1,14 @@
 package com.wolfram.planlekcji.ui.bottomSheets;
 
 import android.app.TimePickerDialog;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
 import com.google.android.material.button.MaterialButton;
 import com.wolfram.planlekcji.R;
+import com.wolfram.planlekcji.database.room.entities.EventDisplay;
 import com.wolfram.planlekcji.database.room.entities.Subject;
 import com.wolfram.planlekcji.database.room.entities.Time;
 import com.wolfram.planlekcji.utils.enums.Day;
@@ -14,36 +16,34 @@ import com.wolfram.planlekcji.utils.enums.Day;
 import java.util.Calendar;
 import java.util.Date;
 
+import androidx.lifecycle.ViewModelProviders;
+
 /**
  * @author Wolfram
  * @date 2019-08-28
  */
 public class ModifySubjectBottomSheet extends CustomBottomSheet {
 
-    private OnModifyListener modify;
-    private Subject editSubject;
+    private EventDisplay eventDisplay;
+
     @Override
     protected int getResource() {
         return R.layout.bottom_sheet;
     }
 
-    public void setEditSubject(Subject subject) {
-        this.editSubject = subject;
+    public void setEditEvent(EventDisplay eventDisplay) {
+        this.eventDisplay = eventDisplay;
     }
 
-    public interface OnModifyListener {
-        void onModify(Subject subject);
-    }
 
     public ModifySubjectBottomSheet() {
     }
 
-    public void setModify(OnModifyListener modify) {
-        this.modify = modify;
-    }
 
     @Override
     protected void customizeDialog() {
+        ModifySubjectViewModel viewModel = ViewModelProviders.of(this).get(ModifySubjectViewModel.class);
+
         ArrayAdapter<Day> adapter =
                 new ArrayAdapter<>(
                         getContext(),
@@ -63,14 +63,14 @@ public class ModifySubjectBottomSheet extends CustomBottomSheet {
 
         EditText subjectLocalization = root.findViewById(R.id.subject_localization);
 
-        Subject thisSubject = new Subject();
+        EventDisplay thisEvent = new EventDisplay();
 
         editTimeStart.setOnClickListener((v) -> {
             Date dateNow = Calendar.getInstance().getTime();
             TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), (timePicker, hour, minute) -> {
                 Time timeStart = new Time(hour, minute);
                 editTimeStart.setText(timeStart.toString());
-                thisSubject.setStart_time(timeStart);
+                thisEvent.setStart_time(timeStart);
             }, dateNow.getHours(), dateNow.getMinutes(), true);
             timePickerDialog.show();
         });
@@ -79,7 +79,7 @@ public class ModifySubjectBottomSheet extends CustomBottomSheet {
             TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), (timePicker, hour, minute) -> {
                 Time timeEnd = new Time(hour, minute);
                 editTimeEnd.setText(timeEnd.toString());
-                thisSubject.setEnd_time(timeEnd);
+                thisEvent.setEnd_time(timeEnd);
             }, dateNow.getHours(), dateNow.getMinutes(), true);
             timePickerDialog.show();
         });
@@ -87,33 +87,47 @@ public class ModifySubjectBottomSheet extends CustomBottomSheet {
         MaterialButton saveButton = root.findViewById(R.id.subject_save);
         MaterialButton cancelButton = root.findViewById(R.id.subject_cancel);
         saveButton.setOnClickListener(v -> {
+            viewModel.deleteEvent(eventDisplay);
+
+            Log.e("eventdisplay", eventDisplay.toString());
             String name = subjectName.getText().toString();
-            thisSubject.setSubject(name);
+
+            thisEvent.setName(name);
+
+            Long id = viewModel.getSubject(name);
+
+            if (id == null) {
+                Subject s = new Subject(name);
+                long newId = viewModel.insertNewSubject(s);
+                thisEvent.setSubject_id(newId);
+            }else {
+                thisEvent.setSubject_id(id);
+            }
 
             Day day = Day.valueOf(dayPicker.getText().toString());
-            thisSubject.setDay(day);
+            thisEvent.setDay(day);
 
             String localization = subjectLocalization.getText().toString();
-            thisSubject.setLocalization(localization);
+            thisEvent.setLocalization(localization);
 
-            modify.onModify(thisSubject);
+            viewModel.insertEvent(thisEvent);
             dismiss();
         });
         cancelButton.setOnClickListener(v -> {
             dismiss();
         });
-        if (editSubject != null) {
-            thisSubject.setStart_time(editSubject.getStart_time());
-            thisSubject.setEnd_time(editSubject.getEnd_time());
+        if (eventDisplay != null) {
+            thisEvent.setStart_time(eventDisplay.getStart_time());
+            thisEvent.setEnd_time(eventDisplay.getEnd_time());
 
-            subjectName.setText(editSubject.getSubject());
-            editTimeStart.setText(editSubject.getStart_time().toString());
-            editTimeEnd.setText(editSubject.getEnd_time().toString());
-            subjectLocalization.setText(editSubject.getLocalization());
-            thisSubject.setStart_time(editSubject.getStart_time());
-            thisSubject.setEnd_time(editSubject.getEnd_time());
+            subjectName.setText(eventDisplay.getName());
+            editTimeStart.setText(eventDisplay.getStart_time().toString());
+            editTimeEnd.setText(eventDisplay.getEnd_time().toString());
+            subjectLocalization.setText(eventDisplay.getLocalization());
+            thisEvent.setStart_time(eventDisplay.getStart_time());
+            thisEvent.setEnd_time(eventDisplay.getEnd_time());
 
-            int position = Day.valueOf(editSubject.getDay()).ordinal();
+            int position = Day.valueOf(eventDisplay.getDay()).ordinal();
             dayPicker.setText(dayPicker.getAdapter().getItem(position).toString(), false);
         }
     }

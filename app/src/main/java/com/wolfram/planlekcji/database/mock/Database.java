@@ -1,7 +1,7 @@
 package com.wolfram.planlekcji.database.mock;
 
+import com.wolfram.planlekcji.database.room.entities.Event;
 import com.wolfram.planlekcji.database.room.entities.Grade;
-import com.wolfram.planlekcji.database.room.entities.Subject;
 
 import java.util.List;
 
@@ -10,6 +10,6 @@ import java.util.List;
  * @date 2019-08-03
  */
 public interface Database {
-    List<Subject> getSubjectList();
-    List<Grade> getSubjectGrade(Subject s);
+    List<Event> getSubjectList();
+    List<Grade> getSubjectGrade(Event s);
 }

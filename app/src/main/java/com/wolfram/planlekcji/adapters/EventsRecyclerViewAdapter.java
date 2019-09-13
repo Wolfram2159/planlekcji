@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.database.room.entities.Subject;
+import com.wolfram.planlekcji.database.room.entities.EventDisplay;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,25 +18,24 @@ import androidx.recyclerview.widget.RecyclerView;
  * @author Wolfram
  * @date 2019-08-03
  */
-public class SubjectsRecyclerViewAdapter extends RecyclerView.Adapter<SubjectsRecyclerViewAdapter.SubjectViewHolder>{
+public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecyclerViewAdapter.SubjectViewHolder>{
 
-    private RecyclerViewAdapterCallback recyclerViewAdapterCallback;
+    private OnItemClickListener onItemClickListener;
     private LayoutInflater layoutInflater;
-    private List<Subject> subjectsList;
+    private List<EventDisplay> eventsList;
 
-    public interface RecyclerViewAdapterCallback {
-        void onDelete(Subject s, int position);
-        void onItemClick(Subject subject, int position);
+    public interface OnItemClickListener {
+        void onClick(EventDisplay event, int position);
     }
 
-    public SubjectsRecyclerViewAdapter(LayoutInflater layoutInflater, RecyclerViewAdapterCallback recyclerViewAdapterCallback) {
+    public EventsRecyclerViewAdapter(LayoutInflater layoutInflater, OnItemClickListener onItemClickListener) {
         this.layoutInflater = layoutInflater;
-        subjectsList = new ArrayList<>();
-        this.recyclerViewAdapterCallback = recyclerViewAdapterCallback;
+        eventsList = new ArrayList<>();
+        this.onItemClickListener = onItemClickListener;
     }
 
-    public void setSubjectsList(List<Subject> subjectsList) {
-        this.subjectsList = subjectsList;
+    public void setEventsList(List<EventDisplay> eventsList) {
+        this.eventsList = eventsList;
         notifyDataSetChanged();
     }
 
@@ -49,10 +48,10 @@ public class SubjectsRecyclerViewAdapter extends RecyclerView.Adapter<SubjectsRe
 
     @Override
     public void onBindViewHolder(@NonNull SubjectViewHolder holder, int position) {
-        Subject subject = subjectsList.get(position);
+        EventDisplay subject = eventsList.get(position);
 
         holder.subject.setText(
-                subject.getSubject()
+                subject.getName()
         );
         holder.time.setText(
                 subject.getTimeString()
@@ -64,14 +63,7 @@ public class SubjectsRecyclerViewAdapter extends RecyclerView.Adapter<SubjectsRe
 
     @Override
     public int getItemCount() {
-        return subjectsList.size();
-    }
-
-    public void deleteItem(int position){
-        Subject subject = subjectsList.get(position);
-        subjectsList.remove(position);
-        notifyItemRemoved(position);
-        recyclerViewAdapterCallback.onDelete(subject, position);
+        return eventsList.size();
     }
 
     public class SubjectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -92,8 +84,8 @@ public class SubjectsRecyclerViewAdapter extends RecyclerView.Adapter<SubjectsRe
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            Subject s = subjectsList.get(position);
-            recyclerViewAdapterCallback.onItemClick(s, position);
+            EventDisplay event = eventsList.get(position);
+            onItemClickListener.onClick(event, position);
         }
     }
 }

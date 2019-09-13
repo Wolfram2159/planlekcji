@@ -2,7 +2,7 @@ package com.wolfram.planlekcji.adapters;
 
 import android.os.Bundle;
 
-import com.wolfram.planlekcji.ui.fragments.PagerAdapterFragment;
+import com.wolfram.planlekcji.ui.fragments.events.PagerAdapterFragment;
 import com.wolfram.planlekcji.utils.enums.Day;
 import com.wolfram.planlekcji.utils.enums.ShortDay;
 
@@ -15,10 +15,10 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
  * @author Wolfram
  * @date 2019-08-10
  */
-public class SubjectsViewPagerAdapter extends FragmentStatePagerAdapter {
+public class EventsViewPagerAdapter extends FragmentStatePagerAdapter {
 
 
-    public SubjectsViewPagerAdapter(@NonNull FragmentManager fm) {
+    public EventsViewPagerAdapter(@NonNull FragmentManager fm) {
         super(fm);
     }
 

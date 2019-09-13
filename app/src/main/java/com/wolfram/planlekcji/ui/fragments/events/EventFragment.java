@@ -1,4 +1,4 @@
-package com.wolfram.planlekcji.ui.fragments;
+package com.wolfram.planlekcji.ui.fragments.events;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,13 +8,12 @@ import android.view.ViewGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.adapters.SubjectsViewPagerAdapter;
+import com.wolfram.planlekcji.adapters.EventsViewPagerAdapter;
 import com.wolfram.planlekcji.ui.bottomSheets.ModifySubjectBottomSheet;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,7 +22,7 @@ import butterknife.ButterKnife;
  * @author Wolfram
  * @date 2019-08-30
  */
-public class SubjectsFragment extends Fragment {
+public class EventFragment extends Fragment {
 
     @BindView(R.id.subjects_fab)
     FloatingActionButton fab;
@@ -36,18 +35,14 @@ public class SubjectsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_subjects, null);
+        View view = inflater.inflate(R.layout.fragment_events, null);
         ButterKnife.bind(this, view);
-
-        SubjectsFragmentViewModel viewModel = ViewModelProviders.of(this).get(SubjectsFragmentViewModel.class);
 
         ModifySubjectBottomSheet bottomSheet = new ModifySubjectBottomSheet();
 
-        bottomSheet.setModify(viewModel::insertSubject);
-
         fab.setOnClickListener(v -> bottomSheet.show(getFragmentManager(), "AddSubject"));
 
-        SubjectsViewPagerAdapter pagerAdapter = new SubjectsViewPagerAdapter(getFragmentManager());
+        EventsViewPagerAdapter pagerAdapter = new EventsViewPagerAdapter(getFragmentManager());
 
         viewPager.setAdapter(pagerAdapter);
 
