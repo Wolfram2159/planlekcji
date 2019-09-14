@@ -29,7 +29,7 @@ public class PagerAdapterFragment extends Fragment {
 
     public static final String POSITION = "POSITION";
 
-    @BindView(R.id.subjects_recycler)
+    @BindView(R.id.events_recycler)
     RecyclerView recycler;
 
     @Override

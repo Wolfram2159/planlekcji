@@ -35,4 +35,7 @@ public interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertEvent(Event e);
+
+    @Query("SELECT * FROM subjects")
+    LiveData<List<Subject>> getSubjects();
 }

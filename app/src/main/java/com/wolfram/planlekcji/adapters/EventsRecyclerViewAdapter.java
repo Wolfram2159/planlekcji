@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
  * @author Wolfram
  * @date 2019-08-03
  */
-public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecyclerViewAdapter.SubjectViewHolder>{
+public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecyclerViewAdapter.EventViewHolder>{
 
     private OnItemClickListener onItemClickListener;
     private LayoutInflater layoutInflater;
@@ -41,13 +41,13 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
 
     @NonNull
     @Override
-    public SubjectViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = layoutInflater.inflate(R.layout.subject_item, parent, false);
-        return new SubjectViewHolder(v);
+    public EventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = layoutInflater.inflate(R.layout.event_item, parent, false);
+        return new EventViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SubjectViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
         EventDisplay subject = eventsList.get(position);
 
         holder.subject.setText(
@@ -66,19 +66,19 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
         return eventsList.size();
     }
 
-    public class SubjectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView subject;
         private TextView time;
         private TextView localization;
-        private ViewGroup container;
-        SubjectViewHolder(@NonNull View itemView) {
+
+        EventViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.subject = itemView.findViewById(R.id.item_subject);
-            this.time = itemView.findViewById(R.id.item_time);
-            this.localization = itemView.findViewById(R.id.item_localization);
-            this.container = itemView.findViewById(R.id.root_item);
-            this.container.setOnClickListener(this);
+            this.subject = itemView.findViewById(R.id.item_event_name);
+            this.time = itemView.findViewById(R.id.item_event_time);
+            this.localization = itemView.findViewById(R.id.item_event_localization);
+            ViewGroup container = itemView.findViewById(R.id.root_event_item);
+            container.setOnClickListener(this);
         }
 
         @Override

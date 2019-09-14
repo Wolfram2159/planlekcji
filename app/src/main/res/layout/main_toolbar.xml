@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activities.SubjectsActivity">
+    tools:context=".ui.activities.MainActivity">
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,8 +16,6 @@
             android:background="@color/Primary"
             app:popupTheme="@style/AppTheme.PopupOverlay"/>
     </com.google.android.material.appbar.AppBarLayout>
-
-    <!--todo: FAB-->
 
     <include layout="@layout/content_main"/>
 
