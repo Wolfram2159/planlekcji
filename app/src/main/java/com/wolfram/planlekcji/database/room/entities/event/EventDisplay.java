@@ -1,10 +1,10 @@
-package com.wolfram.planlekcji.database.room.entities;
+package com.wolfram.planlekcji.database.room.entities.event;
 
 /**
  * @author Wolfram
  * @date 2019-09-12
  */
-public class EventDisplay extends Event{
+public class EventDisplay extends Event {
     private String name;
 
     public EventDisplay() {
@@ -21,6 +21,11 @@ public class EventDisplay extends Event{
                 ", localization='" + localization + '\'' +
                 ", day='" + day + '\'' +
                 '}';
+    }
+
+    public EventDisplay(EventDisplay event) {
+        super(event);
+        this.name = event.name;
     }
 
     public String getName() {

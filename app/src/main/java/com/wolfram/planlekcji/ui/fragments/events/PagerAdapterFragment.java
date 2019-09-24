@@ -7,8 +7,9 @@ import android.view.ViewGroup;
 
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.adapters.EventsRecyclerViewAdapter;
-import com.wolfram.planlekcji.database.room.entities.EventDisplay;
-import com.wolfram.planlekcji.ui.bottomSheets.ActionBottomSheet;
+import com.wolfram.planlekcji.database.room.entities.event.EventDisplay;
+import com.wolfram.planlekcji.database.room.entities.event.EventSingleton;
+import com.wolfram.planlekcji.ui.bottomSheets.events.ActionEventBottomSheet;
 import com.wolfram.planlekcji.utils.enums.Day;
 
 import java.util.List;
@@ -51,13 +52,13 @@ public class PagerAdapterFragment extends Fragment {
         Day day = Day.values()[pos];
         LiveData<List<EventDisplay>> subjectList = viewModel.getEvents(day);
 
-        EventsRecyclerViewAdapter adapter = new EventsRecyclerViewAdapter(layoutInflater, (event, position) -> {
-            ActionBottomSheet actionBottomSheet = new ActionBottomSheet();
-            actionBottomSheet.setOnDeleteListener(() -> {
+        EventsRecyclerViewAdapter adapter = new EventsRecyclerViewAdapter(layoutInflater, event -> {
+            ActionEventBottomSheet actionEventBottomSheet = new ActionEventBottomSheet();
+            EventSingleton.getInstance(event);
+            actionEventBottomSheet.setDeleteListener(() -> {
                 viewModel.deleteEvent(event);
             });
-            actionBottomSheet.setOnModifyListener(event);
-            actionBottomSheet.show(getFragmentManager(), "ActionBottomSheet");
+            actionEventBottomSheet.show(getFragmentManager(), "ActionEventBottomSheet");
         });
 
         recycler.setItemAnimator(new DefaultItemAnimator());

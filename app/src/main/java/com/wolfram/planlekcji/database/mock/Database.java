@@ -1,7 +1,7 @@
 package com.wolfram.planlekcji.database.mock;
 
-import com.wolfram.planlekcji.database.room.entities.Event;
-import com.wolfram.planlekcji.database.room.entities.Grade;
+import com.wolfram.planlekcji.database.room.entities.event.Event;
+import com.wolfram.planlekcji.database.room.entities.grade.Grade;
 
 import java.util.List;
 

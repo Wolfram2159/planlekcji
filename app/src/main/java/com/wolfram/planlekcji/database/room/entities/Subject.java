@@ -28,10 +28,7 @@ public class Subject {
 
     @Override
     public String toString() {
-        return "Event{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+        return this.name;
     }
 
     public Integer getId() {

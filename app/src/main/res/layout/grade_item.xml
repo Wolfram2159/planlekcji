@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView  android:id="@+id/root_subject_item"
+<com.google.android.material.card.MaterialCardView  android:id="@+id/root_grade_item"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/Widget.MaterialComponents.CardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:animateLayoutChanges="true"
+    android:layout_margin="0dp"
     app:cardCornerRadius="0dp"
-    app:cardBackgroundColor="@color/colorPrimary"
+    android:animateLayoutChanges="true"
+    app:cardBackgroundColor="@color/Secondary"
     app:rippleColor="@color/Primary"
     app:strokeColor="@android:color/darker_gray">
 
@@ -16,34 +17,35 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/item_subject_name"
-            style="@style/GradeGroupItem"
+        <TextView   android:id="@+id/item_grade_description"
+            style="@style/GradeChildItem.Description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/bottom_line"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Matematyka" />
+            tools:text="4.0"/>
 
-        <ImageView
-            android:id="@+id/item_subject_arrow"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/ic_arrow"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <TextView   android:id="@+id/item_grade_date"
+            style="@style/GradeChildItem.Date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_date"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="26-04-2017"
+            />
 
-        <ImageView
+        <ImageView  android:id="@+id/bottom_line"
+            style="@style/GradeChildItem.BottomLine"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#565656"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

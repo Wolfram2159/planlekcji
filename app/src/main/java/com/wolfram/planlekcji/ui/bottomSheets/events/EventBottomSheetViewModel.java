@@ -1,11 +1,11 @@
-package com.wolfram.planlekcji.ui.bottomSheets;
+package com.wolfram.planlekcji.ui.bottomSheets.events;
 
 import android.app.Application;
 import android.os.AsyncTask;
 
 import com.wolfram.planlekcji.database.room.AppDatabase;
 import com.wolfram.planlekcji.database.room.UserDao;
-import com.wolfram.planlekcji.database.room.entities.Event;
+import com.wolfram.planlekcji.database.room.entities.event.Event;
 import com.wolfram.planlekcji.database.room.entities.Subject;
 
 import java.util.concurrent.Callable;
@@ -20,11 +20,11 @@ import androidx.lifecycle.AndroidViewModel;
  * @author Wolfram
  * @date 2019-09-13
  */
-public class ModifySubjectViewModel extends AndroidViewModel {
+public class EventBottomSheetViewModel extends AndroidViewModel {
 
     private UserDao dao;
 
-    public ModifySubjectViewModel(@NonNull Application application) {
+    public EventBottomSheetViewModel(@NonNull Application application) {
         super(application);
         dao = AppDatabase.getInstance(application.getApplicationContext()).getUserDao();
     }

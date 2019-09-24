@@ -5,8 +5,8 @@ import android.os.AsyncTask;
 
 import com.wolfram.planlekcji.database.room.AppDatabase;
 import com.wolfram.planlekcji.database.room.UserDao;
-import com.wolfram.planlekcji.database.room.entities.Event;
-import com.wolfram.planlekcji.database.room.entities.EventDisplay;
+import com.wolfram.planlekcji.database.room.entities.event.Event;
+import com.wolfram.planlekcji.database.room.entities.event.EventDisplay;
 import com.wolfram.planlekcji.utils.enums.Day;
 
 import java.util.EnumMap;

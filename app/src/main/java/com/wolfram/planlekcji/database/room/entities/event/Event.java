@@ -1,5 +1,7 @@
-package com.wolfram.planlekcji.database.room.entities;
+package com.wolfram.planlekcji.database.room.entities.event;
 
+import com.wolfram.planlekcji.database.room.entities.Subject;
+import com.wolfram.planlekcji.database.room.entities.Time;
 import com.wolfram.planlekcji.utils.enums.Day;
 
 import androidx.room.Embedded;
@@ -35,6 +37,16 @@ public class Event {
 
     public Event() {
 
+    }
+
+    //copying constructor
+    public Event(Event event){
+        this.id = event.id;
+        this.subject_id = event.subject_id;
+        this.start_time = event.start_time;
+        this.end_time = event.end_time;
+        this.localization = event.localization;
+        this.day = event.day;
     }
 
     public Event(Integer id, Long subject_id, Time start_time, Time end_time, String localization, String day) {

@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@+id/nav_events">
+    app:startDestination="@+id/nav_grades">
 
     <fragment android:id="@+id/nav_events"
         android:name="com.wolfram.planlekcji.ui.fragments.events.EventFragment"

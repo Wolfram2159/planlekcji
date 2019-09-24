@@ -3,6 +3,7 @@ package com.wolfram.planlekcji.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wolfram.planlekcji.R;
@@ -18,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
  * @author Wolfram
  * @date 2019-09-14
  */
-public class SubjectsRecyclerViewAdapter extends RecyclerView.Adapter<SubjectsRecyclerViewAdapter.SubjectsViewHolder> {
+public class SubjectsRecyclerViewAdapter extends RecyclerView.Adapter<SubjectsRecyclerViewAdapter.SubjectViewHolder> {
 
     private List<Subject> subjectList;
     private LayoutInflater layoutInflater;
@@ -35,13 +36,13 @@ public class SubjectsRecyclerViewAdapter extends RecyclerView.Adapter<SubjectsRe
 
     @NonNull
     @Override
-    public SubjectsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SubjectViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = layoutInflater.inflate(R.layout.subject_item, parent, false);
-        return new SubjectsViewHolder(v);
+        return new SubjectViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SubjectsViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SubjectViewHolder holder, int position) {
         Subject subject = subjectList.get(position);
 
         holder.textView.setText(subject.getName());
@@ -52,13 +53,16 @@ public class SubjectsRecyclerViewAdapter extends RecyclerView.Adapter<SubjectsRe
         return subjectList.size();
     }
 
-    public class SubjectsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class SubjectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private TextView textView;
+        private ImageView imageView;
 
-        public SubjectsViewHolder(@NonNull View itemView) {
+        public SubjectViewHolder(@NonNull View itemView) {
             super(itemView);
             this.textView = itemView.findViewById(R.id.item_subject_name);
+            this.imageView = itemView.findViewById(R.id.item_subject_arrow);
+            imageView.setVisibility(View.INVISIBLE);
             ViewGroup container = itemView.findViewById(R.id.root_subject_item);
             container.setOnClickListener(this);
         }

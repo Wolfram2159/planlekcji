@@ -9,7 +9,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.adapters.EventsViewPagerAdapter;
-import com.wolfram.planlekcji.ui.bottomSheets.ModifySubjectBottomSheet;
+import com.wolfram.planlekcji.ui.bottomSheets.events.ModifyEventBottomSheet;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,7 +38,7 @@ public class EventFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_events, null);
         ButterKnife.bind(this, view);
 
-        ModifySubjectBottomSheet bottomSheet = new ModifySubjectBottomSheet();
+        ModifyEventBottomSheet bottomSheet = new ModifyEventBottomSheet();
 
         fab.setOnClickListener(v -> bottomSheet.show(getFragmentManager(), "AddSubject"));
 

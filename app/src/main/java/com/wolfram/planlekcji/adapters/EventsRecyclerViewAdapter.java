@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.database.room.entities.EventDisplay;
+import com.wolfram.planlekcji.database.room.entities.event.EventDisplay;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
     private List<EventDisplay> eventsList;
 
     public interface OnItemClickListener {
-        void onClick(EventDisplay event, int position);
+        void onClick(EventDisplay event);
     }
 
     public EventsRecyclerViewAdapter(LayoutInflater layoutInflater, OnItemClickListener onItemClickListener) {
@@ -85,7 +85,7 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
         public void onClick(View view) {
             int position = getAdapterPosition();
             EventDisplay event = eventsList.get(position);
-            onItemClickListener.onClick(event, position);
+            onItemClickListener.onClick(event);
         }
     }
 }
