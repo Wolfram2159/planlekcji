@@ -2,9 +2,10 @@ package com.wolfram.planlekcji.ui.bottomSheets.grades;
 
 import com.google.android.material.button.MaterialButton;
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.database.room.entities.grade.GradeSingleton;
 import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
-import com.wolfram.planlekcji.utils.interfaces.OnDeleteListener;
+import com.wolfram.planlekcji.ui.fragments.grades.GradesFragmentViewModel;
+
+import androidx.lifecycle.ViewModelProviders;
 
 /**
  * @author Wolfram
@@ -12,12 +13,8 @@ import com.wolfram.planlekcji.utils.interfaces.OnDeleteListener;
  */
 public class ActionGradeBottomSheet extends CustomBottomSheet {
 
-    private boolean ifSetNull = true;
-    private OnDeleteListener onDeleteListener;
-
-    public void setOnDeleteListener(OnDeleteListener onDeleteListener) {
-        this.onDeleteListener = onDeleteListener;
-    }
+    private GradesFragmentViewModel viewModel;
+    private boolean isEditedBtnClicked = false;
 
     @Override
     protected int getResource() {
@@ -27,8 +24,8 @@ public class ActionGradeBottomSheet extends CustomBottomSheet {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (ifSetNull) {
-            GradeSingleton.setNull();
+        if (!isEditedBtnClicked) {
+            viewModel.setModifiedGrade(null);
         }
     }
 
@@ -37,16 +34,17 @@ public class ActionGradeBottomSheet extends CustomBottomSheet {
         MaterialButton edit = root.findViewById(R.id.action_edit_btn);
         MaterialButton delete = root.findViewById(R.id.action_delete_btn);
 
-        edit.setOnClickListener(view -> {
-            ModifyGradeBottomSheet modifyGradeBottomSheet = new ModifyGradeBottomSheet();
+        viewModel = ViewModelProviders.of(getActivity()).get(GradesFragmentViewModel.class);
 
+        edit.setOnClickListener(view -> {
+            isEditedBtnClicked = true;
+            ModifyGradeBottomSheet modifyGradeBottomSheet = new ModifyGradeBottomSheet();
             modifyGradeBottomSheet.show(getFragmentManager(), "EditBottomSheet");
-            ifSetNull = false;
             dismiss();
         });
 
         delete.setOnClickListener(view -> {
-            onDeleteListener.onDelete();
+            viewModel.deleteGrade();
             dismiss();
         });
     }

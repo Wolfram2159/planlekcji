@@ -9,11 +9,10 @@ import android.widget.TextView;
 
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
-import com.thoughtbot.expandablerecyclerview.models.ExpandableList;
 import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder;
 import com.thoughtbot.expandablerecyclerview.viewholders.GroupViewHolder;
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.database.room.entities.grade.Grade;
+import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplay;
 
 import java.util.List;
 
@@ -22,19 +21,19 @@ import java.util.List;
  * @date 2019-09-20
  */
 public class GradesRecyclerViewAdapter extends ExpandableRecyclerViewAdapter<GradesRecyclerViewAdapter.SubjectVH, GradesRecyclerViewAdapter.GradeVH> {
+
+    private OnItemClickListener onItemClickListener;
+
+    public interface OnItemClickListener{
+        void onItemClick(GradeDisplay gradeDisplay);
+    }
+
     public GradesRecyclerViewAdapter(List<? extends ExpandableGroup> groups) {
         super(groups);
     }
 
-    public void setExpandableList(List<? extends ExpandableGroup> groups){
-        this.expandableList = new ExpandableList(groups);
-    }
-
-    public void notifyGroupDataChanged() {
-        this.expandableList.expandedGroupIndexes = new boolean[this.getGroups().size()];
-        for (int i = 0; i < this.getGroups().size(); i++) {
-            this.expandableList.expandedGroupIndexes[i] = false;
-        }
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     @Override
@@ -51,8 +50,9 @@ public class GradesRecyclerViewAdapter extends ExpandableRecyclerViewAdapter<Gra
 
     @Override
     public void onBindChildViewHolder(GradeVH holder, int flatPosition, ExpandableGroup group, int childIndex) {
-        Grade g = (Grade) group.getItems().get(childIndex);
+        GradeDisplay g = (GradeDisplay) group.getItems().get(childIndex);
         holder.gradeDesc.setText(g.getDescription());
+        holder.grade = g;
     }
 
     @Override
@@ -67,7 +67,6 @@ public class GradesRecyclerViewAdapter extends ExpandableRecyclerViewAdapter<Gra
 
         public SubjectVH(View itemView) {
             super(itemView);
-            //itemView.setBackgroundColor(Color.parseColor("#CECECE"));
             arrow = itemView.findViewById(R.id.item_subject_arrow);
             subjectName = itemView.findViewById(R.id.item_subject_name);
         }
@@ -102,13 +101,20 @@ public class GradesRecyclerViewAdapter extends ExpandableRecyclerViewAdapter<Gra
         }
     }
 
-    class GradeVH extends ChildViewHolder {
+    class GradeVH extends ChildViewHolder implements View.OnClickListener{
 
         private TextView gradeDesc;
+        private GradeDisplay grade;
 
         public GradeVH(View itemView) {
             super(itemView);
             gradeDesc = itemView.findViewById(R.id.item_grade_description);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            onItemClickListener.onItemClick(grade);
         }
     }
 

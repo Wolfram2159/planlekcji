@@ -12,8 +12,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.adapters.GradesRecyclerViewAdapter;
 import com.wolfram.planlekcji.database.room.entities.Subject;
-import com.wolfram.planlekcji.database.room.entities.grade.Grade;
+import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplay;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeGroup;
+import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
+import com.wolfram.planlekcji.ui.bottomSheets.grades.ActionGradeBottomSheet;
 import com.wolfram.planlekcji.ui.bottomSheets.grades.ModifyGradeBottomSheet;
 
 import java.util.ArrayList;
@@ -44,7 +46,7 @@ public class GradesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_grades, container, false);
         ButterKnife.bind(this, view);
 
-        GradesFragmentViewModel viewModel = ViewModelProviders.of(this).get(GradesFragmentViewModel.class);
+        GradesFragmentViewModel viewModel = ViewModelProviders.of(getActivity()).get(GradesFragmentViewModel.class);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recycler.setLayoutManager(layoutManager);
@@ -58,7 +60,7 @@ public class GradesFragment extends Fragment {
             for (int i = 0; i < subjects.size(); i++) {
                 int j = i;
                 Subject s = subjects.get(i);
-                LiveData<List<Grade>> gradesList = viewModel.getGradesFromSubject(s.getId());
+                LiveData<List<GradeDisplay>> gradesList = viewModel.getGradesFromSubject(s.getId());
                 gradesList.observe(this, grades -> {
                     if (gradeGroups.size() < subjects.size()) {
                         gradeGroups.add(new GradeGroup(s.getName(), grades));
@@ -67,8 +69,14 @@ public class GradesFragment extends Fragment {
                         int index = hashMap.get(j);
                         gradeGroups.set(index, new GradeGroup(s.getName(), grades));
                     }
-                    gradeGroups.sort((g1, g2) -> g1.getTitle().compareTo(g2.getTitle()));
-                    GradesRecyclerViewAdapter adapter = new GradesRecyclerViewAdapter(gradeGroups);
+                    List<GradeGroup> listForAdapter = new ArrayList<>(gradeGroups);
+                    listForAdapter.sort((g1, g2) -> g1.getTitle().compareTo(g2.getTitle()));
+                    GradesRecyclerViewAdapter adapter = new GradesRecyclerViewAdapter(listForAdapter);
+                    adapter.setOnItemClickListener(gradeDisplay -> {
+                        viewModel.setModifiedGrade(gradeDisplay);
+                        CustomBottomSheet actionBottomSheet = new ActionGradeBottomSheet();
+                        actionBottomSheet.show(getFragmentManager(), "ActionGrade");
+                    });
                     recycler.setAdapter(adapter);
                 });
             }

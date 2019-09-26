@@ -4,6 +4,7 @@ import com.wolfram.planlekcji.database.room.entities.Subject;
 import com.wolfram.planlekcji.database.room.entities.event.Event;
 import com.wolfram.planlekcji.database.room.entities.event.EventDisplay;
 import com.wolfram.planlekcji.database.room.entities.grade.Grade;
+import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplay;
 
 import java.util.List;
 
@@ -37,15 +38,18 @@ public interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertEvent(Event e);
 
-    @Query("SELECT * FROM subjects")
+    @Query("SELECT * FROM subjects ORDER BY id ASC")
     LiveData<List<Subject>> getSubjects();
-
-    @Query("SELECT * FROM subjects")
-    LiveData<List<Subject>> getSubjectsNames();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertGrade(Grade grade);
 
-    @Query("SELECT * FROM grades WHERE subject_id=(:subjectId) ORDER BY subject_id ASC")//todo: add Date field to Grade class
-    LiveData<List<Grade>> getGradesFromSubject(int subjectId);
+    @Query("SELECT grades.id, subjects.id as subject_id, subjects.name, grades.description FROM grades JOIN subjects ON grades.subject_id=subjects.id WHERE subject_id=(:subjectId) ORDER BY subject_id ASC")
+    LiveData<List<GradeDisplay>> getGradesFromSubject(int subjectId);
+
+    @Delete
+    void deleteGrade(Grade grade);
+
+    /*@Query("SELECT * FROM")
+    LiveData<GradeDisplay> getGradeDisplay(int grade_id);*/
 }

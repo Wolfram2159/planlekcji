@@ -8,8 +8,9 @@ import com.google.android.material.button.MaterialButton;
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.database.room.entities.Subject;
 import com.wolfram.planlekcji.database.room.entities.grade.Grade;
-import com.wolfram.planlekcji.database.room.entities.grade.GradeSingleton;
+import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplay;
 import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
+import com.wolfram.planlekcji.ui.fragments.grades.GradesFragmentViewModel;
 
 import androidx.lifecycle.ViewModelProviders;
 
@@ -18,6 +19,9 @@ import androidx.lifecycle.ViewModelProviders;
  * @date 2019-09-18
  */
 public class ModifyGradeBottomSheet extends CustomBottomSheet {
+
+    private GradesFragmentViewModel viewModel;
+
     @Override
     protected int getResource() {
         return R.layout.grades_bottom_sheet;
@@ -26,7 +30,7 @@ public class ModifyGradeBottomSheet extends CustomBottomSheet {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        GradeSingleton.setNull();
+        viewModel.setModifiedGrade(null);
     }
 
     @Override
@@ -36,16 +40,29 @@ public class ModifyGradeBottomSheet extends CustomBottomSheet {
         EditText desc = root.findViewById(R.id.grade_desc);
         AutoCompleteTextView subjectPicker = root.findViewById(R.id.grade_name);
 
-        GradeBottomSheetViewModel viewModel = ViewModelProviders.of(this).get(GradeBottomSheetViewModel.class);
+        viewModel = ViewModelProviders.of(getActivity()).get(GradesFragmentViewModel.class);
 
-        viewModel.getSubjectsNames().observe(this, subjects -> {
+        Grade newGrade = new Grade();
+
+        GradeDisplay modifiedGrade;
+
+        if ((modifiedGrade = viewModel.getModifiedGrade()) != null){
+            newGrade.setId(modifiedGrade.getId());
+            newGrade.setSubject_id(modifiedGrade.getSubject_id());
+            newGrade.setDescription(modifiedGrade.getDescription());
+
+            subjectPicker.setText(modifiedGrade.getName());
+            desc.setText(modifiedGrade.getDescription());
+        }
+
+        viewModel.getSubjects().observe(this, subjects -> {
             ArrayAdapter<Subject> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, subjects);
 
             subjectPicker.setShowSoftInputOnFocus(false);
             subjectPicker.setAdapter(adapter);
         });
 
-        Grade newGrade = new Grade();
+
 
         subjectPicker.setOnItemClickListener((parent, view, pos, arg) -> {
             Object item = parent.getItemAtPosition(pos);
@@ -54,20 +71,6 @@ public class ModifyGradeBottomSheet extends CustomBottomSheet {
             }
         });
 
-
-        /*todo: this
-
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            DatePickerDialog picker = new DatePickerDialog(getContext());
-            picker.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
-                @Override
-                public void onDateSet(DatePicker picker, int year, int month, int day) {
-                    Log.e("czas", "" + year + "/" + month + "/" + day + "");
-                }
-            });
-            picker.show();
-        }
-*/
         saveBtn.setOnClickListener(view -> {
             newGrade.setDescription(desc.getText().toString());
             viewModel.insertGrade(newGrade);
@@ -77,13 +80,5 @@ public class ModifyGradeBottomSheet extends CustomBottomSheet {
         cancelBtn.setOnClickListener(view -> {
             dismiss();
         });
-        if (!GradeSingleton.isNull()){
-            GradeSingleton gradeSingleton = GradeSingleton.getInstance(null);
-            int id = gradeSingleton.getId();
-            newGrade.setId(id);
-
-            subjectPicker.setText(gradeSingleton.getName());
-            desc.setText(gradeSingleton.getDescription());
-        }
     }
 }

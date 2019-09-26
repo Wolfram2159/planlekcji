@@ -7,11 +7,12 @@ import android.widget.EditText;
 
 import com.google.android.material.button.MaterialButton;
 import com.wolfram.planlekcji.R;
+import com.wolfram.planlekcji.database.room.entities.event.Event;
 import com.wolfram.planlekcji.database.room.entities.event.EventDisplay;
-import com.wolfram.planlekcji.database.room.entities.event.EventSingleton;
 import com.wolfram.planlekcji.database.room.entities.Subject;
 import com.wolfram.planlekcji.database.room.entities.Time;
 import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
+import com.wolfram.planlekcji.ui.fragments.events.ViewPagerEventsFragmentViewModel;
 import com.wolfram.planlekcji.utils.enums.Day;
 
 import java.util.Calendar;
@@ -25,6 +26,8 @@ import androidx.lifecycle.ViewModelProviders;
  */
 public class ModifyEventBottomSheet extends CustomBottomSheet {
 
+    private ViewPagerEventsFragmentViewModel viewModel;
+
     @Override
     protected int getResource() {
         return R.layout.events_bottom_sheet;
@@ -33,12 +36,12 @@ public class ModifyEventBottomSheet extends CustomBottomSheet {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        EventSingleton.setNull();
+        viewModel.setModifiedEvent(null);
     }
 
     @Override
     protected void customizeDialog() {
-        EventBottomSheetViewModel viewModel = ViewModelProviders.of(this).get(EventBottomSheetViewModel.class);
+        viewModel = ViewModelProviders.of(getActivity()).get(ViewPagerEventsFragmentViewModel.class);
 
         ArrayAdapter<Day> adapter =
                 new ArrayAdapter<>(
@@ -55,7 +58,23 @@ public class ModifyEventBottomSheet extends CustomBottomSheet {
         EditText editTimeEnd = root.findViewById(R.id.subject_time_end);
         EditText subjectLocalization = root.findViewById(R.id.subject_localization);
 
-        EventDisplay newEvent = new EventDisplay();
+        Event newEvent = new Event();
+
+        EventDisplay modifiedEvent;
+
+        if ((modifiedEvent = viewModel.getModifiedEvent()) != null) {
+            newEvent.setId(modifiedEvent.getId());
+            newEvent.setStart_time(modifiedEvent.getStart_time());
+            newEvent.setEnd_time(modifiedEvent.getEnd_time());
+
+            subjectName.setText(modifiedEvent.getName());
+            editTimeStart.setText(modifiedEvent.getStart_time().toString());
+            editTimeEnd.setText(modifiedEvent.getEnd_time().toString());
+            subjectLocalization.setText(modifiedEvent.getLocalization());
+
+            int position = Day.valueOf(modifiedEvent.getDay()).ordinal();
+            dayPicker.setText(dayPicker.getAdapter().getItem(position).toString(), false);
+        }
 
         editTimeStart.setOnClickListener((v) -> {
             Date dateNow = Calendar.getInstance().getTime();
@@ -99,23 +118,5 @@ public class ModifyEventBottomSheet extends CustomBottomSheet {
         cancelButton.setOnClickListener(v -> {
             dismiss();
         });
-        if (!EventSingleton.isNull()) {
-            EventSingleton eventDisplay = EventSingleton.getInstance(null);
-            int id = eventDisplay.getId();
-            newEvent.setId(id);
-
-            newEvent.setStart_time(eventDisplay.getStart_time());
-            newEvent.setEnd_time(eventDisplay.getEnd_time());
-
-            subjectName.setText(eventDisplay.getName());
-            editTimeStart.setText(eventDisplay.getStart_time().toString());
-            editTimeEnd.setText(eventDisplay.getEnd_time().toString());
-            subjectLocalization.setText(eventDisplay.getLocalization());
-            newEvent.setStart_time(eventDisplay.getStart_time());
-            newEvent.setEnd_time(eventDisplay.getEnd_time());
-
-            int position = Day.valueOf(eventDisplay.getDay()).ordinal();
-            dayPicker.setText(dayPicker.getAdapter().getItem(position).toString(), false);
-        }
     }
 }

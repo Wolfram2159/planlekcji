@@ -28,9 +28,12 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
         void onClick(EventDisplay event);
     }
 
-    public EventsRecyclerViewAdapter(LayoutInflater layoutInflater, OnItemClickListener onItemClickListener) {
+    public EventsRecyclerViewAdapter(LayoutInflater layoutInflater) {
         this.layoutInflater = layoutInflater;
         eventsList = new ArrayList<>();
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 

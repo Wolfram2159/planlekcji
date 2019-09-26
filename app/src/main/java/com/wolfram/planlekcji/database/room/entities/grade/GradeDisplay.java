@@ -21,11 +21,6 @@ public class GradeDisplay extends Grade {
                 '}';
     }
 
-    public GradeDisplay(GradeDisplay grade){
-        super(grade);
-        this.name = grade.name;
-    }
-
     public String getName() {
         return name;
     }

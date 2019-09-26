@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.adapters.EventsRecyclerViewAdapter;
 import com.wolfram.planlekcji.database.room.entities.event.EventDisplay;
-import com.wolfram.planlekcji.database.room.entities.event.EventSingleton;
 import com.wolfram.planlekcji.ui.bottomSheets.events.ActionEventBottomSheet;
 import com.wolfram.planlekcji.utils.enums.Day;
 
@@ -43,7 +42,7 @@ public class PagerAdapterFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
-        ViewPagerEventsFragmentViewModel viewModel = ViewModelProviders.of(this).get(ViewPagerEventsFragmentViewModel.class);
+        ViewPagerEventsFragmentViewModel viewModel = ViewModelProviders.of(getActivity()).get(ViewPagerEventsFragmentViewModel.class);
 
         LayoutInflater layoutInflater = getLayoutInflater();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -52,15 +51,13 @@ public class PagerAdapterFragment extends Fragment {
         Day day = Day.values()[pos];
         LiveData<List<EventDisplay>> subjectList = viewModel.getEvents(day);
 
-        EventsRecyclerViewAdapter adapter = new EventsRecyclerViewAdapter(layoutInflater, event -> {
+        EventsRecyclerViewAdapter adapter = new EventsRecyclerViewAdapter(layoutInflater);
+        adapter.setOnItemClickListener(event -> {
+            viewModel.setModifiedEvent(event);
+
             ActionEventBottomSheet actionEventBottomSheet = new ActionEventBottomSheet();
-            EventSingleton.getInstance(event);
-            actionEventBottomSheet.setDeleteListener(() -> {
-                viewModel.deleteEvent(event);
-            });
             actionEventBottomSheet.show(getFragmentManager(), "ActionEventBottomSheet");
         });
-
         recycler.setItemAnimator(new DefaultItemAnimator());
         recycler.setAdapter(adapter);
 
