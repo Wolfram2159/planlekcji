@@ -38,7 +38,7 @@ public class SubjectsFragment extends Fragment {
         SubjectsRecyclerViewAdapter adapter = new SubjectsRecyclerViewAdapter(getLayoutInflater());
         recycler.setAdapter(adapter);
 
-        SubjectsFragmentViewModel viewModel = ViewModelProviders.of(this).get(SubjectsFragmentViewModel.class);
+        SubjectsFragmentViewModel viewModel = ViewModelProviders.of(getActivity()).get(SubjectsFragmentViewModel.class);
         LiveData<List<Subject>> subjectsList = viewModel.getSubjects();
         subjectsList.observe(this, adapter::setSubjectList);
 
