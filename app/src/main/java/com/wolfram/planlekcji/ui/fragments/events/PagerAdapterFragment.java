@@ -44,14 +44,13 @@ public class PagerAdapterFragment extends Fragment {
 
         ViewPagerEventsFragmentViewModel viewModel = ViewModelProviders.of(getActivity()).get(ViewPagerEventsFragmentViewModel.class);
 
-        LayoutInflater layoutInflater = getLayoutInflater();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recycler.setLayoutManager(layoutManager);
 
         Day day = Day.values()[pos];
         LiveData<List<EventDisplay>> subjectList = viewModel.getEvents(day);
 
-        EventsRecyclerViewAdapter adapter = new EventsRecyclerViewAdapter(layoutInflater);
+        EventsRecyclerViewAdapter adapter = new EventsRecyclerViewAdapter();
         adapter.setOnItemClickListener(event -> {
             viewModel.setModifiedEvent(event);
 

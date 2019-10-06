@@ -21,15 +21,13 @@ import androidx.recyclerview.widget.RecyclerView;
 public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecyclerViewAdapter.EventViewHolder>{
 
     private OnItemClickListener onItemClickListener;
-    private LayoutInflater layoutInflater;
     private List<EventDisplay> eventsList;
 
     public interface OnItemClickListener {
         void onClick(EventDisplay event);
     }
 
-    public EventsRecyclerViewAdapter(LayoutInflater layoutInflater) {
-        this.layoutInflater = layoutInflater;
+    public EventsRecyclerViewAdapter() {
         eventsList = new ArrayList<>();
     }
 
@@ -45,7 +43,7 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
     @NonNull
     @Override
     public EventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = layoutInflater.inflate(R.layout.event_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_item, parent, false);
         return new EventViewHolder(v);
     }
 

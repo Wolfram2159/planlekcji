@@ -10,12 +10,10 @@ import android.view.ViewGroup;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.adapters.GradesRecyclerViewAdapter;
+import com.wolfram.planlekcji.adapters.expanded.ParentGradeRecyclerViewAdapter;
 import com.wolfram.planlekcji.database.room.entities.Subject;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplay;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeGroup;
-import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
-import com.wolfram.planlekcji.ui.bottomSheets.grades.ActionGradeBottomSheet;
 import com.wolfram.planlekcji.ui.bottomSheets.grades.ModifyGradeBottomSheet;
 
 import java.util.ArrayList;
@@ -26,9 +24,9 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -51,8 +49,9 @@ public class GradesFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recycler.setLayoutManager(layoutManager);
 
-        recycler.setItemAnimator(new DefaultItemAnimator());
 
+        ParentGradeRecyclerViewAdapter adapter = new ParentGradeRecyclerViewAdapter();
+        ((SimpleItemAnimator) recycler.getItemAnimator()).setSupportsChangeAnimations(false);
         LiveData<List<Subject>> subjectList = viewModel.getSubjects();
         subjectList.observe(this, subjects -> {
             List<GradeGroup> gradeGroups = new ArrayList<>();
@@ -71,16 +70,12 @@ public class GradesFragment extends Fragment {
                     }
                     List<GradeGroup> listForAdapter = new ArrayList<>(gradeGroups);
                     listForAdapter.sort((g1, g2) -> g1.getTitle().compareTo(g2.getTitle()));
-                    GradesRecyclerViewAdapter adapter = new GradesRecyclerViewAdapter(listForAdapter);
-                    adapter.setOnItemClickListener(gradeDisplay -> {
-                        viewModel.setModifiedGrade(gradeDisplay);
-                        CustomBottomSheet actionBottomSheet = new ActionGradeBottomSheet();
-                        actionBottomSheet.show(getFragmentManager(), "ActionGrade");
-                    });
-                    recycler.setAdapter(adapter);
+
+                    adapter.setGradeGroups(listForAdapter);
                 });
             }
         });
+        recycler.setAdapter(adapter);
         //todo: rework Grade.class
         //todo: notes fragment/activity with image/txt files
 

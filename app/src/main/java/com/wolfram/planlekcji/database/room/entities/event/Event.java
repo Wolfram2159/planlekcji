@@ -7,6 +7,7 @@ import com.wolfram.planlekcji.utils.enums.Day;
 import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 /**
@@ -39,7 +40,7 @@ public class Event {
 
     }
 
-    //copying constructor
+    @Ignore
     public Event(Event event){
         this.id = event.id;
         this.subject_id = event.subject_id;
@@ -47,15 +48,6 @@ public class Event {
         this.end_time = event.end_time;
         this.localization = event.localization;
         this.day = event.day;
-    }
-
-    public Event(Integer id, Long subject_id, Time start_time, Time end_time, String localization, String day) {
-        this.id = id;
-        this.subject_id = subject_id;
-        this.start_time = start_time;
-        this.end_time = end_time;
-        this.localization = localization;
-        this.day = day;
     }
 
     @Override
