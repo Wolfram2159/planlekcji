@@ -9,7 +9,6 @@
     android:layout_margin="0dp"
     app:cardCornerRadius="0dp"
     android:animateLayoutChanges="true"
-    app:cardBackgroundColor="@color/Secondary"
     app:rippleColor="@color/Primary"
     app:strokeColor="@android:color/darker_gray">
 
