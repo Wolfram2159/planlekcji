@@ -5,20 +5,19 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragments.events.EventFragment">
-<!--todo:rename id's-->
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/root_subjects"
+        android:id="@+id/root_events"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
 
         <androidx.viewpager.widget.ViewPager
-            android:id="@+id/subjects_view_pager"
+            android:id="@+id/events_view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <com.google.android.material.tabs.TabLayout
-                android:id="@+id/subjects_tab_layout"
+                android:id="@+id/events_tab_layout"
                 style="@style/Base.Widget.Design.TabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -26,9 +25,9 @@
         </androidx.viewpager.widget.ViewPager>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/subjects_fab"
+            android:id="@+id/events_fab"
             style="@style/Widget.MaterialComponents.FloatingActionButton"
-            app:layout_anchor="@+id/subjects_view_pager"
+            app:layout_anchor="@+id/events_view_pager"
             app:layout_anchorGravity="bottom|end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

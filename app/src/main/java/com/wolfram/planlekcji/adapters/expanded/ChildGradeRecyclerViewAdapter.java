@@ -20,7 +20,12 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 public class ChildGradeRecyclerViewAdapter extends RecyclerView.Adapter<ChildGradeRecyclerViewAdapter.ViewHolder> {
 
+    public interface OnChildItemClickListener {
+        void onClick(GradeDisplay g);
+    }
+
     private List<GradeDisplay> gradeList;
+    private OnChildItemClickListener onChildItemClickListener;
 
     ChildGradeRecyclerViewAdapter() {
         this.gradeList = new ArrayList<>();
@@ -29,6 +34,10 @@ public class ChildGradeRecyclerViewAdapter extends RecyclerView.Adapter<ChildGra
     void setGradeList(List<GradeDisplay> gradeList) {
         this.gradeList = gradeList;
         notifyDataSetChanged();
+    }
+
+    public void setOnChildItemClickListener(OnChildItemClickListener onChildItemClickListener) {
+        this.onChildItemClickListener = onChildItemClickListener;
     }
 
     @NonNull
@@ -48,13 +57,21 @@ public class ChildGradeRecyclerViewAdapter extends RecyclerView.Adapter<ChildGra
         return gradeList.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView description;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             description = itemView.findViewById(R.id.item_grade_description);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+            GradeDisplay g = gradeList.get(position);
+            onChildItemClickListener.onClick(g);
         }
     }
 }

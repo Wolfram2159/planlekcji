@@ -14,6 +14,7 @@ import com.wolfram.planlekcji.adapters.expanded.ParentGradeRecyclerViewAdapter;
 import com.wolfram.planlekcji.database.room.entities.Subject;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplay;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeGroup;
+import com.wolfram.planlekcji.ui.bottomSheets.grades.ActionGradeBottomSheet;
 import com.wolfram.planlekcji.ui.bottomSheets.grades.ModifyGradeBottomSheet;
 
 import java.util.ArrayList;
@@ -51,6 +52,14 @@ public class GradesFragment extends Fragment {
 
 
         ParentGradeRecyclerViewAdapter adapter = new ParentGradeRecyclerViewAdapter();
+
+        adapter.setOnChildItemClickListener(gradeDisplay -> {
+            viewModel.setModifiedGrade(gradeDisplay);
+
+            ActionGradeBottomSheet actionGradeBottomSheet = new ActionGradeBottomSheet();
+            actionGradeBottomSheet.show(getFragmentManager(), "ActionGradeBottomSheet");
+        });
+
         ((SimpleItemAnimator) recycler.getItemAnimator()).setSupportsChangeAnimations(false);
         LiveData<List<Subject>> subjectList = viewModel.getSubjects();
         subjectList.observe(this, subjects -> {
@@ -78,7 +87,6 @@ public class GradesFragment extends Fragment {
         recycler.setAdapter(adapter);
         //todo: rework Grade.class
         //todo: notes fragment/activity with image/txt files
-
         fab.setOnClickListener(v -> {
             ModifyGradeBottomSheet bottomSheet = new ModifyGradeBottomSheet();
             bottomSheet.show(getFragmentManager(), "ModifyGrade");
