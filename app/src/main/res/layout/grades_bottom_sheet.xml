@@ -9,7 +9,6 @@
     android:clipToPadding="true"
     app:behavior_peekHeight="0dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
-    <!--todo: rename id's-->
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/grade_cancel"

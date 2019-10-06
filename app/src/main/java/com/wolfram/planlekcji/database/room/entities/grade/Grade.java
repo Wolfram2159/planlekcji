@@ -1,12 +1,10 @@
 package com.wolfram.planlekcji.database.room.entities.grade;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.wolfram.planlekcji.database.room.entities.Subject;
 
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 /**
@@ -18,7 +16,7 @@ import androidx.room.PrimaryKey;
                 entity = Subject.class,
                 parentColumns = "id",
                 childColumns = "subject_id"))
-public class Grade implements Parcelable {
+public class Grade {
     @PrimaryKey(autoGenerate = true)
     protected Integer id;
 
@@ -28,39 +26,17 @@ public class Grade implements Parcelable {
 
     public Grade() {
     }
-
+    @Ignore
     public Grade(int subject_id, String description) {
         this.subject_id = subject_id;
         this.description = description;
     }
-
+    @Ignore
     public Grade(Grade grade){
         this.id = grade.id;
         this.subject_id = grade.subject_id;
         this.description = grade.description;
     }
-
-    protected Grade(Parcel in) {
-        if (in.readByte() == 0) {
-            id = null;
-        } else {
-            id = in.readInt();
-        }
-        subject_id = in.readInt();
-        description = in.readString();
-    }
-
-    public static final Creator<Grade> CREATOR = new Creator<Grade>() {
-        @Override
-        public Grade createFromParcel(Parcel in) {
-            return new Grade(in);
-        }
-
-        @Override
-        public Grade[] newArray(int size) {
-            return new Grade[size];
-        }
-    };
 
     @Override
     public String toString() {
@@ -92,23 +68,5 @@ public class Grade implements Parcelable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-
-        if (id == null) {
-            parcel.writeByte((byte) 0);
-        } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeInt(id);
-        }
-        parcel.writeInt(subject_id);
-        parcel.writeString(description);
     }
 }

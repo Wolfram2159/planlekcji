@@ -24,11 +24,11 @@ import butterknife.ButterKnife;
  */
 public class EventFragment extends Fragment {
 
-    @BindView(R.id.subjects_fab)
+    @BindView(R.id.events_fab)
     FloatingActionButton fab;
-    @BindView(R.id.subjects_view_pager)
+    @BindView(R.id.events_view_pager)
     ViewPager viewPager;
-    @BindView(R.id.subjects_tab_layout)
+    @BindView(R.id.events_tab_layout)
     TabLayout tabLayout;
 
 
