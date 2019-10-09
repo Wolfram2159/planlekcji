@@ -1,5 +1,6 @@
 package com.wolfram.planlekcji.ui.bottomSheets.grades;
 
+import android.app.DatePickerDialog;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -11,6 +12,10 @@ import com.wolfram.planlekcji.database.room.entities.grade.Grade;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplay;
 import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 import com.wolfram.planlekcji.ui.fragments.grades.GradesFragmentViewModel;
+import com.wolfram.planlekcji.utils.others.Utils;
+
+import java.util.Calendar;
+import java.util.Date;
 
 import androidx.lifecycle.ViewModelProviders;
 
@@ -39,10 +44,24 @@ public class ModifyGradeBottomSheet extends CustomBottomSheet {
         MaterialButton saveBtn = root.findViewById(R.id.grade_save);
         EditText desc = root.findViewById(R.id.grade_desc);
         AutoCompleteTextView subjectPicker = root.findViewById(R.id.grade_name);
-
-        viewModel = ViewModelProviders.of(getActivity()).get(GradesFragmentViewModel.class);
+        EditText date = root.findViewById(R.id.grade_date);
 
         Grade newGrade = new Grade();
+
+        date.setOnClickListener(v -> {
+            Date dateNow = Calendar.getInstance().getTime();
+            DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
+                    (picker, year, month, day) -> {
+                        Date pickedDate = new Date((year-1900), month, day);
+                        String myDate = Utils.getDateString(pickedDate);
+                        date.setText(myDate);
+                        newGrade.setDate(pickedDate);
+                    }, (1900 + dateNow.getYear()), dateNow.getMonth(), dateNow.getDate());
+            datePickerDialog.show();
+        });
+        date.setShowSoftInputOnFocus(false);
+
+        viewModel = ViewModelProviders.of(getActivity()).get(GradesFragmentViewModel.class);
 
         GradeDisplay modifiedGrade;
 
@@ -50,9 +69,12 @@ public class ModifyGradeBottomSheet extends CustomBottomSheet {
             newGrade.setId(modifiedGrade.getId());
             newGrade.setSubject_id(modifiedGrade.getSubject_id());
             newGrade.setDescription(modifiedGrade.getDescription());
+            newGrade.setDate(modifiedGrade.getDate());
 
             subjectPicker.setText(modifiedGrade.getName());
             desc.setText(modifiedGrade.getDescription());
+            String myDate = Utils.getDateString(modifiedGrade.getDate());
+            date.setText(myDate);
         }
 
         viewModel.getSubjects().observe(this, subjects -> {

@@ -21,9 +21,9 @@ import androidx.room.Query;
  */
 @Dao
 public interface UserDao {
-    @Query("SELECT events.id, subjects.id as subject_id, name, start_hour, start_minute, end_hour, end_minute, localization, day " +
+    @Query("SELECT events.id, subjects.id as subject_id, name, start_time, end_time, localization, day " +
             "FROM events JOIN subjects ON events.subject_id=subjects.id " +
-            "WHERE day = (:day) ORDER BY start_hour ASC")
+            "WHERE day = (:day) ORDER BY start_time ASC")
     LiveData<List<EventDisplay>> getEventsFromDay(String day);
 
     @Query("SELECT subjects.id FROM subjects WHERE (:name)=name")
@@ -44,12 +44,11 @@ public interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertGrade(Grade grade);
 
-    @Query("SELECT grades.id, subjects.id as subject_id, subjects.name, grades.description FROM grades JOIN subjects ON grades.subject_id=subjects.id WHERE subject_id=(:subjectId) ORDER BY subject_id ASC")
+    @Query("SELECT grades.id, subjects.id as subject_id, date, subjects.name, grades.description " +
+            "FROM grades JOIN subjects " +
+            "ON grades.subject_id=subjects.id WHERE subject_id=(:subjectId) ORDER BY date ASC")
     LiveData<List<GradeDisplay>> getGradesFromSubject(int subjectId);
 
     @Delete
     void deleteGrade(Grade grade);
-
-    /*@Query("SELECT * FROM")
-    LiveData<GradeDisplay> getGradeDisplay(int grade_id);*/
 }

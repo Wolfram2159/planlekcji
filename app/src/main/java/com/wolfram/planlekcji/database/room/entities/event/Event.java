@@ -1,10 +1,11 @@
 package com.wolfram.planlekcji.database.room.entities.event;
 
 import com.wolfram.planlekcji.database.room.entities.Subject;
-import com.wolfram.planlekcji.database.room.entities.Time;
 import com.wolfram.planlekcji.utils.enums.Day;
+import com.wolfram.planlekcji.utils.others.Utils;
 
-import androidx.room.Embedded;
+import java.util.Date;
+
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
@@ -26,11 +27,9 @@ public class Event {
 
     protected Long subject_id;
 
-    @Embedded(prefix = "start_")
-    protected Time start_time;
+    protected Date start_time;
 
-    @Embedded(prefix = "end_")
-    protected Time end_time;
+    protected Date end_time;
 
     protected String localization;
 
@@ -63,7 +62,9 @@ public class Event {
     }
 
     public String getTimeString(){
-        return start_time.toString() + " - " + end_time.toString();
+        String startTime = Utils.getTimeString(getStart_time());
+        String endTime = Utils.getTimeString(getEnd_time());
+        return startTime + " - " + endTime;
     }
 
     public Integer getId() {
@@ -82,19 +83,19 @@ public class Event {
         this.subject_id = subject_id;
     }
 
-    public Time getStart_time() {
+    public Date getStart_time() {
         return start_time;
     }
 
-    public void setStart_time(Time start_time) {
+    public void setStart_time(Date start_time) {
         this.start_time = start_time;
     }
 
-    public Time getEnd_time() {
+    public Date getEnd_time() {
         return end_time;
     }
 
-    public void setEnd_time(Time end_time) {
+    public void setEnd_time(Date end_time) {
         this.end_time = end_time;
     }
 

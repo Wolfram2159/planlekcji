@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplay;
+import com.wolfram.planlekcji.utils.others.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,7 @@ public class ChildGradeRecyclerViewAdapter extends RecyclerView.Adapter<ChildGra
         notifyDataSetChanged();
     }
 
-    public void setOnChildItemClickListener(OnChildItemClickListener onChildItemClickListener) {
+    void setOnChildItemClickListener(OnChildItemClickListener onChildItemClickListener) {
         this.onChildItemClickListener = onChildItemClickListener;
     }
 
@@ -49,7 +50,10 @@ public class ChildGradeRecyclerViewAdapter extends RecyclerView.Adapter<ChildGra
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.description.setText(gradeList.get(position).getDescription());
+        GradeDisplay g = gradeList.get(position);
+        holder.description.setText(g.getDescription());
+        String date = Utils.getDateString(g.getDate());
+        holder.date.setText(date);
     }
 
     @Override
@@ -60,10 +64,12 @@ public class ChildGradeRecyclerViewAdapter extends RecyclerView.Adapter<ChildGra
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView description;
+        private TextView date;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             description = itemView.findViewById(R.id.item_grade_description);
+            date = itemView.findViewById(R.id.item_grade_date);
             itemView.setOnClickListener(this);
         }
 

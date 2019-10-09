@@ -49,16 +49,16 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
 
     @Override
     public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
-        EventDisplay subject = eventsList.get(position);
+        EventDisplay eventDisplay = eventsList.get(position);
 
         holder.subject.setText(
-                subject.getName()
+                eventDisplay.getName()
         );
         holder.time.setText(
-                subject.getTimeString()
+                eventDisplay.getTimeString()
         );
         holder.localization.setText(
-                subject.getLocalization()
+                eventDisplay.getLocalization()
         );
     }
 

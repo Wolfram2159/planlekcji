@@ -7,13 +7,13 @@ import android.widget.EditText;
 
 import com.google.android.material.button.MaterialButton;
 import com.wolfram.planlekcji.R;
+import com.wolfram.planlekcji.database.room.entities.Subject;
 import com.wolfram.planlekcji.database.room.entities.event.Event;
 import com.wolfram.planlekcji.database.room.entities.event.EventDisplay;
-import com.wolfram.planlekcji.database.room.entities.Subject;
-import com.wolfram.planlekcji.database.room.entities.Time;
 import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 import com.wolfram.planlekcji.ui.fragments.events.ViewPagerEventsFragmentViewModel;
 import com.wolfram.planlekcji.utils.enums.Day;
+import com.wolfram.planlekcji.utils.others.Utils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -76,20 +76,22 @@ public class ModifyEventBottomSheet extends CustomBottomSheet {
             dayPicker.setText(dayPicker.getAdapter().getItem(position).toString(), false);
         }
 
-        editTimeStart.setOnClickListener((v) -> {
+        editTimeStart.setOnClickListener(v -> {
             Date dateNow = Calendar.getInstance().getTime();
             TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), (timePicker, hour, minute) -> {
-                Time timeStart = new Time(hour, minute);
-                editTimeStart.setText(timeStart.toString());
+                Date timeStart = new Date(2019, 10, 10, hour, minute);
+                String tStart = Utils.getTimeString(timeStart);
+                editTimeStart.setText(tStart);
                 newEvent.setStart_time(timeStart);
             }, dateNow.getHours(), dateNow.getMinutes(), true);
             timePickerDialog.show();
         });
-        editTimeEnd.setOnClickListener((v) -> {
+        editTimeEnd.setOnClickListener(v -> {
             Date dateNow = Calendar.getInstance().getTime();
             TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), (timePicker, hour, minute) -> {
-                Time timeEnd = new Time(hour, minute);
-                editTimeEnd.setText(timeEnd.toString());
+                Date timeEnd = new Date(2019, 10, 10 , hour, minute);
+                String tEnd = Utils.getTimeString(timeEnd);
+                editTimeEnd.setText(tEnd);
                 newEvent.setEnd_time(timeEnd);
             }, dateNow.getHours(), dateNow.getMinutes(), true);
             timePickerDialog.show();

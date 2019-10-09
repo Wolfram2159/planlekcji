@@ -6,9 +6,8 @@
     style="@style/Widget.MaterialComponents.CardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:animateLayoutChanges="true"
+    app:cardBackgroundColor="#F5F5F5"
     app:cardCornerRadius="0dp"
-    app:cardBackgroundColor="@color/colorPrimary"
     app:rippleColor="@color/Primary"
     app:strokeColor="@android:color/darker_gray">
 

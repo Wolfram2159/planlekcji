@@ -2,6 +2,8 @@ package com.wolfram.planlekcji.database.room.entities.grade;
 
 import com.wolfram.planlekcji.database.room.entities.Subject;
 
+import java.util.Date;
+
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
@@ -24,8 +26,11 @@ public class Grade {
 
     protected String description;
 
+    protected Date date;
+
     public Grade() {
     }
+
     @Ignore
     public Grade(int subject_id, String description) {
         this.subject_id = subject_id;
@@ -42,7 +47,9 @@ public class Grade {
     public String toString() {
         return "Grade{" +
                 "id=" + id +
+                ", subject_id=" + subject_id +
                 ", description='" + description + '\'' +
+                ", date=" + date +
                 '}';
     }
 
@@ -68,5 +75,13 @@ public class Grade {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

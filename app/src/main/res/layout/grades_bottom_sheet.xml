@@ -24,7 +24,7 @@
         app:icon="@drawable/icon_cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/grade_save"
-        app:layout_constraintTop_toBottomOf="@+id/grade_desc_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/grade_date_layout" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/grade_save"
@@ -40,8 +40,7 @@
         app:icon="@drawable/icon_save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/grade_desc_layout" />
-
+        app:layout_constraintTop_toBottomOf="@+id/grade_date_layout" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/grade_name_layout"
@@ -65,7 +64,6 @@
             tools:ignore="LabelFor" />
     </com.google.android.material.textfield.TextInputLayout>
 
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/grade_desc_layout"
         android:layout_width="match_parent"
@@ -83,6 +81,29 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            tools:ignore="LabelFor" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/grade_date_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:hint="Date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/grade_desc_layout">
+
+        <EditText
+            android:id="@+id/grade_date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:focusable="false"
             android:importantForAutofill="no"
             android:inputType="text"
             tools:ignore="LabelFor" />
