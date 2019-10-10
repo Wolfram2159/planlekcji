@@ -13,6 +13,9 @@
         <item android:id="@+id/nav_subjects"
             android:icon="@drawable/ic_menu_subjects"
             android:title="@string/nav_subjects"/>
+        <item android:id="@+id/nav_notes"
+            android:icon="@drawable/ic_menu_notes"
+            android:title="@string/nav_notes"/>
     </group>
 
     <item android:title="@string/Communicate">

@@ -20,6 +20,11 @@
         android:label="@string/nav_subjects"
         tools:layout="@layout/fragment_subjects"/>
 
+    <fragment android:id="@+id/nav_notes"
+        android:name="com.wolfram.planlekcji.ui.fragments.notes.NotesFragment"
+        android:label="@string/nav_notes"
+        tools:layout="@layout/fragment_notes"/>
+
     <fragment android:id="@+id/nav_share"
         android:name="com.wolfram.planlekcji.ui.fragments.share.ShareFragment"
         android:label="@string/nav_share"
