@@ -1,111 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout  android:id="@+id/grades_bottom_sheet"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/notes_image_bottom_sheet"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="6dp"
     android:clipToPadding="true"
+    android:padding="6dp"
     app:behavior_peekHeight="0dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/grade_cancel"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
+    <ImageView
+        android:id="@+id/notes_image_photo"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Cancel"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
-        android:textSize="14sp"
-        app:icon="@drawable/icon_cancel"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/grade_save"
-        app:layout_constraintTop_toBottomOf="@+id/grade_date_layout" />
+        app:layout_constraintEnd_toStartOf="@+id/guideline4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.4" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/grade_save"
+        android:id="@+id/notes_image_save"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:text="Save"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
         android:textSize="14sp"
         app:icon="@drawable/icon_save"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/grade_date_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/notes_image_date_layout" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/notes_image_cancel"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Cancel"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
+        android:textSize="14sp"
+        app:icon="@drawable/icon_cancel"
+        app:layout_constraintEnd_toStartOf="@+id/notes_image_save"
+        app:layout_constraintTop_toBottomOf="@+id/notes_image_date_layout" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/grade_name_layout"
+        android:id="@+id/notes_image_name_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:hint="Subject Name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toTopOf="parent">
 
         <AutoCompleteTextView
-            android:id="@+id/grade_name"
+            android:id="@+id/notes_image_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:completionThreshold="0"
-            tools:ignore="LabelFor" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/grade_desc_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:hint="Description"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/grade_name_layout">
-
-        <EditText
-            android:id="@+id/grade_desc"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:gravity="center"
-            android:importantForAutofill="no"
-            android:inputType="text"
             tools:ignore="LabelFor" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/grade_date_layout"
-        android:layout_width="match_parent"
+        android:id="@+id/notes_image_date_layout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:hint="Date"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/grade_desc_layout">
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
+        app:layout_constraintTop_toBottomOf="@+id/notes_image_name_layout">
 
         <EditText
-            android:id="@+id/grade_date"
+            android:id="@+id/notes_image_date"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:focusable="false"
+            android:gravity="center"
             android:importantForAutofill="no"
             android:inputType="date"
             tools:ignore="LabelFor" />
+
     </com.google.android.material.textfield.TextInputLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
