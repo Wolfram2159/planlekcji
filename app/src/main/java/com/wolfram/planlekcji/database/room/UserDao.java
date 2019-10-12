@@ -5,6 +5,7 @@ import com.wolfram.planlekcji.database.room.entities.event.Event;
 import com.wolfram.planlekcji.database.room.entities.event.EventDisplay;
 import com.wolfram.planlekcji.database.room.entities.grade.Grade;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplay;
+import com.wolfram.planlekcji.database.room.entities.notes.Note;
 
 import java.util.List;
 
@@ -51,4 +52,8 @@ public interface UserDao {
 
     @Delete
     void deleteGrade(Grade grade);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertNote(Note note);
+
 }

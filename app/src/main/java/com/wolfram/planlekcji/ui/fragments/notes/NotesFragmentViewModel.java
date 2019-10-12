@@ -2,23 +2,29 @@ package com.wolfram.planlekcji.ui.fragments.notes;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.os.AsyncTask;
 import android.os.Environment;
 
 import com.wolfram.planlekcji.database.room.AppDatabase;
 import com.wolfram.planlekcji.database.room.UserDao;
+import com.wolfram.planlekcji.database.room.entities.Subject;
+import com.wolfram.planlekcji.database.room.entities.notes.Note;
+import com.wolfram.planlekcji.utils.others.Utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 public class NotesFragmentViewModel extends AndroidViewModel {
 
     private UserDao dao;
     private String currentPhotoPath;
+    private Date currentDate;
 
     public NotesFragmentViewModel(@NonNull Application application) {
         super(application);
@@ -29,10 +35,15 @@ public class NotesFragmentViewModel extends AndroidViewModel {
         return currentPhotoPath;
     }
 
+    public Date getCurrentDate(){
+        return currentDate;
+    }
+
+    @SuppressLint("SimpleDateFormat")
     public File createImageFile() throws IOException {
         // Create an image file name
-        @SuppressLint("SimpleDateFormat")
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        currentDate = new Date();
+        String timeStamp = Utils.getTimeStringForSaveFile(currentDate);
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getApplication().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
@@ -46,7 +57,11 @@ public class NotesFragmentViewModel extends AndroidViewModel {
         return image;
     }
 
-    public void insertCurrentImage() {
-        //AsyncTask.execute(() -> dao.);
+    public void insertCurrentImage(Note note) {
+        AsyncTask.execute(() -> dao.insertNote(note));
+    }
+
+    public LiveData<List<Subject>> getSubjects() {
+        return dao.getSubjects();
     }
 }

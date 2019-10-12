@@ -16,15 +16,27 @@ public final class Utils {
         throw new UnsupportedOperationException();
     }
 
+    @SuppressLint("SimpleDateFormat")
     public static String getDateString(Date date) {
-        @SuppressLint("SimpleDateFormat")
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         return formatter.format(date);
     }
 
+    @SuppressLint("SimpleDateFormat")
     public static String getTimeString(Date date) {
-        @SuppressLint("SimpleDateFormat")
         DateFormat formatter = new SimpleDateFormat("HH:mm");
+        return formatter.format(date);
+    }
+
+    /*@SuppressLint("SimpleDateFormat")
+    public static String getTimeStringForImage(Date date){
+        DateFormat formatter = new SimpleDateFormat("MM/dd - HH:mm");
+        return formatter.format(date);
+    }*/
+
+    @SuppressLint("SimpleDateFormat")
+    public static String getTimeStringForSaveFile(Date date){
+        DateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmmss");
         return formatter.format(date);
     }
 }

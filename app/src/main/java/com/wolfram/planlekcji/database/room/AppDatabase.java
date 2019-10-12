@@ -3,9 +3,10 @@ package com.wolfram.planlekcji.database.room;
 import android.content.Context;
 
 import com.wolfram.planlekcji.database.room.entities.DateConverter;
+import com.wolfram.planlekcji.database.room.entities.Subject;
 import com.wolfram.planlekcji.database.room.entities.event.Event;
 import com.wolfram.planlekcji.database.room.entities.grade.Grade;
-import com.wolfram.planlekcji.database.room.entities.Subject;
+import com.wolfram.planlekcji.database.room.entities.notes.Note;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -20,7 +21,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
  * @author Wolfram
  * @date 2019-07-31
  */
-@Database(entities = {Event.class, Subject.class, Grade.class}, version = 3)
+@Database(entities = {Event.class, Subject.class, Grade.class, Note.class}, version = 4)
 @TypeConverters({DateConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
     @Ignore
@@ -36,6 +37,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     .databaseBuilder(context, AppDatabase.class, AppDatabase.APPDATABASE_NAME)
                     .addMigrations(MIGRATION_1_2)
                     .addMigrations(MIGRATION_2_3)
+                    .addMigrations(MIGRATION_3_4)
                     .build();
         }
         return appDatabase;
@@ -54,6 +56,20 @@ public abstract class AppDatabase extends RoomDatabase {
             database.execSQL("ALTER TABLE grades ADD year INTEGER");
             database.execSQL("ALTER TABLE grades ADD month INTEGER");
             database.execSQL("ALTER TABLE grades ADD day INTEGER");
+        }
+    };
+
+    private static final Migration MIGRATION_3_4 = new Migration(3, 4) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE notes (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "subject_id INTEGER NOT NULL," +
+                    "photoPath TEXT," +
+                    "filePath TEXT," +
+                    "date INTEGER," +
+                    "FOREIGN KEY (subject_id) REFERENCES subjects(id)" +
+                    ")");
         }
     };
 }

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.wolfram.planlekcji.R;
+import com.wolfram.planlekcji.ui.bottomSheets.notes.AddImageBottomSheet;
 
 import java.io.File;
 import java.io.IOException;
@@ -86,9 +87,8 @@ public class NotesFragment extends Fragment {
         if (resultCode==0 && tempPhoto.exists()){
             tempPhoto.delete();
         }else {
-            viewModel.insertCurrentImage();
-            //add tempPhoto to room
-
+            AddImageBottomSheet addImageBottomSheet = new AddImageBottomSheet();
+            addImageBottomSheet.show(getFragmentManager(), "AddImageBottomSheet");
         }
     }
 

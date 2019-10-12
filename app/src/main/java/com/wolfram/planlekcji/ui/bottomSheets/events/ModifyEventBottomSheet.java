@@ -77,7 +77,7 @@ public class ModifyEventBottomSheet extends CustomBottomSheet {
         }
 
         editTimeStart.setOnClickListener(v -> {
-            Date dateNow = Calendar.getInstance().getTime();
+            Date dateNow = new Date();
             TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), (timePicker, hour, minute) -> {
                 Date timeStart = new Date(2019, 10, 10, hour, minute);
                 String tStart = Utils.getTimeString(timeStart);
@@ -87,7 +87,7 @@ public class ModifyEventBottomSheet extends CustomBottomSheet {
             timePickerDialog.show();
         });
         editTimeEnd.setOnClickListener(v -> {
-            Date dateNow = Calendar.getInstance().getTime();
+            Date dateNow = new Date();
             TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), (timePicker, hour, minute) -> {
                 Date timeEnd = new Date(2019, 10, 10 , hour, minute);
                 String tEnd = Utils.getTimeString(timeEnd);

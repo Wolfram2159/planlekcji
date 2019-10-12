@@ -14,7 +14,6 @@ import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 import com.wolfram.planlekcji.ui.fragments.grades.GradesFragmentViewModel;
 import com.wolfram.planlekcji.utils.others.Utils;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import androidx.lifecycle.ViewModelProviders;
@@ -49,7 +48,7 @@ public class ModifyGradeBottomSheet extends CustomBottomSheet {
         Grade newGrade = new Grade();
 
         date.setOnClickListener(v -> {
-            Date dateNow = Calendar.getInstance().getTime();
+            Date dateNow = new Date();
             DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
                     (picker, year, month, day) -> {
                         Date pickedDate = new Date((year-1900), month, day);
