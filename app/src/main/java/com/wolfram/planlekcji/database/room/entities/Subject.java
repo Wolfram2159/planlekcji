@@ -1,5 +1,7 @@
 package com.wolfram.planlekcji.database.room.entities;
 
+import com.wolfram.planlekcji.adapters.tree.TreeNode;
+
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.Index;
@@ -10,7 +12,7 @@ import androidx.room.PrimaryKey;
  * @date 2019-09-09
  */
 @Entity(indices = {@Index(value = "id", unique = true)}, tableName = "subjects")
-public class Subject {
+public class Subject extends TreeNode {
     @PrimaryKey(autoGenerate = true)
     private Integer id;
 
@@ -47,5 +49,14 @@ public class Subject {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String getPath() {
+        if (getParent() == null){
+            return "";
+        }else {
+            return getParent().getPath() + "->" + getName();
+        }
     }
 }

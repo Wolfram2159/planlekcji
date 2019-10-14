@@ -1,5 +1,6 @@
 package com.wolfram.planlekcji.database.room.entities.notes;
 
+import com.wolfram.planlekcji.adapters.tree.TreeNode;
 import com.wolfram.planlekcji.database.room.entities.Subject;
 
 import java.util.Date;
@@ -18,7 +19,7 @@ import androidx.room.PrimaryKey;
                 entity = Subject.class,
                 parentColumns = "id",
                 childColumns = "subject_id"))
-public class Note {
+public class Note extends TreeNode {
     @PrimaryKey(autoGenerate = true)
     protected Integer id;
 
@@ -75,5 +76,14 @@ public class Note {
 
     public void setFilePath(@Nullable String filePath) {
         this.filePath = filePath;
+    }
+
+    @Override
+    public String getPath() {
+        if (getParent() == null){
+            return "";
+        }else {
+            return getParent().getPath();
+        }
     }
 }
