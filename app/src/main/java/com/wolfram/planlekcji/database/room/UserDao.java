@@ -56,4 +56,6 @@ public interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertNote(Note note);
 
+    @Query("SELECT * FROM notes WHERE subject_id=(:subject_id)")
+    LiveData<List<Note>> getNotesFromSubject(int subject_id);
 }

@@ -7,10 +7,6 @@ package com.wolfram.planlekcji.adapters.tree;
 public class Directory extends TreeNode {
     @Override
     public String getPath() {
-        if (this.parent == null){
-            return "root";
-        }else {
-            return parent.getPath() + "->" + this.nodeName;
-        }
+        return parent.getPath() + "->" + this.nodeName;
     }
 }

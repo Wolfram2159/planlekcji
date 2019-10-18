@@ -31,7 +31,6 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public TreeAdapter(TreeNode parent) {
         this.parent = parent;
-        //onPathChangedListener.onPathChanged(parent.getPath());
     }
 
     public void setParent(TreeNode parent) {

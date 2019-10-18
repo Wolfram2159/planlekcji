@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,9 +17,12 @@ import android.widget.TextView;
 
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.adapters.tree.Directory;
+import com.wolfram.planlekcji.adapters.tree.Root;
 import com.wolfram.planlekcji.adapters.tree.TreeAdapter;
-import com.wolfram.planlekcji.adapters.tree.TreeNode;
+import com.wolfram.planlekcji.database.room.entities.Subject;
+import com.wolfram.planlekcji.database.room.entities.notes.Note;
 import com.wolfram.planlekcji.ui.bottomSheets.notes.AddImageBottomSheet;
+import com.wolfram.planlekcji.utils.others.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +41,6 @@ public class NotesFragment extends Fragment {
     private NotesFragmentViewModel viewModel;
     private RecyclerView recycler;
     private TreeAdapter adapter;
-    private OnBackPressedCallback callback;
     private TextView path;
 
     private static final int REQUEST_TAKE_PHOTO = 1;
@@ -58,13 +61,70 @@ public class NotesFragment extends Fragment {
         recycler = getActivity().findViewById(R.id.notes_recycler);
         path = getActivity().findViewById(R.id.notes_path);
 
-        callback = new OnBackPressedCallback(true) {
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 adapter.onBackPressed();
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+
+        // TODO: 2019-10-14 how to save Tree, not creating always new Tree
+        /*TreeNode root = new Directory();
+        //TreeNode child = new Subject(1, "SubjectTest");
+        TreeNode child2 = new Directory();
+        TreeNode child3 = new Directory();
+        TreeNode child4 = new Directory();
+        TreeNode child5 = new Directory();
+        TreeNode child6 = new Directory();
+        TreeNode child7 = new Directory();
+        //root.addChildren(child, "SubjectTest");
+        root.addChildren(child7, "SubjectTest");
+        root.addChildren(child2, "Directory");
+        root.addChildren(child3, "Directory1");
+        root.addChildren(child6, "SubjectTest1");
+        child6.addChildren(child4, "Directory3");
+        child6.addChildren(child5, "SubjectTest3");
+*/
+        Root root = new Root();
+        viewModel.getSubjects().observe(this, subjects -> {
+            for (Subject subject : subjects) {
+                Directory pictures = new Directory();
+                Directory documents = new Directory();
+                subject.addChildren(new Directory(), "Pictures");
+                subject.addChildren(new Directory(), "Documents");
+                root.addChildren(subject, subject.getName());
+
+                viewModel.getNotesFromSubject(subject.getId()).observe(this, notes -> {
+                    for (Note note : notes) {
+                        String nodeName = Utils.getDateString(note.getDate());
+                        if (note.getFilePath() != null){
+                            documents.addChildren(note, "File");
+                        }else if (note.getPhotoPath() != null){
+                            pictures.addChildren(note, "Photo");
+                        }
+                        if (note.getPath() != null) {
+                            Log.e("notePath", note.getPath());
+                        }
+                    }
+                    adapter.setParent(root);
+                });
+            }
+            adapter.setParent(root);
+        });
+
+        adapter = new TreeAdapter(root);
+
+        adapter.setOnPathChangedListener(newPath -> {
+            Animation inAnim = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in);
+            inAnim.setDuration(800);
+            path.setText(newPath);
+            path.startAnimation(inAnim);
+        });
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+
+        recycler.setLayoutManager(layoutManager);
+        recycler.setAdapter(adapter);
     }
 
     @Override
@@ -115,34 +175,6 @@ public class NotesFragment extends Fragment {
     }
 
     private void onFileClick(){
-        // TODO: 2019-10-14 how to save Tree, not creating always new Tree
-        TreeNode root = new Directory();
-        //TreeNode child = new Subject(1, "SubjectTest");
-        TreeNode child2 = new Directory();
-        TreeNode child3 = new Directory();
-        TreeNode child4 = new Directory();
-        TreeNode child5 = new Directory();
-        TreeNode child6 = new Directory();
-        TreeNode child7 = new Directory();
-        //root.addChildren(child, "SubjectTest");
-        root.addChildren(child7, "SubjectTest");
-        root.addChildren(child2, "Directory");
-        root.addChildren(child3, "Directory1");
-        root.addChildren(child6, "SubjectTest1");
-        child6.addChildren(child4, "Directory3");
-        child6.addChildren(child5, "SubjectTest3");
-        adapter = new TreeAdapter(root);
-
-        adapter.setOnPathChangedListener(newPath -> {
-            Animation inAnim = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in);
-            inAnim.setDuration(800);
-            path.setText(newPath);
-            path.startAnimation(inAnim);
-        });
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-
-        recycler.setLayoutManager(layoutManager);
-        recycler.setAdapter(adapter);
         /*Log.e("parent", "" + (child.getParent()==null) + "");
         Log.e("parent", "" + (node.getParent()==null) + "");*/
 
