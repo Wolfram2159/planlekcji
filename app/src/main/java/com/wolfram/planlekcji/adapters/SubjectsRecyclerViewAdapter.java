@@ -3,7 +3,6 @@ package com.wolfram.planlekcji.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wolfram.planlekcji.R;
@@ -56,13 +55,10 @@ public class SubjectsRecyclerViewAdapter extends RecyclerView.Adapter<SubjectsRe
     public class SubjectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private TextView textView;
-        private ImageView imageView;
 
         public SubjectViewHolder(@NonNull View itemView) {
             super(itemView);
             this.textView = itemView.findViewById(R.id.item_subject_name);
-            this.imageView = itemView.findViewById(R.id.item_subject_arrow);
-            imageView.setVisibility(View.INVISIBLE);
             ViewGroup container = itemView.findViewById(R.id.root_subject_item);
             container.setOnClickListener(this);
         }

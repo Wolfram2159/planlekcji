@@ -58,4 +58,7 @@ public interface UserDao {
 
     @Query("SELECT * FROM notes WHERE subject_id=(:subject_id)")
     LiveData<List<Note>> getNotesFromSubject(int subject_id);
+
+    @Query("SELECT * FROM notes")
+    LiveData<List<Note>> getNotes();
 }

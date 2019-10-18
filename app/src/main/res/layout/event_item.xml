@@ -32,22 +32,22 @@
 
         <TextView
             android:id="@+id/item_event_name"
-            style="@style/event_item_primary"
-            android:layout_width="0dp"
-            android:layout_height="30dp"
+            style="@style/TextAppearance.MaterialComponents.Headline5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="4dp"
             android:layout_marginEnd="24dp"
+            android:layout_marginBottom="4dp"
             app:layout_constraintBottom_toTopOf="@+id/guideline"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/item_event_logo"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Matematyka"/>
+            tools:text="Matematyka" />
 
         <TextView
             android:id="@+id/item_event_time"
-            style="@style/event_item_secondary"
+            style="@style/TextAppearance.MaterialComponents.Caption"
             android:layout_width="wrap_content"
             android:layout_height="22dp"
             android:layout_marginStart="8dp"
@@ -67,7 +67,7 @@
 
         <TextView
             android:id="@+id/item_event_localization"
-            style="@style/event_item_secondary"
+            style="@style/TextAppearance.MaterialComponents.Caption"
             android:layout_width="wrap_content"
             android:layout_height="22dp"
             android:layout_marginEnd="24dp"

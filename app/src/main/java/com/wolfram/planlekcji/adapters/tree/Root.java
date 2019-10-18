@@ -7,7 +7,7 @@ public class Root extends TreeNode {
     public Root() {
         this.parent = null;
         this.childrenList = new ArrayList<>();
-        this.nodeName = "root";
+        this.nodeName = "PlanLekcji";
     }
 
     @Override

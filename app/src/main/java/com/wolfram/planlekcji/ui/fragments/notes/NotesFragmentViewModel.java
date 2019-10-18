@@ -68,4 +68,8 @@ public class NotesFragmentViewModel extends AndroidViewModel {
     public LiveData<List<Note>> getNotesFromSubject(int subject_id){
         return dao.getNotesFromSubject(subject_id);
     }
+
+    public LiveData<List<Note>> getNotes() {
+        return dao.getNotes();
+    }
 }

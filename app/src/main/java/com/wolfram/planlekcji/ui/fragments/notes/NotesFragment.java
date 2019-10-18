@@ -70,29 +70,13 @@ public class NotesFragment extends Fragment {
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
 
         // TODO: 2019-10-14 how to save Tree, not creating always new Tree
-        /*TreeNode root = new Directory();
-        //TreeNode child = new Subject(1, "SubjectTest");
-        TreeNode child2 = new Directory();
-        TreeNode child3 = new Directory();
-        TreeNode child4 = new Directory();
-        TreeNode child5 = new Directory();
-        TreeNode child6 = new Directory();
-        TreeNode child7 = new Directory();
-        //root.addChildren(child, "SubjectTest");
-        root.addChildren(child7, "SubjectTest");
-        root.addChildren(child2, "Directory");
-        root.addChildren(child3, "Directory1");
-        root.addChildren(child6, "SubjectTest1");
-        child6.addChildren(child4, "Directory3");
-        child6.addChildren(child5, "SubjectTest3");
-*/
         Root root = new Root();
         viewModel.getSubjects().observe(this, subjects -> {
             for (Subject subject : subjects) {
                 Directory pictures = new Directory();
                 Directory documents = new Directory();
-                subject.addChildren(new Directory(), "Pictures");
-                subject.addChildren(new Directory(), "Documents");
+                subject.addChildren(pictures, "Pictures");
+                subject.addChildren(documents, "Documents");
                 root.addChildren(subject, subject.getName());
 
                 viewModel.getNotesFromSubject(subject.getId()).observe(this, notes -> {
@@ -103,14 +87,15 @@ public class NotesFragment extends Fragment {
                         }else if (note.getPhotoPath() != null){
                             pictures.addChildren(note, "Photo");
                         }
-                        if (note.getPath() != null) {
-                            Log.e("notePath", note.getPath());
-                        }
                     }
                     adapter.setParent(root);
                 });
             }
             adapter.setParent(root);
+        });
+
+        viewModel.getNotes().observe(this, notes -> {
+            Log.e("a",notes.size() + "");
         });
 
         adapter = new TreeAdapter(root);
