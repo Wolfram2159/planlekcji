@@ -17,13 +17,18 @@ public abstract class TreeNode {
     @Ignore
     protected TreeNode parent;
 
+    public TreeNode() {
+        childrenList = new ArrayList<>();
+    }
+
     public void addChildren(TreeNode treeNode, String nodeName) {
-        if (childrenList == null) {
-            childrenList = new ArrayList<>();
-        }
         treeNode.setNodeName(nodeName);
         treeNode.setParent(this);
         childrenList.add(treeNode);
+    }
+
+    public void clearChildrens(){
+        childrenList.clear();
     }
 
     public List<TreeNode> getChildrenList() {

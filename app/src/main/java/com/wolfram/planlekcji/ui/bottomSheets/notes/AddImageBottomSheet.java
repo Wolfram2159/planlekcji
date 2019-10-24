@@ -78,13 +78,13 @@ public class AddImageBottomSheet extends CustomBottomSheet {
         photo.setImageURI(contentUri);
         newNote.setPhotoPath(viewModel.getCurrentPhotoPath());
 
-
         save.setOnClickListener(view -> {
             viewModel.insertCurrentImage(newNote);
             dismiss();
         });
 
         cancel.setOnClickListener(view -> {
+            viewModel.deleteCurrentImage();
             dismiss();
         });
     }

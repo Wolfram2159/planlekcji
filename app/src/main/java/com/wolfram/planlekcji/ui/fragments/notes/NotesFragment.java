@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,10 +18,11 @@ import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.adapters.tree.Directory;
 import com.wolfram.planlekcji.adapters.tree.Root;
 import com.wolfram.planlekcji.adapters.tree.TreeAdapter;
+import com.wolfram.planlekcji.adapters.tree.TreeNode;
 import com.wolfram.planlekcji.database.room.entities.Subject;
 import com.wolfram.planlekcji.database.room.entities.notes.Note;
 import com.wolfram.planlekcji.ui.bottomSheets.notes.AddImageBottomSheet;
-import com.wolfram.planlekcji.utils.others.Utils;
+import com.wolfram.planlekcji.ui.bottomSheets.notes.AddNoteBottomSheet;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +33,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class NotesFragment extends Fragment {
@@ -80,33 +80,39 @@ public class NotesFragment extends Fragment {
                 root.addChildren(subject, subject.getName());
 
                 viewModel.getNotesFromSubject(subject.getId()).observe(this, notes -> {
+                    TreeNode actualRoot = adapter.getParent();
+                    pictures.clearChildrens();
+                    documents.clearChildrens();
                     for (Note note : notes) {
-                        String nodeName = Utils.getDateString(note.getDate());
-                        if (note.getFilePath() != null){
+                        if (note.getFilePath() != null) {
                             documents.addChildren(note, "File");
-                        }else if (note.getPhotoPath() != null){
+                        } else if (note.getPhotoPath() != null) {
                             pictures.addChildren(note, "Photo");
                         }
                     }
-                    adapter.setParent(root);
+                    adapter.setParent(actualRoot);
                 });
             }
             adapter.setParent(root);
         });
 
-        viewModel.getNotes().observe(this, notes -> {
-            Log.e("a",notes.size() + "");
-        });
-
+        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 1);
         adapter = new TreeAdapter(root);
 
-        adapter.setOnPathChangedListener(newPath -> {
-            Animation inAnim = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in);
-            inAnim.setDuration(800);
-            path.setText(newPath);
-            path.startAnimation(inAnim);
+        adapter.setTreeAdapterListener(new TreeAdapter.TreeAdapterListener() {
+            @Override
+            public void onPathChanged(String newPath) {
+                Animation inAnim = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in);
+                inAnim.setDuration(800);
+                path.setText(newPath);
+                path.startAnimation(inAnim);
+            }
+
+            @Override
+            public void onGridChanged(int spanCount) {
+                layoutManager.setSpanCount(spanCount);
+            }
         });
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
 
         recycler.setLayoutManager(layoutManager);
         recycler.setAdapter(adapter);
@@ -130,13 +136,14 @@ public class NotesFragment extends Fragment {
                 return super.onOptionsItemSelected(item);
         }
     }
-    private void onCameraClick(){
+
+    private void onCameraClick() {
         Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File photoFile = null;
         try {
             photoFile = viewModel.createImageFile();
         } catch (IOException ignored) {
-
+            ignored.printStackTrace();
         }
         // Continue only if the File was successfully created
         if (photoFile != null) {
@@ -151,22 +158,16 @@ public class NotesFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         File tempPhoto = new File(viewModel.getCurrentPhotoPath());
-        if (resultCode==0 && tempPhoto.exists()){
+        if (resultCode == 0 && tempPhoto.exists()) {
             tempPhoto.delete();
-        }else {
+        } else {
             AddImageBottomSheet addImageBottomSheet = new AddImageBottomSheet();
             addImageBottomSheet.show(getFragmentManager(), "AddImageBottomSheet");
         }
     }
 
-    private void onFileClick(){
-        /*Log.e("parent", "" + (child.getParent()==null) + "");
-        Log.e("parent", "" + (node.getParent()==null) + "");*/
-
-        /*Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File f = new File(viewModel.getCurrentPhotoPath());
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);*/
-        //this.sendBroadcast(mediaScanIntent);
+    private void onFileClick() {
+        AddNoteBottomSheet bottomSheet = new AddNoteBottomSheet();
+        bottomSheet.show(getFragmentManager(), "AddNoteBottomSheet");
     }
 }

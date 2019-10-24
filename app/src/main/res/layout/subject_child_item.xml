@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView  android:id="@+id/root_grade_item"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_grade_item"
     style="@style/Widget.MaterialComponents.CardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@drawable/subject_child_item_layer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/subject_child_item_layer">
 
         <TextView
             android:id="@+id/item_grade_description"
@@ -29,12 +29,12 @@
         <TextView
             android:id="@+id/item_grade_date"
             style="@style/TextAppearance.MaterialComponents.Caption"
-            android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:drawableStart="@drawable/ic_date"
             android:drawablePadding="8dp"
+            android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

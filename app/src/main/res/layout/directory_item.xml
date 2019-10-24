@@ -6,17 +6,20 @@
     style="@style/Widget.MaterialComponents.CardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardBackgroundColor="#F5F5F5"
-    app:cardCornerRadius="0dp"
+    android:layout_margin="4dp"
+    app:cardCornerRadius="3dp"
+    app:cardElevation="5dp"
     app:rippleColor="@color/Primary"
-    app:strokeColor="@android:color/darker_gray">
+    app:strokeColor="@android:color/darker_gray"
+    app:strokeWidth="1dp">
 
-    <TextView android:id="@+id/directory_item_node_name"
-        style="@style/event_item_primary"
-        android:padding="16dp"
+    <TextView
+        android:id="@+id/item_directory_name"
+        style="@style/TextAppearance.MaterialComponents.Headline5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        tools:text="@string/app_name"/>
+        android:layout_margin="24dp"
+        tools:text="Pictures" />
 
 </com.google.android.material.card.MaterialCardView>

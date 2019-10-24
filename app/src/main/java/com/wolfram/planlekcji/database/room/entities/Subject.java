@@ -56,7 +56,7 @@ public class Subject extends TreeNode {
         if (getParent() == null){
             return "";
         }else {
-            return getParent().getPath() + "->" + getName();
+            return getParent().getPath() + " -> " + getName();
         }
     }
 }

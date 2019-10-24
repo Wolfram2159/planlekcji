@@ -72,4 +72,10 @@ public class NotesFragmentViewModel extends AndroidViewModel {
     public LiveData<List<Note>> getNotes() {
         return dao.getNotes();
     }
+
+    public void deleteCurrentImage() {
+        // TODO: 2019-10-24 check if the image is deleted
+        File imageToDelete = new File(currentPhotoPath);
+        imageToDelete.delete();
+    }
 }
