@@ -7,9 +7,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.material.button.MaterialButton;
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.database.room.entities.Subject;
-import com.wolfram.planlekcji.database.room.entities.notes.Note;
+import com.wolfram.planlekcji.database.room.entities.notes.ImageNote;
+import com.wolfram.planlekcji.database.room.entities.notes.TextNote;
 import com.wolfram.planlekcji.utils.others.Utils;
 
 import java.io.File;
@@ -26,6 +28,11 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public interface TreeAdapterListener {
         void onPathChanged(String newPath);
         void onGridChanged(int spanCount);
+    }
+    public interface TreeAdapterParent{
+        int getViewType();
+        int getGridSpanCount();
+        // TODO: 2019-10-26 getGridSpanCount, checkParentInstanceOf
     }
 
     private TreeNode parent;
@@ -64,7 +71,7 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else if (parent instanceof Root) {
             treeAdapterListener.onGridChanged(1);
         } else if (parent instanceof Directory) {
-            treeAdapterListener.onGridChanged(3);
+            treeAdapterListener.onGridChanged(2);
         }
     }
 
@@ -95,27 +102,23 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else if (node instanceof Directory) {
             TreeDirectoryVH directoryHolder = (TreeDirectoryVH) holder;
             directoryHolder.directory_tv.setText(node.getNodeName());
-        } else if (node instanceof Note){
+        } else if (node instanceof ImageNote) {
             TreeImageNoteVH imageHolder = (TreeImageNoteVH) holder;
-            File imageFile = new File(((Note) node).getPhotoPath());
+            File imageFile = new File(((ImageNote) node).getPhotoPath());
             Uri uri = Uri.fromFile(imageFile);
             imageHolder.image.setImageURI(uri);
-            imageHolder.date.setText(Utils.getDateString(((Note) node).getDate()));
+            imageHolder.date.setText(Utils.getDateString(((ImageNote) node).getDate()));
+        } else if (node instanceof TextNote){
+            TreeTextNoteVH textHolder = (TreeTextNoteVH) holder;
+            textHolder.title.setText(((TextNote) node).getTitle());
+            textHolder.date.setText(Utils.getDateString(((TextNote) node).getDate()));
         }
     }
 
     @Override
     public int getItemViewType(int position) {
         TreeNode node = parent.getChildrenList().get(position);
-        if (node instanceof Subject) {
-            return 1;
-        } else if (node instanceof Directory) {
-            return 2;
-        } else if(node instanceof Note){
-            return 3;
-        } else {
-            return super.getItemViewType(position);
-        }
+        return node.getViewType();
     }
 
     @Override
@@ -166,21 +169,52 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
         }
     }
-    public class TreeImageNoteVH extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+    public class TreeImageNoteVH extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView image;
         private TextView date;
 
         public TreeImageNoteVH(@NonNull View itemView) {
             super(itemView);
-            image = itemView.findViewById(R.id.note_item_image);
-            date = itemView.findViewById(R.id.note_item_date);
+            image = itemView.findViewById(R.id.note_image_item_image);
+            date = itemView.findViewById(R.id.note_image_item_date);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            //show big photo on full screen
+            // TODO: 2019-10-26 show big photo on full screen
+        }
+    }
+
+    public class TreeTextNoteVH extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        private TextView title;
+        private TextView date;
+        private MaterialButton edit;
+        private MaterialButton delete;
+
+        public TreeTextNoteVH(@NonNull View itemView) {
+            super(itemView);
+            title = itemView.findViewById(R.id.note_text_item_title);
+            date = itemView.findViewById(R.id.note_text_item_date);
+            edit = itemView.findViewById(R.id.note_text_item_btn_edit);
+            delete = itemView.findViewById(R.id.note_text_item_btn_delete);
+        }
+
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.note_text_item_btn_edit:
+
+                    break;
+                case R.id.note_text_item_btn_delete:
+
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

@@ -9,7 +9,7 @@ import androidx.room.Ignore;
  * @author Wolfram
  * @date 2019-10-14
  */
-public abstract class TreeNode {
+public abstract class TreeNode implements TreeAdapter.TreeAdapterParent{
     @Ignore
     protected List<TreeNode> childrenList;
     @Ignore

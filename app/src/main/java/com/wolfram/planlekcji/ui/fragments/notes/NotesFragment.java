@@ -20,9 +20,10 @@ import com.wolfram.planlekcji.adapters.tree.Root;
 import com.wolfram.planlekcji.adapters.tree.TreeAdapter;
 import com.wolfram.planlekcji.adapters.tree.TreeNode;
 import com.wolfram.planlekcji.database.room.entities.Subject;
-import com.wolfram.planlekcji.database.room.entities.notes.Note;
-import com.wolfram.planlekcji.ui.bottomSheets.notes.AddImageBottomSheet;
-import com.wolfram.planlekcji.ui.bottomSheets.notes.AddNoteBottomSheet;
+import com.wolfram.planlekcji.database.room.entities.notes.ImageNote;
+import com.wolfram.planlekcji.database.room.entities.notes.TextNote;
+import com.wolfram.planlekcji.ui.bottomSheets.notes.AddImageNoteBottomSheet;
+import com.wolfram.planlekcji.ui.bottomSheets.notes.AddTextNoteBottomSheet;
 
 import java.io.File;
 import java.io.IOException;
@@ -79,16 +80,20 @@ public class NotesFragment extends Fragment {
                 subject.addChildren(documents, "Documents");
                 root.addChildren(subject, subject.getName());
 
-                viewModel.getNotesFromSubject(subject.getId()).observe(this, notes -> {
+                viewModel.getImageNotesFromSubject(subject.getId()).observe(this, imageNotes -> {
                     TreeNode actualRoot = adapter.getParent();
                     pictures.clearChildrens();
+                    for (ImageNote imageNote : imageNotes) {
+                        pictures.addChildren(imageNote, "Photo");
+                    }
+                    adapter.setParent(actualRoot);
+                });
+
+                viewModel.getTextNotesFromSubject(subject.getId()).observe(this, textNotes -> {
+                    TreeNode actualRoot = adapter.getParent();
                     documents.clearChildrens();
-                    for (Note note : notes) {
-                        if (note.getFilePath() != null) {
-                            documents.addChildren(note, "File");
-                        } else if (note.getPhotoPath() != null) {
-                            pictures.addChildren(note, "Photo");
-                        }
+                    for (TextNote textNote : textNotes) {
+                        documents.addChildren(textNote, "File");
                     }
                     adapter.setParent(actualRoot);
                 });
@@ -142,8 +147,8 @@ public class NotesFragment extends Fragment {
         File photoFile = null;
         try {
             photoFile = viewModel.createImageFile();
-        } catch (IOException ignored) {
-            ignored.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
         // Continue only if the File was successfully created
         if (photoFile != null) {
@@ -157,17 +162,21 @@ public class NotesFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        File tempPhoto = new File(viewModel.getCurrentPhotoPath());
-        if (resultCode == 0 && tempPhoto.exists()) {
-            tempPhoto.delete();
+        if (resultCode == 0) {
+            viewModel.deleteImage();
         } else {
-            AddImageBottomSheet addImageBottomSheet = new AddImageBottomSheet();
-            addImageBottomSheet.show(getFragmentManager(), "AddImageBottomSheet");
+            AddImageNoteBottomSheet addImageNoteBottomSheet = new AddImageNoteBottomSheet();
+            addImageNoteBottomSheet.show(getFragmentManager(), "AddImageNoteBottomSheet");
         }
     }
 
     private void onFileClick() {
-        AddNoteBottomSheet bottomSheet = new AddNoteBottomSheet();
-        bottomSheet.show(getFragmentManager(), "AddNoteBottomSheet");
+        try {
+            viewModel.createFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        AddTextNoteBottomSheet bottomSheet = new AddTextNoteBottomSheet();
+        bottomSheet.show(getFragmentManager(), "AddTextNoteBottomSheet");
     }
 }

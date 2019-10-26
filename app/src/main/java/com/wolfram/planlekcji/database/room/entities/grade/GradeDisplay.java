@@ -7,10 +7,6 @@ package com.wolfram.planlekcji.database.room.entities.grade;
 public class GradeDisplay extends Grade {
     private String name;
 
-    public GradeDisplay(){
-
-    }
-
     @Override
     public String toString() {
         return "GradeDisplay{" +

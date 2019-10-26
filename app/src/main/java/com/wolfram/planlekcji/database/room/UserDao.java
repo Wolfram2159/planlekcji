@@ -5,7 +5,8 @@ import com.wolfram.planlekcji.database.room.entities.event.Event;
 import com.wolfram.planlekcji.database.room.entities.event.EventDisplay;
 import com.wolfram.planlekcji.database.room.entities.grade.Grade;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplay;
-import com.wolfram.planlekcji.database.room.entities.notes.Note;
+import com.wolfram.planlekcji.database.room.entities.notes.ImageNote;
+import com.wolfram.planlekcji.database.room.entities.notes.TextNote;
 
 import java.util.List;
 
@@ -54,11 +55,21 @@ public interface UserDao {
     void deleteGrade(Grade grade);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertNote(Note note);
+    void insertImageNote(ImageNote imageNote);
 
-    @Query("SELECT * FROM notes WHERE subject_id=(:subject_id)")
-    LiveData<List<Note>> getNotesFromSubject(int subject_id);
+    @Query("SELECT * FROM imageNotes WHERE subject_id=(:subject_id)")
+    LiveData<List<ImageNote>> getImageNotesFromSubject(int subject_id);
 
-    @Query("SELECT * FROM notes")
-    LiveData<List<Note>> getNotes();
+    @Query("SELECT * FROM imageNotes")
+    LiveData<List<ImageNote>> getImageNotes();
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertTextNote(TextNote textNote);
+
+    @Query("SELECT * FROM textNotes WHERE subject_id=(:subject_id)")
+    LiveData<List<TextNote>> getTextNotesFromSubject(int subject_id);
+
+    @Query("SELECT * FROM textNotes")
+    LiveData<List<TextNote>> getTextNotes();
+
 }

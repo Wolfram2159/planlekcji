@@ -5,37 +5,30 @@ import com.wolfram.planlekcji.database.room.entities.Subject;
 
 import java.util.Date;
 
-import androidx.annotation.Nullable;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 /**
  * @author Wolfram
- * @date 2019-10-12
+ * @date 2019-10-25
  */
-@Entity(tableName = "notes",
+@Entity(tableName = "textNotes",
         foreignKeys = @ForeignKey(
                 entity = Subject.class,
                 parentColumns = "id",
                 childColumns = "subject_id"))
-public class Note extends TreeNode {
+public class TextNote extends TreeNode {
     @PrimaryKey(autoGenerate = true)
     protected Integer id;
 
     protected int subject_id;
 
-    @Nullable
-    protected String photoPath;
-
-    @Nullable
     protected String filePath;
 
+    protected String title;
+
     protected Date date;
-
-    public Note(){
-
-    }
 
     public Integer getId() {
         return id;
@@ -53,12 +46,20 @@ public class Note extends TreeNode {
         this.subject_id = subject_id;
     }
 
-    public String getPhotoPath() {
-        return photoPath;
+    public String getFilePath() {
+        return filePath;
     }
 
-    public void setPhotoPath(String photoPath) {
-        this.photoPath = photoPath;
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Date getDate() {
@@ -69,13 +70,14 @@ public class Note extends TreeNode {
         this.date = date;
     }
 
-    @Nullable
-    public String getFilePath() {
-        return filePath;
+    @Override
+    public int getViewType() {
+        return 4;
     }
 
-    public void setFilePath(@Nullable String filePath) {
-        this.filePath = filePath;
+    @Override
+    public int getGridSpanCount() {
+        return 0;
     }
 
     @Override

@@ -28,34 +28,37 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.4" />
+        app:layout_constraintGuide_percent="0.35" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/notes_image_save"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
+        style="@style/Widget.MaterialComponents.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:text="Save"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
-        android:textSize="14sp"
         app:icon="@drawable/icon_save"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/notes_image_cancel"
         app:layout_constraintTop_toBottomOf="@+id/notes_image_date_layout" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/notes_image_cancel"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:text="Cancel"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
-        android:textSize="14sp"
-        app:icon="@drawable/icon_cancel"
-        app:layout_constraintEnd_toStartOf="@+id/notes_image_save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toBottomOf="@+id/notes_image_date_layout" />
 
     <com.google.android.material.textfield.TextInputLayout

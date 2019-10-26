@@ -11,6 +11,16 @@ public class Root extends TreeNode {
     }
 
     @Override
+    public int getViewType() {
+        return 0;
+    }
+
+    @Override
+    public int getGridSpanCount() {
+        return 1;
+    }
+
+    @Override
     public String getPath() {
         return this.nodeName;
     }

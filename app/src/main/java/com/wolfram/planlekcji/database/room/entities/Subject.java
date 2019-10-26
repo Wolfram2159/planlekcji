@@ -20,6 +20,17 @@ public class Subject extends TreeNode {
 
     public Subject() {
     }
+
+    @Override
+    public int getViewType() {
+        return 1;
+    }
+
+    @Override
+    public int getGridSpanCount() {
+        return 1;
+    }
+
     @Ignore
     public Subject(Integer id, String name) {
         this.id = id;

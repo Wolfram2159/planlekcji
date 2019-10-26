@@ -15,7 +15,6 @@ import com.wolfram.planlekcji.ui.fragments.events.ViewPagerEventsFragmentViewMod
 import com.wolfram.planlekcji.utils.enums.Day;
 import com.wolfram.planlekcji.utils.others.Utils;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import androidx.lifecycle.ViewModelProviders;
@@ -68,8 +67,12 @@ public class ModifyEventBottomSheet extends CustomBottomSheet {
             newEvent.setEnd_time(modifiedEvent.getEnd_time());
 
             subjectName.setText(modifiedEvent.getName());
-            editTimeStart.setText(modifiedEvent.getStart_time().toString());
-            editTimeEnd.setText(modifiedEvent.getEnd_time().toString());
+
+            String startTime = Utils.getTimeString(modifiedEvent.getStart_time());
+            String endTime = Utils.getTimeString(modifiedEvent.getEnd_time());
+
+            editTimeStart.setText(startTime);
+            editTimeEnd.setText(endTime);
             subjectLocalization.setText(modifiedEvent.getLocalization());
 
             int position = Day.valueOf(modifiedEvent.getDay()).ordinal();

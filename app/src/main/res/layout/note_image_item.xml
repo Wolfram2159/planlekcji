@@ -2,12 +2,12 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root_subject_item"
+    android:id="@+id/root_note_image_item"
     style="@style/Widget.MaterialComponents.CardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="2dp"
-    app:cardCornerRadius="12dp"
+    app:cardCornerRadius="0dp"
     app:cardElevation="5dp"
     app:rippleColor="@color/Primary"
     app:strokeColor="@android:color/darker_gray"
@@ -19,28 +19,28 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/note_item_image"
+            android:id="@+id/note_image_item_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="0dp"
             android:scaleType="centerInside"
             android:adjustViewBounds="true"
-            tools:src="@drawable/ic_menu_notes"
             app:layout_constraintBottom_toTopOf="parent"
             app:layout_constraintEnd_toStartOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/note_item_date"
+            android:id="@+id/note_image_item_date"
+            android:padding="5dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="#99ABABAB"
             android:gravity="center"
             style="@style/TextAppearance.MaterialComponents.Body1"
-            app:layout_constraintBottom_toBottomOf="@+id/note_item_image"
-            app:layout_constraintEnd_toEndOf="@+id/note_item_image"
-            app:layout_constraintStart_toStartOf="@+id/note_item_image" />
+            app:layout_constraintBottom_toBottomOf="@+id/note_image_item_image"
+            app:layout_constraintEnd_toEndOf="@+id/note_image_item_image"
+            app:layout_constraintStart_toStartOf="@+id/note_image_item_image" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

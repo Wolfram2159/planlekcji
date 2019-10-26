@@ -2,13 +2,10 @@ package com.wolfram.planlekcji.database.room.entities.notes;
 
 /**
  * @author Wolfram
- * @date 2019-10-12
+ * @date 2019-10-25
  */
-public class NoteDisplay extends Note {
+public class TextNoteDisplay extends TextNote {
     private String name;
-
-    public NoteDisplay() {
-    }
 
     public String getName() {
         return name;

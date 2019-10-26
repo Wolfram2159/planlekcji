@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import com.google.android.material.button.MaterialButton;
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.database.room.entities.Subject;
-import com.wolfram.planlekcji.database.room.entities.notes.Note;
+import com.wolfram.planlekcji.database.room.entities.notes.ImageNote;
 import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 import com.wolfram.planlekcji.ui.fragments.notes.NotesFragmentViewModel;
 import com.wolfram.planlekcji.utils.others.Utils;
@@ -24,7 +24,7 @@ import androidx.lifecycle.ViewModelProviders;
  * @author Wolfram
  * @date 2019-10-11
  */
-public class AddImageBottomSheet extends CustomBottomSheet {
+public class AddImageNoteBottomSheet extends CustomBottomSheet {
 
     private NotesFragmentViewModel viewModel;
 
@@ -37,7 +37,7 @@ public class AddImageBottomSheet extends CustomBottomSheet {
     protected void customizeDialog() {
         viewModel = ViewModelProviders.of(getActivity()).get(NotesFragmentViewModel.class);
 
-        Note newNote = new Note();
+        ImageNote newImageNote = new ImageNote();
 
         ImageView photo = root.findViewById(R.id.notes_image_photo);
         AutoCompleteTextView subjectName = root.findViewById(R.id.notes_image_name);
@@ -54,37 +54,37 @@ public class AddImageBottomSheet extends CustomBottomSheet {
         subjectName.setOnItemClickListener((parent, view, pos, arg) -> {
             Object item = parent.getItemAtPosition(pos);
             if (item instanceof Subject){
-                newNote.setSubject_id(((Subject) item).getId());
+                newImageNote.setSubject_id(((Subject) item).getId());
             }
         });
 
-        Date photoDate = viewModel.getCurrentDate();
-        String takingPhotoTime = Utils.getDateString(photoDate);
-        date.setText(takingPhotoTime);
-        newNote.setDate(photoDate);
+        Date currentDate = viewModel.getCurrentDate();
+        String createTime = Utils.getDateString(currentDate);
+        date.setText(createTime);
+        newImageNote.setDate(currentDate);
 
         date.setOnClickListener(view -> {
             DatePickerDialog pickerDialog = new DatePickerDialog(getContext(), (picker, year, month, day) -> {
                 Date pickedDate = new Date((year-1900), month, day);
                 String myDate = Utils.getDateString(pickedDate);
                 date.setText(myDate);
-                newNote.setDate(pickedDate);
-            }, (1900 + photoDate.getYear()), photoDate.getMonth(), photoDate.getDate());
+                newImageNote.setDate(pickedDate);
+            }, (1900 + currentDate.getYear()), currentDate.getMonth(), currentDate.getDate());
             pickerDialog.show();
         });
 
         File f = new File(viewModel.getCurrentPhotoPath());
         Uri contentUri = Uri.fromFile(f);
         photo.setImageURI(contentUri);
-        newNote.setPhotoPath(viewModel.getCurrentPhotoPath());
+        newImageNote.setPhotoPath(viewModel.getCurrentPhotoPath());
 
         save.setOnClickListener(view -> {
-            viewModel.insertCurrentImage(newNote);
+            viewModel.insertImageNote(newImageNote);
             dismiss();
         });
 
         cancel.setOnClickListener(view -> {
-            viewModel.deleteCurrentImage();
+            viewModel.deleteImage();
             dismiss();
         });
     }
