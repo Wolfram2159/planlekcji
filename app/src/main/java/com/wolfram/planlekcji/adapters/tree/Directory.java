@@ -1,5 +1,7 @@
 package com.wolfram.planlekcji.adapters.tree;
 
+import com.wolfram.planlekcji.database.room.entities.notes.TextNote;
+
 /**
  * @author Wolfram
  * @date 2019-10-14
@@ -13,7 +15,10 @@ public class Directory extends TreeNode {
 
     @Override
     public int getGridSpanCount() {
-        return 3;
+        if (childrenList != null && childrenList.size() != 0) {
+            return childrenList.get(0).getGridSpanCount();
+        }
+        return 1;
     }
 
     @Override

@@ -12,6 +12,7 @@ import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.database.room.entities.Subject;
 import com.wolfram.planlekcji.database.room.entities.notes.ImageNote;
 import com.wolfram.planlekcji.database.room.entities.notes.TextNote;
+import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 import com.wolfram.planlekcji.utils.others.Utils;
 
 import java.io.File;
@@ -29,14 +30,23 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         void onPathChanged(String newPath);
         void onGridChanged(int spanCount);
     }
+    public interface TreeAdapterClickListener {
+        void onNoteShow(TreeNode note);
+        void onNoteDelete(TreeNode note);
+    }
+
     public interface TreeAdapterParent{
         int getViewType();
         int getGridSpanCount();
-        // TODO: 2019-10-26 getGridSpanCount, checkParentInstanceOf
     }
 
     private TreeNode parent;
     private TreeAdapterListener treeAdapterListener;
+    private TreeAdapterClickListener treeAdapterClickListener;
+
+    public void setTreeAdapterClickListener(TreeAdapterClickListener treeAdapterClickListener) {
+        this.treeAdapterClickListener = treeAdapterClickListener;
+    }
 
     public void setTreeAdapterListener(TreeAdapterListener treeAdapterListener) {
         this.treeAdapterListener = treeAdapterListener;
@@ -66,13 +76,9 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     private void checkParentInstanceOf() {
-        if (parent instanceof Subject) {
-            treeAdapterListener.onGridChanged(2);
-        } else if (parent instanceof Root) {
-            treeAdapterListener.onGridChanged(1);
-        } else if (parent instanceof Directory) {
-            treeAdapterListener.onGridChanged(2);
-        }
+        // TODO: 2019-11-01 what if parent can have 2 differeent childrens
+        int gridSpanCount = parent.getGridSpanCount();
+        treeAdapterListener.onGridChanged(gridSpanCount);
     }
 
     @NonNull
@@ -86,10 +92,14 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             case 2:
                 v = LayoutInflater.from(parent.getContext()).inflate(R.layout.directory_item, parent, false);
                 return new TreeDirectoryVH(v);
-            case 1:
+            case 4:
             default:
                 v = LayoutInflater.from(parent.getContext()).inflate(R.layout.subject_item, parent, false);
                 return new TreeSubjectVH(v);
+            case 1:
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.note_text_item, parent, false);
+                return new TreeTextNoteVH(v);
+
         }
     }
 
@@ -199,18 +209,21 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             super(itemView);
             title = itemView.findViewById(R.id.note_text_item_title);
             date = itemView.findViewById(R.id.note_text_item_date);
-            edit = itemView.findViewById(R.id.note_text_item_btn_edit);
+            edit = itemView.findViewById(R.id.note_text_item_btn_show);
             delete = itemView.findViewById(R.id.note_text_item_btn_delete);
+            edit.setOnClickListener(this);
+            delete.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
+            TreeNode note = parent.getChildrenList().get(getAdapterPosition());
             switch (view.getId()) {
-                case R.id.note_text_item_btn_edit:
-
+                case R.id.note_text_item_btn_show:
+                    treeAdapterClickListener.onNoteShow(note);
                     break;
                 case R.id.note_text_item_btn_delete:
-
+                    treeAdapterClickListener.onNoteDelete(note);
                     break;
                 default:
                     break;

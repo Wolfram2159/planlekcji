@@ -40,6 +40,8 @@ public class AddTextNoteBottomSheet extends CustomBottomSheet {
         EditText title = root.findViewById(R.id.notes_text_title);
         EditText date = root.findViewById(R.id.notes_text_date);
 
+        EditText note = root.findViewById(R.id.notes_text_note);
+
         TextNote newTextNote = new TextNote();
 
         viewModel.getSubjects().observe(this, subjects -> {
@@ -50,7 +52,7 @@ public class AddTextNoteBottomSheet extends CustomBottomSheet {
 
         subjectName.setOnItemClickListener((parent, view, pos, arg) -> {
             Object item = parent.getItemAtPosition(pos);
-            if (item instanceof Subject){
+            if (item instanceof Subject) {
                 newTextNote.setSubject_id(((Subject) item).getId());
             }
         });
@@ -62,7 +64,7 @@ public class AddTextNoteBottomSheet extends CustomBottomSheet {
 
         date.setOnClickListener(view -> {
             DatePickerDialog pickerDialog = new DatePickerDialog(getContext(), (picker, year, month, day) -> {
-                Date pickedDate = new Date((year-1900), month, day);
+                Date pickedDate = new Date((year - 1900), month, day);
                 String myDate = Utils.getDateString(pickedDate);
                 date.setText(myDate);
                 newTextNote.setDate(pickedDate);
@@ -72,20 +74,11 @@ public class AddTextNoteBottomSheet extends CustomBottomSheet {
 
         save.setOnClickListener(view -> {
             newTextNote.setTitle(title.getText().toString());
-            File file = null;
-            try {
-                file = viewModel.createFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            if (file != null) {
-                newTextNote.setFilePath(file.getAbsolutePath());
-                viewModel.insertTextNote(newTextNote);
-            }
+            newTextNote.setMessage(note.getText().toString());
+            viewModel.insertTextNote(newTextNote);
             dismiss();
         });
         cancel.setOnClickListener(view -> {
-            viewModel.deleteFile();
             dismiss();
         });
     }

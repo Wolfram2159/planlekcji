@@ -24,7 +24,7 @@ public class TextNote extends TreeNode {
 
     protected int subject_id;
 
-    protected String filePath;
+    protected String message;
 
     protected String title;
 
@@ -46,12 +46,12 @@ public class TextNote extends TreeNode {
         this.subject_id = subject_id;
     }
 
-    public String getFilePath() {
-        return filePath;
+    public String getMessage() {
+        return message;
     }
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getTitle() {
@@ -72,12 +72,23 @@ public class TextNote extends TreeNode {
 
     @Override
     public int getViewType() {
-        return 4;
+        return 1;
     }
 
     @Override
     public int getGridSpanCount() {
-        return 0;
+        return 1;
+    }
+
+    @Override
+    public String toString() {
+        return "TextNote{" +
+                "id=" + id +
+                ", subject_id=" + subject_id +
+                ", message='" + message + '\'' +
+                ", title='" + title + '\'' +
+                ", date=" + date +
+                '}';
     }
 
     @Override

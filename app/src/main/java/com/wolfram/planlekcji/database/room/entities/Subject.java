@@ -23,12 +23,12 @@ public class Subject extends TreeNode {
 
     @Override
     public int getViewType() {
-        return 1;
+        return 4;
     }
 
     @Override
     public int getGridSpanCount() {
-        return 1;
+        return 2;
     }
 
     @Ignore

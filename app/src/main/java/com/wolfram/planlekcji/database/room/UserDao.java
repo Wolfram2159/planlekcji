@@ -60,16 +60,15 @@ public interface UserDao {
     @Query("SELECT * FROM imageNotes WHERE subject_id=(:subject_id)")
     LiveData<List<ImageNote>> getImageNotesFromSubject(int subject_id);
 
-    @Query("SELECT * FROM imageNotes")
-    LiveData<List<ImageNote>> getImageNotes();
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertTextNote(TextNote textNote);
 
     @Query("SELECT * FROM textNotes WHERE subject_id=(:subject_id)")
     LiveData<List<TextNote>> getTextNotesFromSubject(int subject_id);
 
-    @Query("SELECT * FROM textNotes")
-    LiveData<List<TextNote>> getTextNotes();
+    @Delete
+    void deleteTextNote(TextNote note);
 
+    @Delete
+    void deleteImageNote(ImageNote note);
 }
