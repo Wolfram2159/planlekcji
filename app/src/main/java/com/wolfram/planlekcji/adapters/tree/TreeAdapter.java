@@ -31,8 +31,8 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         void onGridChanged(int spanCount);
     }
     public interface TreeAdapterClickListener {
-        void onNoteShow(TreeNode note);
-        void onNoteDelete(TreeNode note);
+        void onNoteShow(TextNote note);
+        void onNoteDelete(TextNote note);
     }
 
     public interface TreeAdapterParent{
@@ -202,22 +202,20 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private TextView title;
         private TextView date;
-        private MaterialButton edit;
-        private MaterialButton delete;
 
         public TreeTextNoteVH(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.note_text_item_title);
             date = itemView.findViewById(R.id.note_text_item_date);
-            edit = itemView.findViewById(R.id.note_text_item_btn_show);
-            delete = itemView.findViewById(R.id.note_text_item_btn_delete);
-            edit.setOnClickListener(this);
+            MaterialButton show = itemView.findViewById(R.id.note_text_item_btn_show);
+            MaterialButton delete = itemView.findViewById(R.id.note_text_item_btn_delete);
+            show.setOnClickListener(this);
             delete.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            TreeNode note = parent.getChildrenList().get(getAdapterPosition());
+            TextNote note = (TextNote) parent.getChildrenList().get(getAdapterPosition());
             switch (view.getId()) {
                 case R.id.note_text_item_btn_show:
                     treeAdapterClickListener.onNoteShow(note);

@@ -22,8 +22,6 @@ import com.wolfram.planlekcji.adapters.tree.TreeNode;
 import com.wolfram.planlekcji.database.room.entities.Subject;
 import com.wolfram.planlekcji.database.room.entities.notes.ImageNote;
 import com.wolfram.planlekcji.database.room.entities.notes.TextNote;
-import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
-import com.wolfram.planlekcji.ui.bottomSheets.events.ActionEventBottomSheet;
 import com.wolfram.planlekcji.ui.bottomSheets.notes.AddImageNoteBottomSheet;
 import com.wolfram.planlekcji.ui.bottomSheets.notes.AddTextNoteBottomSheet;
 import com.wolfram.planlekcji.ui.bottomSheets.notes.ShowTextNoteBottomSheet;
@@ -35,7 +33,6 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -125,23 +122,15 @@ public class NotesFragment extends Fragment {
 
         adapter.setTreeAdapterClickListener(new TreeAdapter.TreeAdapterClickListener() {
             @Override
-            public void onNoteShow(TreeNode note) {
-                if (note instanceof TextNote) {
-                    ShowTextNoteBottomSheet bottomSheet = new ShowTextNoteBottomSheet();
-                    viewModel.setTextNote((TextNote) note);
-                    bottomSheet.show(getFragmentManager(), "ShowTextBottomSheet");
-                } else if (note instanceof ImageNote) {
-
-                }
+            public void onNoteShow(TextNote note) {
+                ShowTextNoteBottomSheet bottomSheet = new ShowTextNoteBottomSheet();
+                viewModel.setTextNote(note);
+                bottomSheet.show(getFragmentManager(), "ShowTextBottomSheet");
             }
 
             @Override
-            public void onNoteDelete(TreeNode note) {
-                if (note instanceof TextNote) {
-                    viewModel.deleteTextNote((TextNote) note);
-                } else if (note instanceof ImageNote) {
-                    viewModel.deleteImageNote((ImageNote) note);
-                }
+            public void onNoteDelete(TextNote note) {
+                viewModel.deleteTextNote(note);
             }
         });
 
