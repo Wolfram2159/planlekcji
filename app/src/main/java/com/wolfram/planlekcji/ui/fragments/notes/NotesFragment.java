@@ -12,8 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.stfalcon.imageviewer.StfalconImageViewer;
+import com.stfalcon.imageviewer.listeners.OnImageChangeListener;
+import com.stfalcon.imageviewer.loader.ImageLoader;
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.adapters.tree.Directory;
 import com.wolfram.planlekcji.adapters.tree.Root;
@@ -28,6 +33,8 @@ import com.wolfram.planlekcji.ui.bottomSheets.notes.ShowTextNoteBottomSheet;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -44,6 +51,8 @@ public class NotesFragment extends Fragment {
     private RecyclerView recycler;
     private TreeAdapter adapter;
     private TextView path;
+
+    private StfalconImageViewer viewer;
 
     private static final int REQUEST_TAKE_PHOTO = 1;
 
@@ -131,6 +140,19 @@ public class NotesFragment extends Fragment {
             @Override
             public void onNoteDelete(TextNote note) {
                 viewModel.deleteTextNote(note);
+            }
+
+            @Override
+            public void onImageClick(List<String> imagePathList, Integer position, ImageView transitionImageView){
+                viewer = new StfalconImageViewer.Builder<>(getContext(), imagePathList, (imageView, imageUrl) -> {
+                    Glide.with(getContext()).load(imageUrl).into(imageView);
+                })  .withStartPosition(position)
+                        .withTransitionFrom(transitionImageView)
+                        .withImageChangeListener(imagePosition -> {
+                            TreeAdapter.TreeImageNoteVH viewHolder = (TreeAdapter.TreeImageNoteVH) recycler.findViewHolderForAdapterPosition(imagePosition);
+                            viewer.updateTransitionImage(viewHolder.getImage());
+                        })
+                    .show();
             }
         });
 

@@ -85,7 +85,6 @@ public class GradesFragment extends Fragment {
             }
         });
         recycler.setAdapter(adapter);
-        //todo: notes fragment/activity with image/txt files
         fab.setOnClickListener(v -> {
             ModifyGradeBottomSheet bottomSheet = new ModifyGradeBottomSheet();
             bottomSheet.show(getFragmentManager(), "ModifyGrade");

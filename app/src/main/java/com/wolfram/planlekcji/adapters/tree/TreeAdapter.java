@@ -12,10 +12,11 @@ import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.database.room.entities.Subject;
 import com.wolfram.planlekcji.database.room.entities.notes.ImageNote;
 import com.wolfram.planlekcji.database.room.entities.notes.TextNote;
-import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 import com.wolfram.planlekcji.utils.others.Utils;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,6 +34,7 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public interface TreeAdapterClickListener {
         void onNoteShow(TextNote note);
         void onNoteDelete(TextNote note);
+        void onImageClick(List<String> imagePathList, Integer position, ImageView transitionImage);
     }
 
     public interface TreeAdapterParent{
@@ -76,7 +78,6 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     private void checkParentInstanceOf() {
-        // TODO: 2019-11-01 what if parent can have 2 differeent childrens
         int gridSpanCount = parent.getGridSpanCount();
         treeAdapterListener.onGridChanged(gridSpanCount);
     }
@@ -181,7 +182,7 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public class TreeImageNoteVH extends RecyclerView.ViewHolder implements View.OnClickListener {
-
+        // TODO: 2019-11-17 how to delete imageNote ?
         private ImageView image;
         private TextView date;
 
@@ -192,9 +193,18 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             itemView.setOnClickListener(this);
         }
 
+        public ImageView getImage() {
+            return image;
+        }
+
         @Override
         public void onClick(View view) {
-            // TODO: 2019-10-26 show big photo on full screen
+            List<String> pathList = new ArrayList<>();
+            for (TreeNode treeNode : parent.getChildrenList()) {
+                ImageNote imageNote = (ImageNote) treeNode;
+                pathList.add(imageNote.getPhotoPath());
+            }
+            treeAdapterClickListener.onImageClick(pathList, getAdapterPosition(), image);
         }
     }
 
