@@ -67,7 +67,7 @@ public class ImageNote extends TreeNode {
 
     @Override
     public int getGridSpanCount() {
-        return 3;
+        return 2;
     }
 
     @Override

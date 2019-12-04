@@ -2,6 +2,7 @@ package com.wolfram.planlekcji.ui.bottomSheets.notes;
 
 import android.app.DatePickerDialog;
 import android.net.Uri;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -26,8 +27,6 @@ import androidx.lifecycle.ViewModelProviders;
  */
 public class AddImageNoteBottomSheet extends CustomBottomSheet {
 
-    private NotesFragmentViewModel viewModel;
-
     @Override
     protected int getResource() {
         return R.layout.notes_image_bottom_sheet;
@@ -35,11 +34,13 @@ public class AddImageNoteBottomSheet extends CustomBottomSheet {
 
     @Override
     protected void customizeDialog() {
-        viewModel = ViewModelProviders.of(getActivity()).get(NotesFragmentViewModel.class);
+        NotesFragmentViewModel viewModel = ViewModelProviders.of(getActivity()).get(NotesFragmentViewModel.class);
 
         ImageNote newImageNote = new ImageNote();
 
         ImageView photo = root.findViewById(R.id.notes_image_photo);
+        ImageView invisibleImageView = root.findViewById(R.id.notes_image_edit);
+        invisibleImageView.setVisibility(View.INVISIBLE);
         AutoCompleteTextView subjectName = root.findViewById(R.id.notes_image_name);
         EditText date = root.findViewById(R.id.notes_image_date);
         MaterialButton save = root.findViewById(R.id.notes_image_save);

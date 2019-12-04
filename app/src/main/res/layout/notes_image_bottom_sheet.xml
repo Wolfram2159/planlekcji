@@ -106,4 +106,20 @@
             tools:ignore="LabelFor" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/notes_image_edit"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:alpha="0.6"
+        android:background="#00000000"
+        app:layout_constraintBottom_toBottomOf="@+id/notes_image_photo"
+        app:layout_constraintEnd_toEndOf="@+id/notes_image_photo"
+        app:layout_constraintStart_toStartOf="@+id/notes_image_photo"
+        app:layout_constraintTop_toTopOf="@+id/notes_image_photo"
+        app:srcCompat="@drawable/ic_edit_photo" />
 </androidx.constraintlayout.widget.ConstraintLayout>

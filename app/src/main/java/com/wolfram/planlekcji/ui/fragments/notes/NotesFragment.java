@@ -1,7 +1,9 @@
 package com.wolfram.planlekcji.ui.fragments.notes;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,6 +32,7 @@ import com.wolfram.planlekcji.database.room.entities.notes.ImageNote;
 import com.wolfram.planlekcji.database.room.entities.notes.TextNote;
 import com.wolfram.planlekcji.ui.bottomSheets.notes.AddImageNoteBottomSheet;
 import com.wolfram.planlekcji.ui.bottomSheets.notes.AddTextNoteBottomSheet;
+import com.wolfram.planlekcji.ui.bottomSheets.notes.ModifyImageNoteBottomSheet;
 import com.wolfram.planlekcji.ui.bottomSheets.notes.ShowTextNoteBottomSheet;
 
 import java.io.File;
@@ -112,7 +116,7 @@ public class NotesFragment extends Fragment {
         });
 
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 1);
-        adapter = new TreeAdapter(root);
+        adapter = new TreeAdapter(root, Glide.with(this));
 
         adapter.setTreeAdapterListener(new TreeAdapter.TreeAdapterListener() {
             @Override
@@ -143,16 +147,26 @@ public class NotesFragment extends Fragment {
             }
 
             @Override
-            public void onImageClick(List<String> imagePathList, Integer position, ImageView transitionImageView){
+            public void onImageClick(List<String> imagePathList, Integer position, ImageView transitionImageView) {
+                // TODO: 2019-12-04 fullscreen with editing and deleteing
+                /*View fullscreen = getLayoutInflater().inflate(R.layout.fullscreen_image, null);
+                Button btn = fullscreen.findViewById(R.id.fullscreen_btn);*/
                 viewer = new StfalconImageViewer.Builder<>(getContext(), imagePathList, (imageView, imageUrl) -> {
-                    Glide.with(getContext()).load(imageUrl).into(imageView);
-                })  .withStartPosition(position)
-                        .withTransitionFrom(transitionImageView)
-                        .withImageChangeListener(imagePosition -> {
-                            TreeAdapter.TreeImageNoteVH viewHolder = (TreeAdapter.TreeImageNoteVH) recycler.findViewHolderForAdapterPosition(imagePosition);
-                            viewer.updateTransitionImage(viewHolder.getImage());
-                        })
-                    .show();
+                    Glide.with(NotesFragment.this).load(imageUrl).into(imageView);
+                }).withStartPosition(position)
+                        .withImageChangeListener(imagePosition -> recycler.post(() -> recycler.smoothScrollToPosition(imagePosition)))
+                        //.withOverlayView(fullscreen)
+                        .show();
+                /*btn.setOnClickListener(view -> {
+                    viewer.dismiss();
+                });*/
+            }
+
+            @Override
+            public void onImageLongClick(ImageNote imageNote) {
+                viewModel.setImageNote(imageNote);
+                ModifyImageNoteBottomSheet bottomSheet = new ModifyImageNoteBottomSheet();
+                bottomSheet.show(getFragmentManager(), "ModifyImageNote");
             }
         });
 

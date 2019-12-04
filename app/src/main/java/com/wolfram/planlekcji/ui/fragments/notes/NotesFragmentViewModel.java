@@ -27,6 +27,7 @@ public class NotesFragmentViewModel extends AndroidViewModel {
     private String currentPhotoPath;
     private Date currentDate;
     private TextNote textNote;
+    private ImageNote imageNote;
 
     public NotesFragmentViewModel(@NonNull Application application) {
         super(application);
@@ -38,10 +39,7 @@ public class NotesFragmentViewModel extends AndroidViewModel {
     }
 
     public Date getCurrentDate(){
-        if (currentDate == null){
-            currentDate = new Date();
-        }
-        return currentDate;
+        return new Date();
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -92,8 +90,10 @@ public class NotesFragmentViewModel extends AndroidViewModel {
         AsyncTask.execute(() -> dao.deleteTextNote(note));
     }
 
-    public void deleteImageNote(ImageNote note) {
-        AsyncTask.execute(() -> dao.deleteImageNote(note));
+    public void deleteImageNote(){
+        AsyncTask.execute(() -> dao.deleteImageNote(imageNote));
+        File imageToDelete = new File(imageNote.getPhotoPath());
+        imageToDelete.delete();
     }
 
     public void setTextNote(TextNote note) {
@@ -102,5 +102,13 @@ public class NotesFragmentViewModel extends AndroidViewModel {
 
     public TextNote getTextNote(){
         return this.textNote;
+    }
+
+    public ImageNote getImageNote() {
+        return imageNote;
+    }
+
+    public void setImageNote(ImageNote imageNote) {
+        this.imageNote = imageNote;
     }
 }
