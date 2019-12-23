@@ -8,7 +8,7 @@ import com.wolfram.planlekcji.database.room.UserDao;
 import com.wolfram.planlekcji.database.room.entities.Subject;
 import com.wolfram.planlekcji.database.room.entities.event.Event;
 import com.wolfram.planlekcji.database.room.entities.event.EventDisplay;
-import com.wolfram.planlekcji.utils.enums.Day;
+import com.wolfram.planlekcji.custom.enums.Day;
 
 import java.util.EnumMap;
 import java.util.List;

@@ -1,10 +1,13 @@
-package com.wolfram.planlekcji.adapters.tree;
+package com.wolfram.planlekcji.ui.adapters.tree;
 
 import java.util.ArrayList;
 
-public class Root extends TreeNode {
+public class RootNode extends TreeNode {
 
-    public Root() {
+    private final static int VIEW_TYPE = 0;
+    private final static int GRID_SPAN_COUNT = 1;
+
+    public RootNode() {
         this.parent = null;
         this.childrenList = new ArrayList<>();
         this.nodeName = "PlanLekcji";
@@ -12,12 +15,12 @@ public class Root extends TreeNode {
 
     @Override
     public int getViewType() {
-        return 0;
+        return VIEW_TYPE;
     }
 
     @Override
     public int getGridSpanCount() {
-        return 1;
+        return GRID_SPAN_COUNT;
     }
 
     @Override

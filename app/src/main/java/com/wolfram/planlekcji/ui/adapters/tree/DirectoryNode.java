@@ -1,16 +1,17 @@
-package com.wolfram.planlekcji.adapters.tree;
-
-import com.wolfram.planlekcji.database.room.entities.notes.TextNote;
+package com.wolfram.planlekcji.ui.adapters.tree;
 
 /**
  * @author Wolfram
  * @date 2019-10-14
  */
-public class Directory extends TreeNode {
+public class DirectoryNode extends TreeNode {
+
+    private static final int VIEW_TYPE = 2;
+    private static final int GRID_SPAN_COUNT = 1;
 
     @Override
     public int getViewType() {
-        return 2;
+        return VIEW_TYPE;
     }
 
     @Override
@@ -18,7 +19,7 @@ public class Directory extends TreeNode {
         if (childrenList != null && childrenList.size() != 0) {
             return childrenList.get(0).getGridSpanCount();
         }
-        return 1;
+        return GRID_SPAN_COUNT;
     }
 
     @Override

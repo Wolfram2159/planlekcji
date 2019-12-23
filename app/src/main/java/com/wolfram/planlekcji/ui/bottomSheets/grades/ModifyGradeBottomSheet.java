@@ -12,7 +12,7 @@ import com.wolfram.planlekcji.database.room.entities.grade.Grade;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplay;
 import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 import com.wolfram.planlekcji.ui.fragments.grades.GradesFragmentViewModel;
-import com.wolfram.planlekcji.utils.others.Utils;
+import com.wolfram.planlekcji.custom.others.Utils;
 
 import java.util.Date;
 

@@ -12,8 +12,8 @@ import com.wolfram.planlekcji.database.room.entities.event.Event;
 import com.wolfram.planlekcji.database.room.entities.event.EventDisplay;
 import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 import com.wolfram.planlekcji.ui.fragments.events.ViewPagerEventsFragmentViewModel;
-import com.wolfram.planlekcji.utils.enums.Day;
-import com.wolfram.planlekcji.utils.others.Utils;
+import com.wolfram.planlekcji.custom.enums.Day;
+import com.wolfram.planlekcji.custom.others.Utils;
 
 import java.util.Date;
 

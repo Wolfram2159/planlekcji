@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.adapters.expanded.ParentGradeRecyclerViewAdapter;
+import com.wolfram.planlekcji.ui.adapters.expanded.ParentGradeRecyclerViewAdapter;
 import com.wolfram.planlekcji.database.room.entities.Subject;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplay;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeGroup;

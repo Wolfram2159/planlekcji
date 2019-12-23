@@ -1,10 +1,11 @@
 package com.wolfram.planlekcji.database.room.entities.notes;
 
-import com.wolfram.planlekcji.adapters.tree.TreeNode;
+import com.wolfram.planlekcji.ui.adapters.tree.ImageNoteNode;
 import com.wolfram.planlekcji.database.room.entities.Subject;
 
 import java.util.Date;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
@@ -18,7 +19,7 @@ import androidx.room.PrimaryKey;
                 entity = Subject.class,
                 parentColumns = "id",
                 childColumns = "subject_id"))
-public class ImageNote extends TreeNode {
+public class ImageNote {
     @PrimaryKey(autoGenerate = true)
     protected Integer id;
 
@@ -27,6 +28,16 @@ public class ImageNote extends TreeNode {
     protected String photoPath;
 
     protected Date date;
+
+    public ImageNote() {
+    }
+
+    public ImageNote(@NonNull ImageNoteNode subjectNode) {
+        this.id = subjectNode.getId();
+        this.subject_id = subjectNode.getSubject_id();
+        this.photoPath = subjectNode.getPhotoPath();
+        this.date = subjectNode.getDate();
+    }
 
     public Integer getId() {
         return id;
@@ -58,24 +69,5 @@ public class ImageNote extends TreeNode {
 
     public void setDate(Date date) {
         this.date = date;
-    }
-
-    @Override
-    public int getViewType() {
-        return 3;
-    }
-
-    @Override
-    public int getGridSpanCount() {
-        return 2;
-    }
-
-    @Override
-    public String getPath() {
-        if (getParent() == null){
-            return "";
-        }else {
-            return getParent().getPath();
-        }
     }
 }

@@ -10,7 +10,7 @@ import com.wolfram.planlekcji.database.room.UserDao;
 import com.wolfram.planlekcji.database.room.entities.Subject;
 import com.wolfram.planlekcji.database.room.entities.notes.ImageNote;
 import com.wolfram.planlekcji.database.room.entities.notes.TextNote;
-import com.wolfram.planlekcji.utils.others.Utils;
+import com.wolfram.planlekcji.custom.others.Utils;
 
 import java.io.File;
 import java.io.IOException;

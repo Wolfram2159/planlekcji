@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.adapters.SubjectsRecyclerViewAdapter;
+import com.wolfram.planlekcji.ui.adapters.SubjectsRecyclerViewAdapter;
 import com.wolfram.planlekcji.database.room.entities.Subject;
 
 import java.util.List;

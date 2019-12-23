@@ -1,8 +1,8 @@
 package com.wolfram.planlekcji.database.room.entities.event;
 
 import com.wolfram.planlekcji.database.room.entities.Subject;
-import com.wolfram.planlekcji.utils.enums.Day;
-import com.wolfram.planlekcji.utils.others.Utils;
+import com.wolfram.planlekcji.custom.enums.Day;
+import com.wolfram.planlekcji.custom.others.Utils;
 
 import java.util.Date;
 

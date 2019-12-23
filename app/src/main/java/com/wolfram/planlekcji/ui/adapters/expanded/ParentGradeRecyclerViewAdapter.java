@@ -1,4 +1,4 @@
-package com.wolfram.planlekcji.adapters.expanded;
+package com.wolfram.planlekcji.ui.adapters.expanded;
 
 import android.view.LayoutInflater;
 import android.view.View;

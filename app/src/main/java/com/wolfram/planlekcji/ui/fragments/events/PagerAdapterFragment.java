@@ -6,10 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.adapters.EventsRecyclerViewAdapter;
+import com.wolfram.planlekcji.ui.adapters.EventsRecyclerViewAdapter;
 import com.wolfram.planlekcji.database.room.entities.event.EventDisplay;
 import com.wolfram.planlekcji.ui.bottomSheets.events.ActionEventBottomSheet;
-import com.wolfram.planlekcji.utils.enums.Day;
+import com.wolfram.planlekcji.custom.enums.Day;
 
 import java.util.List;
 import java.util.Objects;

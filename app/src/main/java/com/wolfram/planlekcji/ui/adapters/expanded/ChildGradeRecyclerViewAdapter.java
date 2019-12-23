@@ -1,4 +1,4 @@
-package com.wolfram.planlekcji.adapters.expanded;
+package com.wolfram.planlekcji.ui.adapters.expanded;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplay;
-import com.wolfram.planlekcji.utils.others.Utils;
+import com.wolfram.planlekcji.custom.others.Utils;
 
 import java.util.ArrayList;
 import java.util.List;

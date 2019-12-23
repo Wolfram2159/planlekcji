@@ -1,9 +1,7 @@
 package com.wolfram.planlekcji.ui.fragments.notes;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -14,19 +12,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.stfalcon.imageviewer.StfalconImageViewer;
-import com.stfalcon.imageviewer.listeners.OnImageChangeListener;
-import com.stfalcon.imageviewer.loader.ImageLoader;
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.adapters.tree.Directory;
-import com.wolfram.planlekcji.adapters.tree.Root;
-import com.wolfram.planlekcji.adapters.tree.TreeAdapter;
-import com.wolfram.planlekcji.adapters.tree.TreeNode;
+import com.wolfram.planlekcji.custom.mapper.RoomMapper;
+import com.wolfram.planlekcji.ui.adapters.tree.DirectoryNode;
+import com.wolfram.planlekcji.ui.adapters.tree.ImageNoteNode;
+import com.wolfram.planlekcji.ui.adapters.tree.RootNode;
+import com.wolfram.planlekcji.ui.adapters.tree.SubjectNode;
+import com.wolfram.planlekcji.ui.adapters.tree.TextNoteNode;
+import com.wolfram.planlekcji.ui.adapters.tree.TreeAdapter;
+import com.wolfram.planlekcji.ui.adapters.tree.TreeNode;
 import com.wolfram.planlekcji.database.room.entities.Subject;
 import com.wolfram.planlekcji.database.room.entities.notes.ImageNote;
 import com.wolfram.planlekcji.database.room.entities.notes.TextNote;
@@ -37,7 +36,6 @@ import com.wolfram.planlekcji.ui.bottomSheets.notes.ShowTextNoteBottomSheet;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.activity.OnBackPressedCallback;
@@ -84,39 +82,43 @@ public class NotesFragment extends Fragment {
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
 
+        RoomMapper roomMapper = new RoomMapper();
         // TODO: 2019-10-14 how to save Tree, not creating always new Tree
-        Root root = new Root();
+        TreeNode rootNode = new RootNode();
         viewModel.getSubjects().observe(this, subjects -> {
             for (Subject subject : subjects) {
-                Directory pictures = new Directory();
-                Directory documents = new Directory();
-                subject.addChildren(pictures, "Pictures");
-                subject.addChildren(documents, "Documents");
-                root.addChildren(subject, subject.getName());
+                SubjectNode subjectNode = roomMapper.convertSubject(subject);
+                TreeNode pictures = new DirectoryNode();
+                TreeNode documents = new DirectoryNode();
+                subjectNode.addChildren(pictures, "Pictures");
+                subjectNode.addChildren(documents, "Documents");
+                rootNode.addChildren(subjectNode, subjectNode.getName());
 
-                viewModel.getImageNotesFromSubject(subject.getId()).observe(this, imageNotes -> {
+                viewModel.getImageNotesFromSubject(subjectNode.getId()).observe(this, imageNotes -> {
                     TreeNode actualRoot = adapter.getParent();
                     pictures.clearChildrens();
                     for (ImageNote imageNote : imageNotes) {
-                        pictures.addChildren(imageNote, "Photo");
+                        ImageNoteNode imageNoteNode = roomMapper.convertImageNote(imageNote);
+                        pictures.addChildren(imageNoteNode, "Photo");
                     }
                     adapter.setParent(actualRoot);
                 });
 
-                viewModel.getTextNotesFromSubject(subject.getId()).observe(this, textNotes -> {
+                viewModel.getTextNotesFromSubject(subjectNode.getId()).observe(this, textNotes -> {
                     TreeNode actualRoot = adapter.getParent();
                     documents.clearChildrens();
                     for (TextNote textNote : textNotes) {
-                        documents.addChildren(textNote, "File");
+                        TextNoteNode textNoteNode = roomMapper.convertTextNote(textNote);
+                        documents.addChildren(textNoteNode, "File");
                     }
                     adapter.setParent(actualRoot);
                 });
             }
-            adapter.setParent(root);
+            adapter.setParent(rootNode);
         });
 
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 1);
-        adapter = new TreeAdapter(root, Glide.with(this));
+        adapter = new TreeAdapter(rootNode, Glide.with(this));
 
         adapter.setTreeAdapterListener(new TreeAdapter.TreeAdapterListener() {
             @Override
@@ -135,15 +137,17 @@ public class NotesFragment extends Fragment {
 
         adapter.setTreeAdapterClickListener(new TreeAdapter.TreeAdapterClickListener() {
             @Override
-            public void onNoteShow(TextNote note) {
+            public void onNoteShow(TextNoteNode note) {
+                TextNote textNote = roomMapper.convertTextNote(note);
                 ShowTextNoteBottomSheet bottomSheet = new ShowTextNoteBottomSheet();
-                viewModel.setTextNote(note);
+                viewModel.setTextNote(textNote);
                 bottomSheet.show(getFragmentManager(), "ShowTextBottomSheet");
             }
 
             @Override
-            public void onNoteDelete(TextNote note) {
-                viewModel.deleteTextNote(note);
+            public void onNoteDelete(TextNoteNode note) {
+                TextNote textNote = roomMapper.convertTextNote(note);
+                viewModel.deleteTextNote(textNote);
             }
 
             @Override
@@ -163,7 +167,8 @@ public class NotesFragment extends Fragment {
             }
 
             @Override
-            public void onImageLongClick(ImageNote imageNote) {
+            public void onImageLongClick(ImageNoteNode imageNoteNode) {
+                ImageNote imageNote = roomMapper.convertImageNote(imageNoteNode);
                 viewModel.setImageNote(imageNote);
                 ModifyImageNoteBottomSheet bottomSheet = new ModifyImageNoteBottomSheet();
                 bottomSheet.show(getFragmentManager(), "ModifyImageNote");

@@ -1,10 +1,11 @@
 package com.wolfram.planlekcji.database.room.entities.notes;
 
-import com.wolfram.planlekcji.adapters.tree.TreeNode;
+import com.wolfram.planlekcji.ui.adapters.tree.TextNoteNode;
 import com.wolfram.planlekcji.database.room.entities.Subject;
 
 import java.util.Date;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
@@ -18,7 +19,7 @@ import androidx.room.PrimaryKey;
                 entity = Subject.class,
                 parentColumns = "id",
                 childColumns = "subject_id"))
-public class TextNote extends TreeNode {
+public class TextNote {
     @PrimaryKey(autoGenerate = true)
     protected Integer id;
 
@@ -29,6 +30,17 @@ public class TextNote extends TreeNode {
     protected String title;
 
     protected Date date;
+
+    public TextNote() {
+    }
+
+    public TextNote(@NonNull TextNoteNode textNoteNode) {
+        this.id = textNoteNode.getId();
+        this.subject_id = textNoteNode.getSubject_id();
+        this.message = textNoteNode.getMessage();
+        this.title = textNoteNode.getMessage();
+        this.date = textNoteNode.getDate();
+    }
 
     public Integer getId() {
         return id;
@@ -71,16 +83,6 @@ public class TextNote extends TreeNode {
     }
 
     @Override
-    public int getViewType() {
-        return 1;
-    }
-
-    @Override
-    public int getGridSpanCount() {
-        return 1;
-    }
-
-    @Override
     public String toString() {
         return "TextNote{" +
                 "id=" + id +
@@ -89,14 +91,5 @@ public class TextNote extends TreeNode {
                 ", title='" + title + '\'' +
                 ", date=" + date +
                 '}';
-    }
-
-    @Override
-    public String getPath() {
-        if (getParent() == null){
-            return "";
-        }else {
-            return getParent().getPath();
-        }
     }
 }

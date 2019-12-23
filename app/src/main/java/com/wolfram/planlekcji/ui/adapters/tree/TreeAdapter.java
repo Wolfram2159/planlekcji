@@ -1,6 +1,5 @@
-package com.wolfram.planlekcji.adapters.tree;
+package com.wolfram.planlekcji.ui.adapters.tree;
 
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +9,8 @@ import android.widget.TextView;
 import com.bumptech.glide.RequestManager;
 import com.google.android.material.button.MaterialButton;
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.database.room.entities.Subject;
-import com.wolfram.planlekcji.database.room.entities.notes.ImageNote;
-import com.wolfram.planlekcji.database.room.entities.notes.TextNote;
-import com.wolfram.planlekcji.utils.others.Utils;
+import com.wolfram.planlekcji.custom.others.Utils;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,14 +27,15 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         void onPathChanged(String newPath);
         void onGridChanged(int spanCount);
     }
+
     public interface TreeAdapterClickListener {
-        void onNoteShow(TextNote note);
-        void onNoteDelete(TextNote note);
+        void onNoteShow(TextNoteNode note);
+        void onNoteDelete(TextNoteNode note);
         void onImageClick(List<String> imagePathList, Integer position, ImageView transitionImage);
-        void onImageLongClick(ImageNote imageNote);
+        void onImageLongClick(ImageNoteNode imageNote);
     }
 
-    public interface TreeAdapterParent{
+    public interface TreeAdapterParent {
         int getViewType();
         int getGridSpanCount();
     }
@@ -48,6 +44,11 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private TreeAdapterListener treeAdapterListener;
     private TreeAdapterClickListener treeAdapterClickListener;
     private RequestManager glide;
+    private static final int IMAGE_NOTE_NODE_VIEW_TYPE = 3;
+    private static final int DIRECTORY_NODE_VIEW_TYPE = 2;
+    private static final int SUBJECT_NODE_VIEW_TYPE = 4;
+    private static final int TEXT_NOTE_NODE_VIEW_TYPE = 1;
+
 
     public TreeAdapter(TreeNode parent, RequestManager glide) {
         this.parent = parent;
@@ -91,17 +92,17 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v;
         switch (viewType) {
-            case 3:
+            case IMAGE_NOTE_NODE_VIEW_TYPE:
                 v = LayoutInflater.from(parent.getContext()).inflate(R.layout.note_image_item, parent, false);
                 return new TreeImageNoteVH(v);
-            case 2:
+            case DIRECTORY_NODE_VIEW_TYPE:
                 v = LayoutInflater.from(parent.getContext()).inflate(R.layout.directory_item, parent, false);
                 return new TreeDirectoryVH(v);
-            case 4:
+            case SUBJECT_NODE_VIEW_TYPE:
             default:
                 v = LayoutInflater.from(parent.getContext()).inflate(R.layout.subject_item, parent, false);
                 return new TreeSubjectVH(v);
-            case 1:
+            case TEXT_NOTE_NODE_VIEW_TYPE:
                 v = LayoutInflater.from(parent.getContext()).inflate(R.layout.note_text_item, parent, false);
                 return new TreeTextNoteVH(v);
 
@@ -111,24 +112,24 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         TreeNode node = parent.getChildrenList().get(position);
-        if (node instanceof Subject) {
+        if (node instanceof SubjectNode) {
             TreeSubjectVH subjectHolder = (TreeSubjectVH) holder;
             subjectHolder.subject_tv.setText(node.getNodeName());
-        } else if (node instanceof Directory) {
+        } else if (node instanceof DirectoryNode) {
             TreeDirectoryVH directoryHolder = (TreeDirectoryVH) holder;
             directoryHolder.directory_tv.setText(node.getNodeName());
-        } else if (node instanceof ImageNote) {
+        } else if (node instanceof ImageNoteNode) {
             TreeImageNoteVH imageHolder = (TreeImageNoteVH) holder;
-            String photoPath = ((ImageNote) node).getPhotoPath();
+            String photoPath = ((ImageNoteNode) node).getPhotoPath();
             glide
                     .load(photoPath)
                     .centerCrop()
                     .into(imageHolder.image);
-            imageHolder.date.setText(Utils.getDateString(((ImageNote) node).getDate()));
-        } else if (node instanceof TextNote){
+            imageHolder.date.setText(Utils.getDateString(((ImageNoteNode) node).getDate()));
+        } else if (node instanceof TextNoteNode) {
             TreeTextNoteVH textHolder = (TreeTextNoteVH) holder;
-            textHolder.title.setText(((TextNote) node).getTitle());
-            textHolder.date.setText(Utils.getDateString(((TextNote) node).getDate()));
+            textHolder.title.setText(((TextNoteNode) node).getTitle());
+            textHolder.date.setText(Utils.getDateString(((TextNoteNode) node).getDate()));
         }
     }
 
@@ -187,7 +188,7 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    public class TreeImageNoteVH extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
+    public class TreeImageNoteVH extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         // TODO: 2019-11-17 how to delete imageNote ?
         private ImageView image;
         private TextView date;
@@ -204,7 +205,7 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public void onClick(View view) {
             List<String> pathList = new ArrayList<>();
             for (TreeNode treeNode : parent.getChildrenList()) {
-                ImageNote imageNote = (ImageNote) treeNode;
+                ImageNoteNode imageNote = (ImageNoteNode) treeNode;
                 pathList.add(imageNote.getPhotoPath());
             }
             treeAdapterClickListener.onImageClick(pathList, getAdapterPosition(), image);
@@ -212,7 +213,7 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         @Override
         public boolean onLongClick(View view) {
-            ImageNote imageNote = (ImageNote) parent.getChildrenList().get(getAdapterPosition());
+            ImageNoteNode imageNote = (ImageNoteNode) parent.getChildrenList().get(getAdapterPosition());
             treeAdapterClickListener.onImageLongClick(imageNote);
             return true;
         }
@@ -235,7 +236,7 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         @Override
         public void onClick(View view) {
-            TextNote note = (TextNote) parent.getChildrenList().get(getAdapterPosition());
+            TextNoteNode note = (TextNoteNode) parent.getChildrenList().get(getAdapterPosition());
             switch (view.getId()) {
                 case R.id.note_text_item_btn_show:
                     treeAdapterClickListener.onNoteShow(note);

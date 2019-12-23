@@ -1,4 +1,4 @@
-package com.wolfram.planlekcji.utils.enums;
+package com.wolfram.planlekcji.custom.enums;
 
 /**
  * @author Wolfram

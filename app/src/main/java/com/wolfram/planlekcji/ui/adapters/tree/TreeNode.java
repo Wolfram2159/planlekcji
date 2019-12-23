@@ -1,4 +1,4 @@
-package com.wolfram.planlekcji.adapters.tree;
+package com.wolfram.planlekcji.ui.adapters.tree;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,5 +51,6 @@ public abstract class TreeNode implements TreeAdapter.TreeAdapterParent{
         this.nodeName = nodeName;
     }
 
+    // TODO: 2019-12-23 write implementation of this method there
     public abstract String getPath();
 }
