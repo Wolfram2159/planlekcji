@@ -15,15 +15,6 @@ public class SubjectNode extends TreeNode {
     }
 
     @Override
-    public String getPath() {
-        if (getParent() == null) {
-            return "";
-        } else {
-            return getParent().getPath() + " -> " + getName();
-        }
-    }
-
-    @Override
     public int getViewType() {
         return VIEW_TYPE;
     }

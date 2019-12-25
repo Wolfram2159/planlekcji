@@ -22,15 +22,6 @@ public class ImageNoteNode extends TreeNode {
     }
 
     @Override
-    public String getPath() {
-        if (getParent() == null) {
-            return "";
-        } else {
-            return getParent().getPath();
-        }
-    }
-
-    @Override
     public int getViewType() {
         return VIEW_TYPE;
     }

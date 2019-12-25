@@ -8,27 +8,30 @@ import com.wolfram.planlekcji.ui.adapters.tree.SubjectNode;
 import com.wolfram.planlekcji.ui.adapters.tree.TextNoteNode;
 
 public class RoomMapper {
-    public SubjectNode convertSubject(Subject sourceSubject) {
+    private RoomMapper() {
+    }
+
+    public static SubjectNode convertSubject(Subject sourceSubject) {
         return new SubjectNode(sourceSubject);
     }
 
-    public Subject convertSubject(SubjectNode sourceSubjectNode) {
+    public static Subject convertSubject(SubjectNode sourceSubjectNode) {
         return new Subject(sourceSubjectNode);
     }
 
-    public ImageNoteNode convertImageNote(ImageNote sourceImageNote) {
+    public static ImageNoteNode convertImageNote(ImageNote sourceImageNote) {
         return new ImageNoteNode(sourceImageNote);
     }
 
-    public ImageNote convertImageNote(ImageNoteNode sourceImageNoteNode) {
+    public static ImageNote convertImageNote(ImageNoteNode sourceImageNoteNode) {
         return new ImageNote(sourceImageNoteNode);
     }
 
-    public TextNoteNode convertTextNote(TextNote sourceTextNote) {
+    public static TextNoteNode convertTextNote(TextNote sourceTextNote) {
         return new TextNoteNode(sourceTextNote);
     }
 
-    public TextNote convertTextNote(TextNoteNode sourceTextNoteNode) {
+    public static TextNote convertTextNote(TextNoteNode sourceTextNoteNode) {
         return new TextNote(sourceTextNoteNode);
     }
 }

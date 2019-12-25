@@ -5,12 +5,19 @@ import android.app.Application;
 import android.os.AsyncTask;
 import android.os.Environment;
 
+import com.wolfram.planlekcji.custom.mapper.RoomMapper;
 import com.wolfram.planlekcji.database.room.AppDatabase;
 import com.wolfram.planlekcji.database.room.UserDao;
 import com.wolfram.planlekcji.database.room.entities.Subject;
 import com.wolfram.planlekcji.database.room.entities.notes.ImageNote;
 import com.wolfram.planlekcji.database.room.entities.notes.TextNote;
 import com.wolfram.planlekcji.custom.others.Utils;
+import com.wolfram.planlekcji.ui.adapters.tree.DirectoryNode;
+import com.wolfram.planlekcji.ui.adapters.tree.ImageNoteNode;
+import com.wolfram.planlekcji.ui.adapters.tree.RootNode;
+import com.wolfram.planlekcji.ui.adapters.tree.SubjectNode;
+import com.wolfram.planlekcji.ui.adapters.tree.TextNoteNode;
+import com.wolfram.planlekcji.ui.adapters.tree.TreeNode;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +26,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 
 public class NotesFragmentViewModel extends AndroidViewModel {
@@ -28,6 +36,7 @@ public class NotesFragmentViewModel extends AndroidViewModel {
     private Date currentDate;
     private TextNote textNote;
     private ImageNote imageNote;
+    private TreeNode parentOfTree = null;
 
     public NotesFragmentViewModel(@NonNull Application application) {
         super(application);
@@ -38,8 +47,58 @@ public class NotesFragmentViewModel extends AndroidViewModel {
         return currentPhotoPath;
     }
 
-    public Date getCurrentDate(){
+    public Date getCurrentDate() {
         return new Date();
+    }
+
+    public interface TreeObserver {
+        TreeNode getParent();
+
+        void setParent(TreeNode parent);
+    }
+
+    private TreeNode createTree(@NonNull LifecycleOwner lifecycleOwner, TreeObserver treeObserver) {
+        parentOfTree = new RootNode();
+        getSubjects().observe(lifecycleOwner, subjects -> {
+            for (Subject subject : subjects) {
+                SubjectNode subjectNode = RoomMapper.convertSubject(subject);
+                TreeNode pictures = new DirectoryNode();
+                TreeNode documents = new DirectoryNode();
+                subjectNode.addChildren(pictures, "Pictures");
+                subjectNode.addChildren(documents, "Documents");
+                parentOfTree.addChildren(subjectNode, subjectNode.getName());
+
+                getImageNotesFromSubject(subjectNode.getId()).observe(lifecycleOwner, imageNotes -> {
+                    TreeNode actualRoot = treeObserver.getParent();
+                    pictures.clearChildrens();
+                    for (ImageNote imageNote : imageNotes) {
+                        ImageNoteNode imageNoteNode = RoomMapper.convertImageNote(imageNote);
+                        pictures.addChildren(imageNoteNode, "Photo");
+                    }
+                    treeObserver.setParent(actualRoot);
+                });
+
+                getTextNotesFromSubject(subjectNode.getId()).observe(lifecycleOwner, textNotes -> {
+                    TreeNode actualRoot = treeObserver.getParent();
+                    documents.clearChildrens();
+                    for (TextNote textNote : textNotes) {
+                        TextNoteNode textNoteNode = RoomMapper.convertTextNote(textNote);
+                        documents.addChildren(textNoteNode, "File");
+                    }
+                    treeObserver.setParent(actualRoot);
+                });
+            }
+            treeObserver.setParent(parentOfTree);
+        });
+        return parentOfTree;
+    }
+
+    public TreeNode getParentOfTree(@NonNull LifecycleOwner lifecycleOwner, TreeObserver treeObserver) {
+        if (parentOfTree == null) {
+            return createTree(lifecycleOwner, treeObserver);
+        } else {
+            return parentOfTree;
+        }
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -64,7 +123,7 @@ public class NotesFragmentViewModel extends AndroidViewModel {
         AsyncTask.execute(() -> dao.insertImageNote(imageNote));
     }
 
-    public void insertTextNote(TextNote textNote){
+    public void insertTextNote(TextNote textNote) {
         AsyncTask.execute(() -> dao.insertTextNote(textNote));
     }
 
@@ -72,11 +131,11 @@ public class NotesFragmentViewModel extends AndroidViewModel {
         return dao.getSubjects();
     }
 
-    public LiveData<List<ImageNote>> getImageNotesFromSubject(int subject_id){
+    public LiveData<List<ImageNote>> getImageNotesFromSubject(int subject_id) {
         return dao.getImageNotesFromSubject(subject_id);
     }
 
-    public LiveData<List<TextNote>> getTextNotesFromSubject(int subject_id){
+    public LiveData<List<TextNote>> getTextNotesFromSubject(int subject_id) {
         return dao.getTextNotesFromSubject(subject_id);
     }
 
@@ -90,7 +149,7 @@ public class NotesFragmentViewModel extends AndroidViewModel {
         AsyncTask.execute(() -> dao.deleteTextNote(note));
     }
 
-    public void deleteImageNote(){
+    public void deleteImageNote() {
         AsyncTask.execute(() -> dao.deleteImageNote(imageNote));
         File imageToDelete = new File(imageNote.getPhotoPath());
         imageToDelete.delete();
@@ -100,7 +159,7 @@ public class NotesFragmentViewModel extends AndroidViewModel {
         this.textNote = note;
     }
 
-    public TextNote getTextNote(){
+    public TextNote getTextNote() {
         return this.textNote;
     }
 

@@ -38,7 +38,7 @@ public class TextNote {
         this.id = textNoteNode.getId();
         this.subject_id = textNoteNode.getSubject_id();
         this.message = textNoteNode.getMessage();
-        this.title = textNoteNode.getMessage();
+        this.title = textNoteNode.getTitle();
         this.date = textNoteNode.getDate();
     }
 

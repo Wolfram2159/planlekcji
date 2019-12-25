@@ -82,39 +82,17 @@ public class NotesFragment extends Fragment {
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
 
-        RoomMapper roomMapper = new RoomMapper();
-        // TODO: 2019-10-14 how to save Tree, not creating always new Tree
-        TreeNode rootNode = new RootNode();
-        viewModel.getSubjects().observe(this, subjects -> {
-            for (Subject subject : subjects) {
-                SubjectNode subjectNode = roomMapper.convertSubject(subject);
-                TreeNode pictures = new DirectoryNode();
-                TreeNode documents = new DirectoryNode();
-                subjectNode.addChildren(pictures, "Pictures");
-                subjectNode.addChildren(documents, "Documents");
-                rootNode.addChildren(subjectNode, subjectNode.getName());
-
-                viewModel.getImageNotesFromSubject(subjectNode.getId()).observe(this, imageNotes -> {
-                    TreeNode actualRoot = adapter.getParent();
-                    pictures.clearChildrens();
-                    for (ImageNote imageNote : imageNotes) {
-                        ImageNoteNode imageNoteNode = roomMapper.convertImageNote(imageNote);
-                        pictures.addChildren(imageNoteNode, "Photo");
-                    }
-                    adapter.setParent(actualRoot);
-                });
-
-                viewModel.getTextNotesFromSubject(subjectNode.getId()).observe(this, textNotes -> {
-                    TreeNode actualRoot = adapter.getParent();
-                    documents.clearChildrens();
-                    for (TextNote textNote : textNotes) {
-                        TextNoteNode textNoteNode = roomMapper.convertTextNote(textNote);
-                        documents.addChildren(textNoteNode, "File");
-                    }
-                    adapter.setParent(actualRoot);
-                });
+        // TODO: 2019-12-25 check if everything working properly, like editing, deleting etc
+        TreeNode rootNode = viewModel.getParentOfTree(this, new NotesFragmentViewModel.TreeObserver() {
+            @Override
+            public TreeNode getParent() {
+                return adapter.getParent();
             }
-            adapter.setParent(rootNode);
+
+            @Override
+            public void setParent(TreeNode parent) {
+                adapter.setParent(parent);
+            }
         });
 
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 1);
@@ -138,7 +116,7 @@ public class NotesFragment extends Fragment {
         adapter.setTreeAdapterClickListener(new TreeAdapter.TreeAdapterClickListener() {
             @Override
             public void onNoteShow(TextNoteNode note) {
-                TextNote textNote = roomMapper.convertTextNote(note);
+                TextNote textNote = RoomMapper.convertTextNote(note);
                 ShowTextNoteBottomSheet bottomSheet = new ShowTextNoteBottomSheet();
                 viewModel.setTextNote(textNote);
                 bottomSheet.show(getFragmentManager(), "ShowTextBottomSheet");
@@ -146,7 +124,7 @@ public class NotesFragment extends Fragment {
 
             @Override
             public void onNoteDelete(TextNoteNode note) {
-                TextNote textNote = roomMapper.convertTextNote(note);
+                TextNote textNote = RoomMapper.convertTextNote(note);
                 viewModel.deleteTextNote(textNote);
             }
 
@@ -168,7 +146,7 @@ public class NotesFragment extends Fragment {
 
             @Override
             public void onImageLongClick(ImageNoteNode imageNoteNode) {
-                ImageNote imageNote = roomMapper.convertImageNote(imageNoteNode);
+                ImageNote imageNote = RoomMapper.convertImageNote(imageNoteNode);
                 viewModel.setImageNote(imageNote);
                 ModifyImageNoteBottomSheet bottomSheet = new ModifyImageNoteBottomSheet();
                 bottomSheet.show(getFragmentManager(), "ModifyImageNote");

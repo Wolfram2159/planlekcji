@@ -21,9 +21,4 @@ public class DirectoryNode extends TreeNode {
         }
         return GRID_SPAN_COUNT;
     }
-
-    @Override
-    public String getPath() {
-        return parent.getPath() + " -> " + this.nodeName;
-    }
 }

@@ -44,10 +44,10 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private TreeAdapterListener treeAdapterListener;
     private TreeAdapterClickListener treeAdapterClickListener;
     private RequestManager glide;
-    private static final int IMAGE_NOTE_NODE_VIEW_TYPE = 3;
-    private static final int DIRECTORY_NODE_VIEW_TYPE = 2;
-    private static final int SUBJECT_NODE_VIEW_TYPE = 4;
     private static final int TEXT_NOTE_NODE_VIEW_TYPE = 1;
+    private static final int DIRECTORY_NODE_VIEW_TYPE = 2;
+    private static final int IMAGE_NOTE_NODE_VIEW_TYPE = 3;
+    private static final int SUBJECT_NODE_VIEW_TYPE = 4;
 
 
     public TreeAdapter(TreeNode parent, RequestManager glide) {

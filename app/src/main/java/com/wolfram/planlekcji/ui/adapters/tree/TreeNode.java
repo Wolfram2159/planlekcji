@@ -3,18 +3,14 @@ package com.wolfram.planlekcji.ui.adapters.tree;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.room.Ignore;
-
 /**
  * @author Wolfram
  * @date 2019-10-14
  */
-public abstract class TreeNode implements TreeAdapter.TreeAdapterParent{
-    @Ignore
+public abstract class TreeNode implements TreeAdapter.TreeAdapterParent {
+
     protected List<TreeNode> childrenList;
-    @Ignore
     protected String nodeName;
-    @Ignore
     protected TreeNode parent;
 
     public TreeNode() {
@@ -27,7 +23,7 @@ public abstract class TreeNode implements TreeAdapter.TreeAdapterParent{
         childrenList.add(treeNode);
     }
 
-    public void clearChildrens(){
+    public void clearChildrens() {
         childrenList.clear();
     }
 
@@ -51,6 +47,11 @@ public abstract class TreeNode implements TreeAdapter.TreeAdapterParent{
         this.nodeName = nodeName;
     }
 
-    // TODO: 2019-12-23 write implementation of this method there
-    public abstract String getPath();
+    public String getPath() {
+        if (parent == null) {
+            return this.nodeName;
+        } else {
+            return this.parent.getPath() + " -> " + this.nodeName;
+        }
+    }
 }

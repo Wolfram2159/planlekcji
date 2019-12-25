@@ -22,9 +22,4 @@ public class RootNode extends TreeNode {
     public int getGridSpanCount() {
         return GRID_SPAN_COUNT;
     }
-
-    @Override
-    public String getPath() {
-        return this.nodeName;
-    }
 }
