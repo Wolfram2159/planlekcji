@@ -1,7 +1,7 @@
 package com.wolfram.planlekcji.database.room.entities.notes;
 
+import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.ui.adapters.tree.TextNoteNode;
-import com.wolfram.planlekcji.database.room.entities.Subject;
 
 import java.util.Date;
 
@@ -10,16 +10,21 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+import static androidx.room.ForeignKey.CASCADE;
+
 /**
  * @author Wolfram
  * @date 2019-10-25
  */
 @Entity(tableName = "textNotes",
         foreignKeys = @ForeignKey(
-                entity = Subject.class,
+                entity = SubjectEntity.class,
                 parentColumns = "id",
-                childColumns = "subject_id"))
-public class TextNote {
+                childColumns = "subject_id",
+                onDelete = CASCADE
+        )
+)
+public class TextNoteEntity {
     @PrimaryKey(autoGenerate = true)
     protected Integer id;
 
@@ -31,10 +36,10 @@ public class TextNote {
 
     protected Date date;
 
-    public TextNote() {
+    public TextNoteEntity() {
     }
 
-    public TextNote(@NonNull TextNoteNode textNoteNode) {
+    public TextNoteEntity(@NonNull TextNoteNode textNoteNode) {
         this.id = textNoteNode.getId();
         this.subject_id = textNoteNode.getSubject_id();
         this.message = textNoteNode.getMessage();
@@ -84,7 +89,7 @@ public class TextNote {
 
     @Override
     public String toString() {
-        return "TextNote{" +
+        return "TextNoteEntity{" +
                 "id=" + id +
                 ", subject_id=" + subject_id +
                 ", message='" + message + '\'' +

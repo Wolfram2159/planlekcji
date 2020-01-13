@@ -12,29 +12,29 @@ import androidx.room.PrimaryKey;
  * @author Wolfram
  * @date 2019-09-09
  */
-@Entity(indices = {@Index(value = "id", unique = true)}, tableName = "subjects")
-public class Subject {
+@Entity(indices = {@Index(value = "name", unique = true)}, tableName = "subjects")
+public class SubjectEntity {
     @PrimaryKey(autoGenerate = true)
     private Integer id;
 
     private String name;
 
-    public Subject() {
+    public SubjectEntity() {
     }
 
-    public Subject(@NonNull SubjectNode subjectNode) {
+    public SubjectEntity(@NonNull SubjectNode subjectNode) {
         this.id = subjectNode.getId();
         this.name = subjectNode.getName();
     }
 
     @Ignore
-    public Subject(Integer id, String name) {
+    public SubjectEntity(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
 
     @Ignore
-    public Subject(String name) {
+    public SubjectEntity(String name) {
         this.name = name;
     }
 

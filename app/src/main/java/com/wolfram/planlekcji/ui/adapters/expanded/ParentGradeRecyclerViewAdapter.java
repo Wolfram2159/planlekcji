@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplay;
+import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplayEntity;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeGroup;
 
 import java.util.ArrayList;
@@ -69,7 +69,7 @@ public class ParentGradeRecyclerViewAdapter extends RecyclerView.Adapter<ParentG
         private ChildGradeRecyclerViewAdapter adapter;
         private ImageView arrow;
 
-        void setGradesList(List<GradeDisplay> gradesList) {
+        void setGradesList(List<GradeDisplayEntity> gradesList) {
             adapter.setGradeList(gradesList);
         }
 

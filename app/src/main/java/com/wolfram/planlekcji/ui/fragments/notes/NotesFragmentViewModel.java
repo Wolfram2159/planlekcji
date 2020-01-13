@@ -5,13 +5,13 @@ import android.app.Application;
 import android.os.AsyncTask;
 import android.os.Environment;
 
-import com.wolfram.planlekcji.custom.mapper.RoomMapper;
+import com.wolfram.planlekcji.common.mapper.RoomMapper;
 import com.wolfram.planlekcji.database.room.AppDatabase;
 import com.wolfram.planlekcji.database.room.UserDao;
-import com.wolfram.planlekcji.database.room.entities.Subject;
-import com.wolfram.planlekcji.database.room.entities.notes.ImageNote;
-import com.wolfram.planlekcji.database.room.entities.notes.TextNote;
-import com.wolfram.planlekcji.custom.others.Utils;
+import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.ImageNoteEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.TextNoteEntity;
+import com.wolfram.planlekcji.common.others.Utils;
 import com.wolfram.planlekcji.ui.adapters.tree.DirectoryNode;
 import com.wolfram.planlekcji.ui.adapters.tree.ImageNoteNode;
 import com.wolfram.planlekcji.ui.adapters.tree.RootNode;
@@ -34,8 +34,8 @@ public class NotesFragmentViewModel extends AndroidViewModel {
     private UserDao dao;
     private String currentPhotoPath;
     private Date currentDate;
-    private TextNote textNote;
-    private ImageNote imageNote;
+    private TextNoteEntity textNote;
+    private ImageNoteEntity imageNote;
     private TreeNode parentOfTree = null;
 
     public NotesFragmentViewModel(@NonNull Application application) {
@@ -60,7 +60,7 @@ public class NotesFragmentViewModel extends AndroidViewModel {
     private TreeNode createTree(@NonNull LifecycleOwner lifecycleOwner, TreeObserver treeObserver) {
         parentOfTree = new RootNode();
         getSubjects().observe(lifecycleOwner, subjects -> {
-            for (Subject subject : subjects) {
+            for (SubjectEntity subject : subjects) {
                 SubjectNode subjectNode = RoomMapper.convertSubject(subject);
                 TreeNode pictures = new DirectoryNode();
                 TreeNode documents = new DirectoryNode();
@@ -71,7 +71,7 @@ public class NotesFragmentViewModel extends AndroidViewModel {
                 getImageNotesFromSubject(subjectNode.getId()).observe(lifecycleOwner, imageNotes -> {
                     TreeNode actualRoot = treeObserver.getParent();
                     pictures.clearChildrens();
-                    for (ImageNote imageNote : imageNotes) {
+                    for (ImageNoteEntity imageNote : imageNotes) {
                         ImageNoteNode imageNoteNode = RoomMapper.convertImageNote(imageNote);
                         pictures.addChildren(imageNoteNode, "Photo");
                     }
@@ -81,7 +81,7 @@ public class NotesFragmentViewModel extends AndroidViewModel {
                 getTextNotesFromSubject(subjectNode.getId()).observe(lifecycleOwner, textNotes -> {
                     TreeNode actualRoot = treeObserver.getParent();
                     documents.clearChildrens();
-                    for (TextNote textNote : textNotes) {
+                    for (TextNoteEntity textNote : textNotes) {
                         TextNoteNode textNoteNode = RoomMapper.convertTextNote(textNote);
                         documents.addChildren(textNoteNode, "File");
                     }
@@ -119,23 +119,23 @@ public class NotesFragmentViewModel extends AndroidViewModel {
         return image;
     }
 
-    public void insertImageNote(ImageNote imageNote) {
+    public void insertImageNote(ImageNoteEntity imageNote) {
         AsyncTask.execute(() -> dao.insertImageNote(imageNote));
     }
 
-    public void insertTextNote(TextNote textNote) {
+    public void insertTextNote(TextNoteEntity textNote) {
         AsyncTask.execute(() -> dao.insertTextNote(textNote));
     }
 
-    public LiveData<List<Subject>> getSubjects() {
+    public LiveData<List<SubjectEntity>> getSubjects() {
         return dao.getSubjects();
     }
 
-    public LiveData<List<ImageNote>> getImageNotesFromSubject(int subject_id) {
+    public LiveData<List<ImageNoteEntity>> getImageNotesFromSubject(int subject_id) {
         return dao.getImageNotesFromSubject(subject_id);
     }
 
-    public LiveData<List<TextNote>> getTextNotesFromSubject(int subject_id) {
+    public LiveData<List<TextNoteEntity>> getTextNotesFromSubject(int subject_id) {
         return dao.getTextNotesFromSubject(subject_id);
     }
 
@@ -145,7 +145,7 @@ public class NotesFragmentViewModel extends AndroidViewModel {
         imageToDelete.delete();
     }
 
-    public void deleteTextNote(TextNote note) {
+    public void deleteTextNote(TextNoteEntity note) {
         AsyncTask.execute(() -> dao.deleteTextNote(note));
     }
 
@@ -155,19 +155,19 @@ public class NotesFragmentViewModel extends AndroidViewModel {
         imageToDelete.delete();
     }
 
-    public void setTextNote(TextNote note) {
+    public void setTextNote(TextNoteEntity note) {
         this.textNote = note;
     }
 
-    public TextNote getTextNote() {
+    public TextNoteEntity getTextNote() {
         return this.textNote;
     }
 
-    public ImageNote getImageNote() {
+    public ImageNoteEntity getImageNote() {
         return imageNote;
     }
 
-    public void setImageNote(ImageNote imageNote) {
+    public void setImageNote(ImageNoteEntity imageNote) {
         this.imageNote = imageNote;
     }
 }

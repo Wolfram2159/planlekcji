@@ -2,7 +2,7 @@ package com.wolfram.planlekcji.ui.adapters.tree;
 
 import androidx.annotation.NonNull;
 
-import com.wolfram.planlekcji.database.room.entities.notes.TextNote;
+import com.wolfram.planlekcji.database.room.entities.notes.TextNoteEntity;
 
 import java.util.Date;
 
@@ -15,7 +15,7 @@ public class TextNoteNode extends TreeNode {
     private static final int VIEW_TYPE = 1;
     private static final int GRID_SPAN_COUNT = 1;
 
-    public TextNoteNode(@NonNull TextNote textNote) {
+    public TextNoteNode(@NonNull TextNoteEntity textNote) {
         this.id = textNote.getId();
         this.subject_id = textNote.getSubject_id();
         this.message = textNote.getMessage();

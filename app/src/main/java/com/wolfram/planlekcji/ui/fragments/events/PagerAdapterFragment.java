@@ -6,10 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wolfram.planlekcji.R;
+import com.wolfram.planlekcji.database.room.entities.event.EventDisplayEntity;
 import com.wolfram.planlekcji.ui.adapters.EventsRecyclerViewAdapter;
-import com.wolfram.planlekcji.database.room.entities.event.EventDisplay;
-import com.wolfram.planlekcji.ui.bottomSheets.events.ActionEventBottomSheet;
-import com.wolfram.planlekcji.custom.enums.Day;
+import com.wolfram.planlekcji.ui.bottomSheets.ActionBottomSheet;
+import com.wolfram.planlekcji.common.enums.Day;
+import com.wolfram.planlekcji.ui.bottomSheets.events.ModifyEventBottomSheet;
 
 import java.util.List;
 import java.util.Objects;
@@ -21,6 +22,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -28,7 +30,7 @@ import butterknife.ButterKnife;
 public class PagerAdapterFragment extends Fragment {
 
     public static final String POSITION = "POSITION";
-
+    private EventViewModel viewModel;
     @BindView(R.id.events_recycler)
     RecyclerView recycler;
 
@@ -41,26 +43,37 @@ public class PagerAdapterFragment extends Fragment {
         int pos = Objects.requireNonNull(args).getInt(POSITION);
 
         ButterKnife.bind(this, view);
-
-        ViewPagerEventsFragmentViewModel viewModel = ViewModelProviders.of(getActivity()).get(ViewPagerEventsFragmentViewModel.class);
+        viewModel = ViewModelProviders.of(getActivity()).get(EventViewModel.class);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recycler.setLayoutManager(layoutManager);
-
         Day day = Day.values()[pos];
-        LiveData<List<EventDisplay>> subjectList = viewModel.getEvents(day);
 
         EventsRecyclerViewAdapter adapter = new EventsRecyclerViewAdapter();
-        adapter.setOnItemClickListener(event -> {
-            viewModel.setModifiedEvent(event);
-
-            ActionEventBottomSheet actionEventBottomSheet = new ActionEventBottomSheet();
-            actionEventBottomSheet.show(getFragmentManager(), "ActionEventBottomSheet");
-        });
+        adapter.setOnItemClickListener(this::showActionBottomSheet);
         recycler.setItemAnimator(new DefaultItemAnimator());
         recycler.setAdapter(adapter);
 
-        subjectList.observe(this, (adapter::setEventsList));
+        LiveData<List<EventDisplayEntity>> eventsFromDay = viewModel.getEventsFromDay(day);
+        eventsFromDay.observe(this, (adapter::setEventsList));
         return view;
+    }
+
+    private void showActionBottomSheet(EventDisplayEntity eventClicked) {
+        ActionBottomSheet actionBottomSheet = new ActionBottomSheet();
+        actionBottomSheet.setOnActionListener(new ActionBottomSheet.OnActionListener() {
+            @Override
+            public void onObjectModify() {
+                viewModel.setModifyingEvent(eventClicked);
+                ModifyEventBottomSheet modifyEventBottomSheet = new ModifyEventBottomSheet();
+                modifyEventBottomSheet.show(getFragmentManager(), EventFragment.MODIFY);
+            }
+
+            @Override
+            public void onObjectDelete() {
+                viewModel.deleteEvent(eventClicked);
+            }
+        });
+        actionBottomSheet.show(getFragmentManager(), ActionBottomSheet.TAG);
     }
 }

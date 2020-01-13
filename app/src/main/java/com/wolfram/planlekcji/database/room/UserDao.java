@@ -1,12 +1,12 @@
 package com.wolfram.planlekcji.database.room;
 
-import com.wolfram.planlekcji.database.room.entities.Subject;
-import com.wolfram.planlekcji.database.room.entities.event.Event;
-import com.wolfram.planlekcji.database.room.entities.event.EventDisplay;
-import com.wolfram.planlekcji.database.room.entities.grade.Grade;
-import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplay;
-import com.wolfram.planlekcji.database.room.entities.notes.ImageNote;
-import com.wolfram.planlekcji.database.room.entities.notes.TextNote;
+import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
+import com.wolfram.planlekcji.database.room.entities.event.EventDisplayEntity;
+import com.wolfram.planlekcji.database.room.entities.event.EventEntity;
+import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplayEntity;
+import com.wolfram.planlekcji.database.room.entities.grade.GradeEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.ImageNoteEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.TextNoteEntity;
 
 import java.util.List;
 
@@ -16,6 +16,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 /**
  * @author Wolfram
@@ -23,52 +24,58 @@ import androidx.room.Query;
  */
 @Dao
 public interface UserDao {
-    @Query("SELECT events.id, subjects.id as subject_id, name, start_time, end_time, localization, day " +
-            "FROM events JOIN subjects ON events.subject_id=subjects.id " +
-            "WHERE day = (:day) ORDER BY start_time ASC")
-    LiveData<List<EventDisplay>> getEventsFromDay(String day);
+    @Query("SELECT * FROM subjects ORDER BY id ASC")
+    LiveData<List<SubjectEntity>> getSubjects();
 
     @Query("SELECT subjects.id FROM subjects WHERE (:name)=name")
     Long getSubject(String name);
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    long insertSubject(SubjectEntity subject);
+
+    @Update(onConflict = OnConflictStrategy.IGNORE)
+    int updateSubject(SubjectEntity subject);
+
     @Delete
-    void deleteEvent(Event e);
+    int deleteSubject(SubjectEntity subject);
 
-    @Insert
-    long insertNewSubject(Subject subject);
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertEvent(Event e);
-
-    @Query("SELECT * FROM subjects ORDER BY id ASC")
-    LiveData<List<Subject>> getSubjects();
+    @Query("SELECT events.id, subjects.id as subject_id, name, start_time, end_time, localization, day " +
+            "FROM events JOIN subjects ON events.subject_id=subjects.id " +
+            "WHERE day = (:day) ORDER BY start_time ASC")
+    LiveData<List<EventDisplayEntity>> getEventsFromDay(String day);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertGrade(Grade grade);
+    void insertEvent(EventEntity e);
+
+    @Delete
+    void deleteEvent(EventEntity e);
 
     @Query("SELECT grades.id, subjects.id as subject_id, date, subjects.name, grades.description " +
             "FROM grades JOIN subjects " +
             "ON grades.subject_id=subjects.id WHERE subject_id=(:subjectId) ORDER BY date ASC")
-    LiveData<List<GradeDisplay>> getGradesFromSubject(int subjectId);
-
-    @Delete
-    void deleteGrade(Grade grade);
+    LiveData<List<GradeDisplayEntity>> getGradesFromSubject(int subjectId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertImageNote(ImageNote imageNote);
+    void insertGrade(GradeEntity grade);
+
+    @Delete
+    void deleteGrade(GradeEntity grade);
 
     @Query("SELECT * FROM imageNotes WHERE subject_id=(:subject_id)")
-    LiveData<List<ImageNote>> getImageNotesFromSubject(int subject_id);
+    LiveData<List<ImageNoteEntity>> getImageNotesFromSubject(int subject_id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertTextNote(TextNote textNote);
+    void insertImageNote(ImageNoteEntity imageNote);
+
+    @Delete
+    void deleteImageNote(ImageNoteEntity note);
 
     @Query("SELECT * FROM textNotes WHERE subject_id=(:subject_id)")
-    LiveData<List<TextNote>> getTextNotesFromSubject(int subject_id);
+    LiveData<List<TextNoteEntity>> getTextNotesFromSubject(int subject_id);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertTextNote(TextNoteEntity textNote);
 
     @Delete
-    void deleteTextNote(TextNote note);
-
-    @Delete
-    void deleteImageNote(ImageNote note);
+    void deleteTextNote(TextNoteEntity note);
 }

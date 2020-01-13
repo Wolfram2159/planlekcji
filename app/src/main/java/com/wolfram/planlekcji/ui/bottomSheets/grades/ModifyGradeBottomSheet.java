@@ -7,12 +7,12 @@ import android.widget.EditText;
 
 import com.google.android.material.button.MaterialButton;
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.database.room.entities.Subject;
-import com.wolfram.planlekcji.database.room.entities.grade.Grade;
-import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplay;
+import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
+import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplayEntity;
+import com.wolfram.planlekcji.database.room.entities.grade.GradeEntity;
 import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 import com.wolfram.planlekcji.ui.fragments.grades.GradesFragmentViewModel;
-import com.wolfram.planlekcji.custom.others.Utils;
+import com.wolfram.planlekcji.common.others.Utils;
 
 import java.util.Date;
 
@@ -45,7 +45,7 @@ public class ModifyGradeBottomSheet extends CustomBottomSheet {
         AutoCompleteTextView subjectPicker = root.findViewById(R.id.grade_name);
         EditText date = root.findViewById(R.id.grade_date);
 
-        Grade newGrade = new Grade();
+        GradeEntity newGrade = new GradeEntity();
 
         date.setOnClickListener(v -> {
             Date dateNow = new Date();
@@ -62,7 +62,7 @@ public class ModifyGradeBottomSheet extends CustomBottomSheet {
 
         viewModel = ViewModelProviders.of(getActivity()).get(GradesFragmentViewModel.class);
 
-        GradeDisplay modifiedGrade;
+        GradeDisplayEntity modifiedGrade;
 
         if ((modifiedGrade = viewModel.getModifiedGrade()) != null){
             newGrade.setId(modifiedGrade.getId());
@@ -77,7 +77,7 @@ public class ModifyGradeBottomSheet extends CustomBottomSheet {
         }
 
         viewModel.getSubjects().observe(this, subjects -> {
-            ArrayAdapter<Subject> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, subjects);
+            ArrayAdapter<SubjectEntity> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, subjects);
 
             subjectPicker.setShowSoftInputOnFocus(false);
             subjectPicker.setAdapter(adapter);
@@ -87,8 +87,8 @@ public class ModifyGradeBottomSheet extends CustomBottomSheet {
 
         subjectPicker.setOnItemClickListener((parent, view, pos, arg) -> {
             Object item = parent.getItemAtPosition(pos);
-            if (item instanceof Subject){
-                newGrade.setSubject_id(((Subject) item).getId());
+            if (item instanceof SubjectEntity){
+                newGrade.setSubject_id(((SubjectEntity) item).getId());
             }
         });
 

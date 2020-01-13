@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.bumptech.glide.RequestManager;
 import com.google.android.material.button.MaterialButton;
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.custom.others.Utils;
+import com.wolfram.planlekcji.common.others.Utils;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -16,4 +16,6 @@
     <string name="notes_camera">Camera</string>
     <string name="notes_file">imageNote</string>
 
+    <string name="subject_created">Subject created</string>
+
 </resources>

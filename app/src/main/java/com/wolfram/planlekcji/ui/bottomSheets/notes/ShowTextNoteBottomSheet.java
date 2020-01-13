@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.button.MaterialButton;
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.database.room.entities.notes.TextNote;
+import com.wolfram.planlekcji.database.room.entities.notes.TextNoteEntity;
 import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 import com.wolfram.planlekcji.ui.fragments.notes.NotesFragmentViewModel;
 
@@ -27,7 +27,7 @@ public class ShowTextNoteBottomSheet extends CustomBottomSheet {
 
         EditText noteValue = root.findViewById(R.id.show_text_note_edit_text);
 
-        TextNote textNote = viewModel.getTextNote();
+        TextNoteEntity textNote = viewModel.getTextNote();
 
         noteValue.setText(textNote.getMessage());
 

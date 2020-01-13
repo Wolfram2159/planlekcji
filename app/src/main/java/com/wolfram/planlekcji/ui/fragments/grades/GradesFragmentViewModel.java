@@ -5,9 +5,9 @@ import android.os.AsyncTask;
 
 import com.wolfram.planlekcji.database.room.AppDatabase;
 import com.wolfram.planlekcji.database.room.UserDao;
-import com.wolfram.planlekcji.database.room.entities.Subject;
-import com.wolfram.planlekcji.database.room.entities.grade.Grade;
-import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplay;
+import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
+import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplayEntity;
+import com.wolfram.planlekcji.database.room.entities.grade.GradeEntity;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ import androidx.lifecycle.LiveData;
  */
 public class GradesFragmentViewModel extends AndroidViewModel {
 
-    private GradeDisplay modifiedGrade;
+    private GradeDisplayEntity modifiedGrade;
     private UserDao dao;
 
     public GradesFragmentViewModel(@NonNull Application application) {
@@ -30,19 +30,19 @@ public class GradesFragmentViewModel extends AndroidViewModel {
         dao = AppDatabase.getInstance(application.getApplicationContext()).getUserDao();
     }
 
-    public void setModifiedGrade(@Nullable GradeDisplay modifiedGrade) {
+    public void setModifiedGrade(@Nullable GradeDisplayEntity modifiedGrade) {
         this.modifiedGrade = modifiedGrade;
     }
 
-    public GradeDisplay getModifiedGrade() {
+    public GradeDisplayEntity getModifiedGrade() {
         return modifiedGrade;
     }
 
-    public LiveData<List<Subject>> getSubjects(){
+    public LiveData<List<SubjectEntity>> getSubjects(){
         return dao.getSubjects();
     }
 
-    public LiveData<List<GradeDisplay>> getGradesFromSubject(int subjectId){
+    public LiveData<List<GradeDisplayEntity>> getGradesFromSubject(int subjectId){
         return dao.getGradesFromSubject(subjectId);
     }
 
@@ -50,7 +50,7 @@ public class GradesFragmentViewModel extends AndroidViewModel {
         AsyncTask.execute(() -> dao.deleteGrade(modifiedGrade));
     }
 
-    public void insertGrade(Grade grade) {
+    public void insertGrade(GradeEntity grade) {
         AsyncTask.execute(() -> dao.insertGrade(grade));
     }
 

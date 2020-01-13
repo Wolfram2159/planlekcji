@@ -7,11 +7,11 @@ import android.widget.EditText;
 
 import com.google.android.material.button.MaterialButton;
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.database.room.entities.Subject;
-import com.wolfram.planlekcji.database.room.entities.notes.TextNote;
+import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.TextNoteEntity;
 import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 import com.wolfram.planlekcji.ui.fragments.notes.NotesFragmentViewModel;
-import com.wolfram.planlekcji.custom.others.Utils;
+import com.wolfram.planlekcji.common.others.Utils;
 
 import java.util.Date;
 
@@ -40,18 +40,18 @@ public class AddTextNoteBottomSheet extends CustomBottomSheet {
 
         EditText note = root.findViewById(R.id.notes_text_note);
 
-        TextNote newTextNote = new TextNote();
+        TextNoteEntity newTextNote = new TextNoteEntity();
 
         viewModel.getSubjects().observe(this, subjects -> {
-            ArrayAdapter<Subject> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, subjects);
+            ArrayAdapter<SubjectEntity> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, subjects);
             subjectName.setAdapter(adapter);
             subjectName.setShowSoftInputOnFocus(false);
         });
 
         subjectName.setOnItemClickListener((parent, view, pos, arg) -> {
             Object item = parent.getItemAtPosition(pos);
-            if (item instanceof Subject) {
-                newTextNote.setSubject_id(((Subject) item).getId());
+            if (item instanceof SubjectEntity) {
+                newTextNote.setSubject_id(((SubjectEntity) item).getId());
             }
         });
 

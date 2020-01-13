@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.database.room.entities.Subject;
+import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,17 +20,27 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 public class SubjectsRecyclerViewAdapter extends RecyclerView.Adapter<SubjectsRecyclerViewAdapter.SubjectViewHolder> {
 
-    private List<Subject> subjectList;
+    private List<SubjectEntity> subjectList;
     private LayoutInflater layoutInflater;
+    private OnItemClickListener onItemClickListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(SubjectEntity clickedSubject);
+    }
+
 
     public SubjectsRecyclerViewAdapter(LayoutInflater layoutInflater) {
         this.layoutInflater = layoutInflater;
         this.subjectList = new ArrayList<>();
     }
 
-    public void setSubjectList(List<Subject> subjectList) {
+    public void setSubjectList(List<SubjectEntity> subjectList) {
         this.subjectList = subjectList;
         notifyDataSetChanged();
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     @NonNull
@@ -42,7 +52,7 @@ public class SubjectsRecyclerViewAdapter extends RecyclerView.Adapter<SubjectsRe
 
     @Override
     public void onBindViewHolder(@NonNull SubjectViewHolder holder, int position) {
-        Subject subject = subjectList.get(position);
+        SubjectEntity subject = subjectList.get(position);
 
         holder.textView.setText(subject.getName());
     }
@@ -52,7 +62,7 @@ public class SubjectsRecyclerViewAdapter extends RecyclerView.Adapter<SubjectsRe
         return subjectList.size();
     }
 
-    public class SubjectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class SubjectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView textView;
 
@@ -65,7 +75,11 @@ public class SubjectsRecyclerViewAdapter extends RecyclerView.Adapter<SubjectsRe
 
         @Override
         public void onClick(View view) {
-
+            if (onItemClickListener != null) {
+                int position = getAdapterPosition();
+                SubjectEntity subjectClicked = subjectList.get(position);
+                onItemClickListener.onItemClick(subjectClicked);
+            }
         }
     }
 }

@@ -1,8 +1,8 @@
 package com.wolfram.planlekcji.database.room.entities.event;
 
-import com.wolfram.planlekcji.database.room.entities.Subject;
-import com.wolfram.planlekcji.custom.enums.Day;
-import com.wolfram.planlekcji.custom.others.Utils;
+import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
+import com.wolfram.planlekcji.common.enums.Day;
+import com.wolfram.planlekcji.common.others.Utils;
 
 import java.util.Date;
 
@@ -11,17 +11,20 @@ import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import static androidx.room.ForeignKey.CASCADE;
+
 /**
  * @author Wolfram
  * @date 2019-09-11
  */
 @Entity(tableName = "events",
         foreignKeys = @ForeignKey(
-                entity = Subject.class,
+                entity = SubjectEntity.class,
                 parentColumns = "id",
-                childColumns = "subject_id"
+                childColumns = "subject_id",
+                onDelete = CASCADE
         ))
-public class Event {
+public class EventEntity {
     @PrimaryKey(autoGenerate = true)
     protected Integer id;
 
@@ -35,12 +38,12 @@ public class Event {
 
     protected String day;
 
-    public Event() {
+    public EventEntity() {
 
     }
 
     @Ignore
-    public Event(Event event){
+    public EventEntity(EventEntity event) {
         this.id = event.id;
         this.subject_id = event.subject_id;
         this.start_time = event.start_time;
@@ -51,7 +54,7 @@ public class Event {
 
     @Override
     public String toString() {
-        return "Event{" +
+        return "EventEntity{" +
                 "id=" + id +
                 ", subject_id=" + subject_id +
                 ", start_time=" + start_time +
@@ -61,7 +64,7 @@ public class Event {
                 '}';
     }
 
-    public String getTimeString(){
+    public String getTimeString() {
         String startTime = Utils.getTimeString(getStart_time());
         String endTime = Utils.getTimeString(getEnd_time());
         return startTime + " - " + endTime;

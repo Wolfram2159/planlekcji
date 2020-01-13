@@ -1,4 +1,4 @@
-package com.wolfram.planlekcji.custom.others;
+package com.wolfram.planlekcji.common.others;
 
 import android.annotation.SuppressLint;
 

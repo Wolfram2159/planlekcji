@@ -18,17 +18,13 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.stfalcon.imageviewer.StfalconImageViewer;
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.custom.mapper.RoomMapper;
-import com.wolfram.planlekcji.ui.adapters.tree.DirectoryNode;
+import com.wolfram.planlekcji.common.mapper.RoomMapper;
 import com.wolfram.planlekcji.ui.adapters.tree.ImageNoteNode;
-import com.wolfram.planlekcji.ui.adapters.tree.RootNode;
-import com.wolfram.planlekcji.ui.adapters.tree.SubjectNode;
 import com.wolfram.planlekcji.ui.adapters.tree.TextNoteNode;
 import com.wolfram.planlekcji.ui.adapters.tree.TreeAdapter;
 import com.wolfram.planlekcji.ui.adapters.tree.TreeNode;
-import com.wolfram.planlekcji.database.room.entities.Subject;
-import com.wolfram.planlekcji.database.room.entities.notes.ImageNote;
-import com.wolfram.planlekcji.database.room.entities.notes.TextNote;
+import com.wolfram.planlekcji.database.room.entities.notes.ImageNoteEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.TextNoteEntity;
 import com.wolfram.planlekcji.ui.bottomSheets.notes.AddImageNoteBottomSheet;
 import com.wolfram.planlekcji.ui.bottomSheets.notes.AddTextNoteBottomSheet;
 import com.wolfram.planlekcji.ui.bottomSheets.notes.ModifyImageNoteBottomSheet;
@@ -116,7 +112,7 @@ public class NotesFragment extends Fragment {
         adapter.setTreeAdapterClickListener(new TreeAdapter.TreeAdapterClickListener() {
             @Override
             public void onNoteShow(TextNoteNode note) {
-                TextNote textNote = RoomMapper.convertTextNote(note);
+                TextNoteEntity textNote = RoomMapper.convertTextNote(note);
                 ShowTextNoteBottomSheet bottomSheet = new ShowTextNoteBottomSheet();
                 viewModel.setTextNote(textNote);
                 bottomSheet.show(getFragmentManager(), "ShowTextBottomSheet");
@@ -124,7 +120,7 @@ public class NotesFragment extends Fragment {
 
             @Override
             public void onNoteDelete(TextNoteNode note) {
-                TextNote textNote = RoomMapper.convertTextNote(note);
+                TextNoteEntity textNote = RoomMapper.convertTextNote(note);
                 viewModel.deleteTextNote(textNote);
             }
 
@@ -146,7 +142,7 @@ public class NotesFragment extends Fragment {
 
             @Override
             public void onImageLongClick(ImageNoteNode imageNoteNode) {
-                ImageNote imageNote = RoomMapper.convertImageNote(imageNoteNode);
+                ImageNoteEntity imageNote = RoomMapper.convertImageNote(imageNoteNode);
                 viewModel.setImageNote(imageNote);
                 ModifyImageNoteBottomSheet bottomSheet = new ModifyImageNoteBottomSheet();
                 bottomSheet.show(getFragmentManager(), "ModifyImageNote");

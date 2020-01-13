@@ -8,9 +8,9 @@ import java.util.List;
  */
 public class GradeGroup {
     public String title;
-    public List<GradeDisplay> gradeList;
+    public List<GradeDisplayEntity> gradeList;
 
-    public GradeGroup(String title, List<GradeDisplay> gradeList){
+    public GradeGroup(String title, List<GradeDisplayEntity> gradeList){
         this.title = title;
         this.gradeList = gradeList;
     }
@@ -23,11 +23,11 @@ public class GradeGroup {
         this.title = title;
     }
 
-    public List<GradeDisplay> getGradeList() {
+    public List<GradeDisplayEntity> getGradeList() {
         return gradeList;
     }
 
-    public void setGradeList(List<GradeDisplay> gradeList) {
+    public void setGradeList(List<GradeDisplayEntity> gradeList) {
         this.gradeList = gradeList;
     }
 }

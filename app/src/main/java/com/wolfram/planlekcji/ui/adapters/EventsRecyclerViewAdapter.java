@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.database.room.entities.event.EventDisplay;
+import com.wolfram.planlekcji.database.room.entities.event.EventDisplayEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +21,10 @@ import androidx.recyclerview.widget.RecyclerView;
 public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecyclerViewAdapter.EventViewHolder>{
 
     private OnItemClickListener onItemClickListener;
-    private List<EventDisplay> eventsList;
+    private List<EventDisplayEntity> eventsList;
 
     public interface OnItemClickListener {
-        void onClick(EventDisplay event);
+        void onClick(EventDisplayEntity event);
     }
 
     public EventsRecyclerViewAdapter() {
@@ -35,7 +35,7 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
         this.onItemClickListener = onItemClickListener;
     }
 
-    public void setEventsList(List<EventDisplay> eventsList) {
+    public void setEventsList(List<EventDisplayEntity> eventsList) {
         this.eventsList = eventsList;
         notifyDataSetChanged();
     }
@@ -49,7 +49,7 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
 
     @Override
     public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
-        EventDisplay eventDisplay = eventsList.get(position);
+        EventDisplayEntity eventDisplay = eventsList.get(position);
 
         holder.subject.setText(
                 eventDisplay.getName()
@@ -85,7 +85,7 @@ public class EventsRecyclerViewAdapter extends RecyclerView.Adapter<EventsRecycl
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            EventDisplay event = eventsList.get(position);
+            EventDisplayEntity event = eventsList.get(position);
             onItemClickListener.onClick(event);
         }
     }

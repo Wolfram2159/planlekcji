@@ -1,6 +1,6 @@
 package com.wolfram.planlekcji.database.room.entities.grade;
 
-import com.wolfram.planlekcji.database.room.entities.Subject;
+import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 
 import java.util.Date;
 
@@ -9,16 +9,21 @@ import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import static androidx.room.ForeignKey.CASCADE;
+
 /**
  * @author Wolfram
  * @date 2019-09-11
  */
 @Entity(tableName = "grades",
         foreignKeys = @ForeignKey(
-                entity = Subject.class,
+                entity = SubjectEntity.class,
                 parentColumns = "id",
-                childColumns = "subject_id"))
-public class Grade {
+                childColumns = "subject_id",
+                onDelete = CASCADE
+        )
+)
+public class GradeEntity {
     @PrimaryKey(autoGenerate = true)
     protected Integer id;
 
@@ -28,16 +33,16 @@ public class Grade {
 
     protected Date date;
 
-    public Grade() {
+    public GradeEntity() {
     }
 
     @Ignore
-    public Grade(int subject_id, String description) {
+    public GradeEntity(int subject_id, String description) {
         this.subject_id = subject_id;
         this.description = description;
     }
     @Ignore
-    public Grade(Grade grade){
+    public GradeEntity(GradeEntity grade){
         this.id = grade.id;
         this.subject_id = grade.subject_id;
         this.description = grade.description;
@@ -45,7 +50,7 @@ public class Grade {
 
     @Override
     public String toString() {
-        return "Grade{" +
+        return "GradeEntity{" +
                 "id=" + id +
                 ", subject_id=" + subject_id +
                 ", description='" + description + '\'' +

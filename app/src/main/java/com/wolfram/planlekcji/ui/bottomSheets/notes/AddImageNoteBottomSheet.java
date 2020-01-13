@@ -10,11 +10,11 @@ import android.widget.ImageView;
 
 import com.google.android.material.button.MaterialButton;
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.database.room.entities.Subject;
-import com.wolfram.planlekcji.database.room.entities.notes.ImageNote;
+import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.ImageNoteEntity;
 import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 import com.wolfram.planlekcji.ui.fragments.notes.NotesFragmentViewModel;
-import com.wolfram.planlekcji.custom.others.Utils;
+import com.wolfram.planlekcji.common.others.Utils;
 
 import java.io.File;
 import java.util.Date;
@@ -36,7 +36,7 @@ public class AddImageNoteBottomSheet extends CustomBottomSheet {
     protected void customizeDialog() {
         NotesFragmentViewModel viewModel = ViewModelProviders.of(getActivity()).get(NotesFragmentViewModel.class);
 
-        ImageNote newImageNote = new ImageNote();
+        ImageNoteEntity newImageNote = new ImageNoteEntity();
 
         ImageView photo = root.findViewById(R.id.notes_image_photo);
         ImageView invisibleImageView = root.findViewById(R.id.notes_image_edit);
@@ -47,15 +47,15 @@ public class AddImageNoteBottomSheet extends CustomBottomSheet {
         MaterialButton cancel = root.findViewById(R.id.notes_image_cancel);
 
         viewModel.getSubjects().observe(this, subjects -> {
-            ArrayAdapter<Subject> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, subjects);
+            ArrayAdapter<SubjectEntity> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, subjects);
             subjectName.setAdapter(adapter);
             subjectName.setShowSoftInputOnFocus(false);
         });
 
         subjectName.setOnItemClickListener((parent, view, pos, arg) -> {
             Object item = parent.getItemAtPosition(pos);
-            if (item instanceof Subject){
-                newImageNote.setSubject_id(((Subject) item).getId());
+            if (item instanceof SubjectEntity){
+                newImageNote.setSubject_id(((SubjectEntity) item).getId());
             }
         });
 

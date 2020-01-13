@@ -2,7 +2,7 @@ package com.wolfram.planlekcji.ui.adapters.tree;
 
 import androidx.annotation.NonNull;
 
-import com.wolfram.planlekcji.database.room.entities.notes.ImageNote;
+import com.wolfram.planlekcji.database.room.entities.notes.ImageNoteEntity;
 
 import java.util.Date;
 
@@ -14,7 +14,7 @@ public class ImageNoteNode extends TreeNode {
     private static final int VIEW_TYPE = 3;
     private static final int GRID_SPAN_COUNT = 2;
 
-    public ImageNoteNode(@NonNull ImageNote sourceImageNote) {
+    public ImageNoteNode(@NonNull ImageNoteEntity sourceImageNote) {
         this.id = sourceImageNote.getId();
         this.subject_id = sourceImageNote.getSubject_id();
         this.photoPath = sourceImageNote.getPhotoPath();

@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.wolfram.planlekcji.R;
+import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.ui.adapters.expanded.ParentGradeRecyclerViewAdapter;
-import com.wolfram.planlekcji.database.room.entities.Subject;
-import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplay;
+import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplayEntity;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeGroup;
 import com.wolfram.planlekcji.ui.bottomSheets.grades.ActionGradeBottomSheet;
 import com.wolfram.planlekcji.ui.bottomSheets.grades.ModifyGradeBottomSheet;
@@ -61,14 +61,14 @@ public class GradesFragment extends Fragment {
         });
 
         ((SimpleItemAnimator) recycler.getItemAnimator()).setSupportsChangeAnimations(false);
-        LiveData<List<Subject>> subjectList = viewModel.getSubjects();
+        LiveData<List<SubjectEntity>> subjectList = viewModel.getSubjects();
         subjectList.observe(this, subjects -> {
             List<GradeGroup> gradeGroups = new ArrayList<>();
             @SuppressLint("UseSparseArrays") HashMap<Integer, Integer> hashMap = new HashMap<>();
             for (int i = 0; i < subjects.size(); i++) {
                 int j = i;
-                Subject s = subjects.get(i);
-                LiveData<List<GradeDisplay>> gradesList = viewModel.getGradesFromSubject(s.getId());
+                SubjectEntity s = subjects.get(i);
+                LiveData<List<GradeDisplayEntity>> gradesList = viewModel.getGradesFromSubject(s.getId());
                 gradesList.observe(this, grades -> {
                     if (gradeGroups.size() < subjects.size()) {
                         gradeGroups.add(new GradeGroup(s.getName(), grades));

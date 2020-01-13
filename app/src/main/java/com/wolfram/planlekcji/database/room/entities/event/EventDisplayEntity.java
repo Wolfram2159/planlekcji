@@ -4,15 +4,15 @@ package com.wolfram.planlekcji.database.room.entities.event;
  * @author Wolfram
  * @date 2019-09-12
  */
-public class EventDisplay extends Event {
+public class EventDisplayEntity extends EventEntity {
     private String name;
 
-    public EventDisplay() {
+    public EventDisplayEntity() {
     }
 
     @Override
     public String toString() {
-        return "EventDisplay{" +
+        return "EventDisplayEntity{" +
                 "id=" + id +
                 ", subject_id=" + subject_id +
                 ", name='" + name + '\'' +
@@ -23,7 +23,7 @@ public class EventDisplay extends Event {
                 '}';
     }
 
-    public EventDisplay(EventDisplay event) {
+    public EventDisplayEntity(EventDisplayEntity event) {
         super(event);
         this.name = event.name;
     }

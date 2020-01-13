@@ -6,8 +6,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplay;
-import com.wolfram.planlekcji.custom.others.Utils;
+import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplayEntity;
+import com.wolfram.planlekcji.common.others.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,17 +22,17 @@ import androidx.recyclerview.widget.RecyclerView;
 public class ChildGradeRecyclerViewAdapter extends RecyclerView.Adapter<ChildGradeRecyclerViewAdapter.ViewHolder> {
 
     public interface OnChildItemClickListener {
-        void onClick(GradeDisplay g);
+        void onClick(GradeDisplayEntity g);
     }
 
-    private List<GradeDisplay> gradeList;
+    private List<GradeDisplayEntity> gradeList;
     private OnChildItemClickListener onChildItemClickListener;
 
     ChildGradeRecyclerViewAdapter() {
         this.gradeList = new ArrayList<>();
     }
 
-    void setGradeList(List<GradeDisplay> gradeList) {
+    void setGradeList(List<GradeDisplayEntity> gradeList) {
         this.gradeList = gradeList;
         notifyDataSetChanged();
     }
@@ -50,7 +50,7 @@ public class ChildGradeRecyclerViewAdapter extends RecyclerView.Adapter<ChildGra
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        GradeDisplay g = gradeList.get(position);
+        GradeDisplayEntity g = gradeList.get(position);
         holder.description.setText(g.getDescription());
         String date = Utils.getDateString(g.getDate());
         holder.date.setText(date);
@@ -76,7 +76,7 @@ public class ChildGradeRecyclerViewAdapter extends RecyclerView.Adapter<ChildGra
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            GradeDisplay g = gradeList.get(position);
+            GradeDisplayEntity g = gradeList.get(position);
             onChildItemClickListener.onClick(g);
         }
     }

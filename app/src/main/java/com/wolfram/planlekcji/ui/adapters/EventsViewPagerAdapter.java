@@ -3,8 +3,8 @@ package com.wolfram.planlekcji.ui.adapters;
 import android.os.Bundle;
 
 import com.wolfram.planlekcji.ui.fragments.events.PagerAdapterFragment;
-import com.wolfram.planlekcji.custom.enums.Day;
-import com.wolfram.planlekcji.custom.enums.ShortDay;
+import com.wolfram.planlekcji.common.enums.Day;
+import com.wolfram.planlekcji.common.enums.ShortDay;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

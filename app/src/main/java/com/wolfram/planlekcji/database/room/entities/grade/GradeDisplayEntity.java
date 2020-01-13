@@ -4,12 +4,12 @@ package com.wolfram.planlekcji.database.room.entities.grade;
  * @author Wolfram
  * @date 2019-09-20
  */
-public class GradeDisplay extends Grade {
+public class GradeDisplayEntity extends GradeEntity {
     private String name;
 
     @Override
     public String toString() {
-        return "GradeDisplay{" +
+        return "GradeDisplayEntity{" +
                 "name='" + name + '\'' +
                 ", id=" + id +
                 ", subject_id=" + subject_id +

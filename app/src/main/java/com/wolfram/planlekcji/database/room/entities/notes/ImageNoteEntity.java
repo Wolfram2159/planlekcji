@@ -1,7 +1,7 @@
 package com.wolfram.planlekcji.database.room.entities.notes;
 
 import com.wolfram.planlekcji.ui.adapters.tree.ImageNoteNode;
-import com.wolfram.planlekcji.database.room.entities.Subject;
+import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 
 import java.util.Date;
 
@@ -10,16 +10,21 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+import static androidx.room.ForeignKey.CASCADE;
+
 /**
  * @author Wolfram
  * @date 2019-10-12
  */
 @Entity(tableName = "imageNotes",
         foreignKeys = @ForeignKey(
-                entity = Subject.class,
+                entity = SubjectEntity.class,
                 parentColumns = "id",
-                childColumns = "subject_id"))
-public class ImageNote {
+                childColumns = "subject_id",
+                onDelete = CASCADE
+        )
+)
+public class ImageNoteEntity {
     @PrimaryKey(autoGenerate = true)
     protected Integer id;
 
@@ -29,10 +34,10 @@ public class ImageNote {
 
     protected Date date;
 
-    public ImageNote() {
+    public ImageNoteEntity() {
     }
 
-    public ImageNote(@NonNull ImageNoteNode subjectNode) {
+    public ImageNoteEntity(@NonNull ImageNoteNode subjectNode) {
         this.id = subjectNode.getId();
         this.subject_id = subjectNode.getSubject_id();
         this.photoPath = subjectNode.getPhotoPath();
