@@ -11,7 +11,7 @@ import com.wolfram.planlekcji.database.room.UserDao;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.database.room.entities.notes.ImageNoteEntity;
 import com.wolfram.planlekcji.database.room.entities.notes.TextNoteEntity;
-import com.wolfram.planlekcji.common.others.Utils;
+import com.wolfram.planlekcji.common.others.DateUtils;
 import com.wolfram.planlekcji.ui.adapters.tree.DirectoryNode;
 import com.wolfram.planlekcji.ui.adapters.tree.ImageNoteNode;
 import com.wolfram.planlekcji.ui.adapters.tree.RootNode;
@@ -105,7 +105,7 @@ public class NotesFragmentViewModel extends AndroidViewModel {
     public File createImageFile() throws IOException {
         // Create an image file name
         currentDate = new Date();
-        String timeStamp = Utils.getTimeStringForSaveFile(currentDate);
+        String timeStamp = DateUtils.getTimeStringForSaveFile(currentDate);
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getApplication().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(

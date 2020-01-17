@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.bumptech.glide.RequestManager;
 import com.google.android.material.button.MaterialButton;
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.common.others.Utils;
+import com.wolfram.planlekcji.common.others.DateUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,11 +125,11 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     .load(photoPath)
                     .centerCrop()
                     .into(imageHolder.image);
-            imageHolder.date.setText(Utils.getDateString(((ImageNoteNode) node).getDate()));
+            imageHolder.date.setText(DateUtils.getDateString(((ImageNoteNode) node).getDate()));
         } else if (node instanceof TextNoteNode) {
             TreeTextNoteVH textHolder = (TreeTextNoteVH) holder;
             textHolder.title.setText(((TextNoteNode) node).getTitle());
-            textHolder.date.setText(Utils.getDateString(((TextNoteNode) node).getDate()));
+            textHolder.date.setText(DateUtils.getDateString(((TextNoteNode) node).getDate()));
         }
     }
 

@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplayEntity;
-import com.wolfram.planlekcji.common.others.Utils;
+import com.wolfram.planlekcji.common.others.DateUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +52,7 @@ public class ChildGradeRecyclerViewAdapter extends RecyclerView.Adapter<ChildGra
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         GradeDisplayEntity g = gradeList.get(position);
         holder.description.setText(g.getDescription());
-        String date = Utils.getDateString(g.getDate());
+        String date = DateUtils.getDateString(g.getDate());
         holder.date.setText(date);
     }
 

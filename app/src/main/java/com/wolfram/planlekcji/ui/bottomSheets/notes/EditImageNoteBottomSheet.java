@@ -19,7 +19,7 @@ import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.database.room.entities.notes.ImageNoteEntity;
 import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 import com.wolfram.planlekcji.ui.fragments.notes.NotesFragmentViewModel;
-import com.wolfram.planlekcji.common.others.Utils;
+import com.wolfram.planlekcji.common.others.DateUtils;
 
 import java.io.File;
 import java.util.Date;
@@ -54,13 +54,13 @@ public class EditImageNoteBottomSheet extends CustomBottomSheet {
 
         Date currentDate = viewModel.getCurrentDate();
         Date createDate = imageNote.getDate();
-        String createTime = Utils.getDateString(createDate);
+        String createTime = DateUtils.getDateString(createDate);
         date.setText(createTime);
 
         date.setOnClickListener(view -> {
             DatePickerDialog pickerDialog = new DatePickerDialog(getContext(), (picker, year, month, day) -> {
                 Date pickedDate = new Date((year - 1900), month, day);
-                String myDate = Utils.getDateString(pickedDate);
+                String myDate = DateUtils.getDateString(pickedDate);
                 date.setText(myDate);
                 imageNote.setDate(pickedDate);
             }, (1900 + currentDate.getYear()), currentDate.getMonth(), currentDate.getDate());

@@ -12,7 +12,7 @@ import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplayEntity;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeEntity;
 import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 import com.wolfram.planlekcji.ui.fragments.grades.GradesFragmentViewModel;
-import com.wolfram.planlekcji.common.others.Utils;
+import com.wolfram.planlekcji.common.others.DateUtils;
 
 import java.util.Date;
 
@@ -52,7 +52,7 @@ public class ModifyGradeBottomSheet extends CustomBottomSheet {
             DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
                     (picker, year, month, day) -> {
                         Date pickedDate = new Date((year-1900), month, day);
-                        String myDate = Utils.getDateString(pickedDate);
+                        String myDate = DateUtils.getDateString(pickedDate);
                         date.setText(myDate);
                         newGrade.setDate(pickedDate);
                     }, (1900 + dateNow.getYear()), dateNow.getMonth(), dateNow.getDate());
@@ -72,7 +72,7 @@ public class ModifyGradeBottomSheet extends CustomBottomSheet {
 
             subjectPicker.setText(modifiedGrade.getName());
             desc.setText(modifiedGrade.getDescription());
-            String myDate = Utils.getDateString(modifiedGrade.getDate());
+            String myDate = DateUtils.getDateString(modifiedGrade.getDate());
             date.setText(myDate);
         }
 

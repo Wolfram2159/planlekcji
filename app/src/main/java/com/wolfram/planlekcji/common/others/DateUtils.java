@@ -10,9 +10,9 @@ import java.util.Date;
  * @author Wolfram
  * @date 2019-08-19
  */
-public final class Utils {
+public final class DateUtils {
 
-    private Utils() {
+    private DateUtils() {
         throw new UnsupportedOperationException();
     }
 

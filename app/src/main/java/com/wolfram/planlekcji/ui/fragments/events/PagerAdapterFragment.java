@@ -55,7 +55,7 @@ public class PagerAdapterFragment extends Fragment {
         recycler.setAdapter(adapter);
 
         LiveData<List<EventDisplayEntity>> eventsFromDay = viewModel.getEventsFromDay(day);
-        eventsFromDay.observe(this, (adapter::setEventsList));
+        eventsFromDay.observe(this, adapter::setEventsList);
         return view;
     }
 

@@ -3,6 +3,8 @@ package com.wolfram.planlekcji.ui.fragments.events;
 import android.app.Application;
 import android.os.AsyncTask;
 
+import com.wolfram.planlekcji.common.data.Event;
+import com.wolfram.planlekcji.common.others.DatabaseUtils;
 import com.wolfram.planlekcji.database.room.AppDatabase;
 import com.wolfram.planlekcji.database.room.UserDao;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
@@ -77,22 +79,40 @@ public class EventViewModel extends AndroidViewModel {
         return modifyingEvent;
     }
 
-    public Long insertNewSubject(SubjectEntity subject) {
-        Callable<Long> insertCallable = () -> dao.insertSubject(subject);
-        Long rowId = null;
+    private Long insertSubject(SubjectEntity subject) {
+        String name = subject.getName();
+        SubjectEntity subjectToSave = new SubjectEntity(name);
+        Callable<Long> insertCallable = () -> dao.insertSubject(subjectToSave);
+        Long id = null;
 
         ExecutorService executorService = Executors.newFixedThreadPool(1);
         Future<Long> future = executorService.submit(insertCallable);
         try {
-            rowId = future.get();
+            id = future.get();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return rowId;
+        return id;
     }
 
-    public void insertEvent(EventDisplayEntity event) {
+    public void modifyEvent(Event<EventDisplayEntity> event, String tag) {
         // TODO: 2020-01-03 check if subject exist, if -> set it id to event, else create new SubjectEntity and set it id
-        AsyncTask.execute(() -> dao.insertEvent(event));
+        EventDisplayEntity eventToSave = event.getValue();
+        SubjectEntity eventSubject = eventToSave.getSubject();
+        boolean used = event.isUsed();
+        Event<SubjectEntity> subjectFromDatabase = DatabaseUtils.getSubjectFromDatabase(eventSubject, subjects);
+        if (!used) {
+            if (subjectFromDatabase.isUsed()) {
+                eventToSave.setSubject(subjectFromDatabase.getValue());
+            } else {
+                Integer subjectId = insertSubject(eventSubject).intValue();
+                eventToSave.setSubject_id(subjectId);
+            }
+        }
+        if (tag.equals(EventFragment.MODIFY)) {
+            AsyncTask.execute(() -> dao.updateEvent(eventToSave));
+        } else {
+            AsyncTask.execute(() -> dao.insertEvent(eventToSave));
+        }
     }
 }

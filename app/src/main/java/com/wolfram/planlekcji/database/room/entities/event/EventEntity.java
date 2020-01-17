@@ -2,7 +2,7 @@ package com.wolfram.planlekcji.database.room.entities.event;
 
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.common.enums.Day;
-import com.wolfram.planlekcji.common.others.Utils;
+import com.wolfram.planlekcji.common.others.DateUtils;
 
 import java.util.Date;
 
@@ -28,7 +28,7 @@ public class EventEntity {
     @PrimaryKey(autoGenerate = true)
     protected Integer id;
 
-    protected Long subject_id;
+    protected Integer subject_id;
 
     protected Date start_time;
 
@@ -65,8 +65,8 @@ public class EventEntity {
     }
 
     public String getTimeString() {
-        String startTime = Utils.getTimeString(getStart_time());
-        String endTime = Utils.getTimeString(getEnd_time());
+        String startTime = DateUtils.getTimeString(getStart_time());
+        String endTime = DateUtils.getTimeString(getEnd_time());
         return startTime + " - " + endTime;
     }
 
@@ -78,11 +78,11 @@ public class EventEntity {
         this.id = id;
     }
 
-    public Long getSubject_id() {
+    public Integer getSubject_id() {
         return subject_id;
     }
 
-    public void setSubject_id(Long subject_id) {
+    public void setSubject_id(Integer subject_id) {
         this.subject_id = subject_id;
     }
 

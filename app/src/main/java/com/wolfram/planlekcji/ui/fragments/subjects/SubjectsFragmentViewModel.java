@@ -4,6 +4,7 @@ import android.app.Application;
 import android.os.AsyncTask;
 
 import com.wolfram.planlekcji.common.data.Event;
+import com.wolfram.planlekcji.common.others.DatabaseUtils;
 import com.wolfram.planlekcji.database.room.AppDatabase;
 import com.wolfram.planlekcji.database.room.UserDao;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
@@ -28,7 +29,6 @@ public class SubjectsFragmentViewModel extends AndroidViewModel {
     private LiveData<Event<String>> resultState;
     private SubjectEntity modifyingSubject;
     private Event<String> event;
-    private SubjectEntity unnamedSubject;
 
     private final String DELETED = "Subject deleted";
     private final String CREATED = "Subject created";
@@ -46,7 +46,6 @@ public class SubjectsFragmentViewModel extends AndroidViewModel {
         privateResultState = new MediatorLiveData<>();
         resultState = privateResultState;
         event = new Event<>();
-        unnamedSubject = new SubjectEntity("unnamed");
     }
 
     public LiveData<Event<String>> getResultState() {
@@ -80,7 +79,7 @@ public class SubjectsFragmentViewModel extends AndroidViewModel {
     private void insertSubject(SubjectEntity subject) {
         if (subject.getName().equals("")) subject.setName(UNNAMED);
         event.setUsed(false);
-        if (checkIfDatabaseHasThisSubject(subject)) {
+        if (DatabaseUtils.checkIfDatabaseHasThisSubject(subject, subjectList)) {
             event.setValue(EXIST);
             setState(event);
         } else {
@@ -100,7 +99,7 @@ public class SubjectsFragmentViewModel extends AndroidViewModel {
         // TODO: 2020-01-01 merging others tables with merging subjects
         if (subject.getName().equals("")) subject.setName(UNNAMED);
         event.setUsed(false);
-        if (checkIfDatabaseHasThisSubject(subject)) {
+        if (DatabaseUtils.checkIfDatabaseHasThisSubject(subject, subjectList)) {
             deleteSubjectWithoutChangingState(modifyingSubject);
             event.setValue(MERGED);
             setState(event);
@@ -113,15 +112,6 @@ public class SubjectsFragmentViewModel extends AndroidViewModel {
                 }
             });
         }
-    }
-
-    private boolean checkIfDatabaseHasThisSubject(SubjectEntity subject) {
-        for (SubjectEntity savedSubject : subjectList) {
-            String savedName = savedSubject.getName();
-            String localName = subject.getName();
-            if (savedName.equals(localName)) return true;
-        }
-        return false;
     }
 
     private void deleteSubjectWithoutChangingState(SubjectEntity subject){

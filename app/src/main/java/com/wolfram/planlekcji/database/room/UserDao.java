@@ -44,8 +44,11 @@ public interface UserDao {
             "WHERE day = (:day) ORDER BY start_time ASC")
     LiveData<List<EventDisplayEntity>> getEventsFromDay(String day);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertEvent(EventEntity e);
+
+    @Update(onConflict = OnConflictStrategy.IGNORE)
+    void updateEvent(EventEntity event);
 
     @Delete
     void deleteEvent(EventEntity e);
