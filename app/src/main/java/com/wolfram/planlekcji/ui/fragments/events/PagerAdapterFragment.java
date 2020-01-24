@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.database.room.entities.event.EventDisplayEntity;
 import com.wolfram.planlekcji.ui.adapters.EventsRecyclerViewAdapter;
@@ -45,6 +46,13 @@ public class PagerAdapterFragment extends Fragment {
         ButterKnife.bind(this, view);
         viewModel = ViewModelProviders.of(getActivity()).get(EventViewModel.class);
 
+        viewModel.getResultState().observe(this, result -> {
+            if (!result.isUsed()){
+                showSnackbar(result.getValue());
+                viewModel.callMessageReceived();
+            }
+        });
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recycler.setLayoutManager(layoutManager);
         Day day = Day.values()[pos];
@@ -75,5 +83,9 @@ public class PagerAdapterFragment extends Fragment {
             }
         });
         actionBottomSheet.show(getFragmentManager(), ActionBottomSheet.TAG);
+    }
+
+    private void showSnackbar(@NonNull String message){
+        Snackbar.make(recycler, message, Snackbar.LENGTH_SHORT).show();
     }
 }

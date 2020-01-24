@@ -21,6 +21,7 @@ import java.util.concurrent.Future;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 
 /**
  * @author Wolfram
@@ -34,6 +35,13 @@ public class EventViewModel extends AndroidViewModel {
     private EventDisplayEntity modifyingEvent;
     private LiveData<List<SubjectEntity>> subjectList;
     private List<SubjectEntity> subjects;
+    private LiveData<Event<String>> resultState;
+    private MediatorLiveData<Event<String>> privateResultState;
+    private Event<String> stateEvent;
+
+    private final String DELETED = "Event deleted";
+    private final String CREATED = "Event created";
+    private final String UPDATED = "Event updated";
 
     public EventViewModel(@NonNull Application application) {
         super(application);
@@ -45,6 +53,13 @@ public class EventViewModel extends AndroidViewModel {
             eventsFromDays.put(day, eventsFromDay);
         }
         subjectList = dao.getSubjects();
+        privateResultState = new MediatorLiveData<>();
+        resultState = privateResultState;
+        stateEvent = new Event<>();
+    }
+
+    public LiveData<Event<String>> getResultState() {
+        return resultState;
     }
 
     public LiveData<List<EventDisplayEntity>> getEventsFromDay(Day day) {
@@ -68,7 +83,10 @@ public class EventViewModel extends AndroidViewModel {
     }
 
     public void deleteEvent(EventDisplayEntity event) {
-        AsyncTask.execute(() -> dao.deleteEvent(event));
+        AsyncTask.execute(() -> {
+            dao.deleteEvent(event);
+            setState(DELETED);
+        });
     }
 
     public void setModifyingEvent(EventDisplayEntity modifyingEvent) {
@@ -96,12 +114,11 @@ public class EventViewModel extends AndroidViewModel {
     }
 
     public void modifyEvent(Event<EventDisplayEntity> event, String tag) {
-        // TODO: 2020-01-03 check if subject exist, if -> set it id to event, else create new SubjectEntity and set it id
+        // TODO: 2020-01-03 check if subject exist, if -> set it id to stateEvent, else create new SubjectEntity and set it id
         EventDisplayEntity eventToSave = event.getValue();
         SubjectEntity eventSubject = eventToSave.getSubject();
-        boolean used = event.isUsed();
         Event<SubjectEntity> subjectFromDatabase = DatabaseUtils.getSubjectFromDatabase(eventSubject, subjects);
-        if (!used) {
+        if (!event.isUsed()) {
             if (subjectFromDatabase.isUsed()) {
                 eventToSave.setSubject(subjectFromDatabase.getValue());
             } else {
@@ -110,9 +127,26 @@ public class EventViewModel extends AndroidViewModel {
             }
         }
         if (tag.equals(EventFragment.MODIFY)) {
-            AsyncTask.execute(() -> dao.updateEvent(eventToSave));
+            AsyncTask.execute(() -> {
+                dao.updateEvent(eventToSave);
+                setState(UPDATED);
+            });
         } else {
-            AsyncTask.execute(() -> dao.insertEvent(eventToSave));
+            AsyncTask.execute(() -> {
+                dao.insertEvent(eventToSave);
+                setState(CREATED);
+            });
         }
+    }
+
+    private void setState(String message){
+        stateEvent.setValue(message);
+        stateEvent.setUsed(false);
+        privateResultState.postValue(stateEvent);
+    }
+
+    public void callMessageReceived() {
+        stateEvent.setUsed(true);
+        privateResultState.postValue(stateEvent);
     }
 }
