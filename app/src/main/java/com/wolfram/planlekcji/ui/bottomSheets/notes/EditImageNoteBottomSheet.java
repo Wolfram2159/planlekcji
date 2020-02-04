@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -107,5 +108,10 @@ public class EditImageNoteBottomSheet extends CustomBottomSheet {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         Uri conrentUri = Uri.fromFile(photoFile);
         photo.setImageURI(conrentUri);
+    }
+
+    @Override
+    public void onClick(View view) {
+
     }
 }

@@ -89,4 +89,9 @@ public class AddImageNoteBottomSheet extends CustomBottomSheet {
             dismiss();
         });
     }
+
+    @Override
+    public void onClick(View view) {
+
+    }
 }

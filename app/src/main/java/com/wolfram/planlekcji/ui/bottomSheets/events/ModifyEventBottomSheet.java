@@ -37,20 +37,8 @@ import butterknife.ButterKnife;
  */
 public class ModifyEventBottomSheet extends CustomBottomSheet implements View.OnClickListener {
 
-    private interface TimeSetter {
-        void onTimeSet(Date time);
-    }
-
-    private interface AdapterSetter {
-        AutoCompleteTextView getAdapterView();
-
-        List<String> getList();
-    }
-
     private EventViewModel viewModel;
     private EventDisplayEntity localEvent = new EventDisplayEntity();
-    private FragmentActivity activity;
-    private String tag;
     private Event<EventDisplayEntity> eventToSave = new Event<>();
     private List<SubjectEntity> subjects;
     @BindView(R.id.event_day)
@@ -75,8 +63,6 @@ public class ModifyEventBottomSheet extends CustomBottomSheet implements View.On
 
     @Override
     protected void customizeDialog() {
-        activity = Objects.requireNonNull(getActivity());
-        tag = getTag();
         viewModel = ViewModelProviders.of(activity).get(EventViewModel.class);
         ButterKnife.bind(this, root);
         subjects = viewModel.getSubjects();
@@ -94,7 +80,7 @@ public class ModifyEventBottomSheet extends CustomBottomSheet implements View.On
     }
 
     private void setupAdapters() {
-        setAdapterToView(new AdapterSetter() {
+        setAdapterToView(new AutocompleteAdapterSetter() {
             @Override
             public AutoCompleteTextView getAdapterView() {
                 return dayPicker;
@@ -109,7 +95,7 @@ public class ModifyEventBottomSheet extends CustomBottomSheet implements View.On
         List<SubjectEntity> subjects = viewModel.getSubjects();
         List<String> subjectNames = getSubjectsNames(subjects);
         setAdapterToView(
-                new AdapterSetter() {
+                new AutocompleteAdapterSetter() {
                     @Override
                     public AutoCompleteTextView getAdapterView() {
                         return subjectPicker;
@@ -139,25 +125,6 @@ public class ModifyEventBottomSheet extends CustomBottomSheet implements View.On
         cancelButton.setOnClickListener(this);
         editTimeStart.setOnClickListener(this);
         editTimeEnd.setOnClickListener(this);
-    }
-
-    private void setAdapterToView(AdapterSetter adapterSetter) {
-        setAdapterToView(adapterSetter, null);
-    }
-
-    private void setAdapterToView(AdapterSetter adapterSetter, AdapterView.OnItemClickListener onItemClickListener) {
-        Context context = Objects.requireNonNull(getContext());
-        AutoCompleteTextView textView = adapterSetter.getAdapterView();
-        List<String> list = adapterSetter.getList();
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
-                context,
-                android.R.layout.simple_list_item_1,
-                list
-        );
-        if (list.size() > 1 && !tag.equals(EventFragment.MODIFY)) textView.setText(list.get(0));
-        textView.setAdapter(arrayAdapter);
-        textView.setShowSoftInputOnFocus(false);
-        textView.setOnItemClickListener(onItemClickListener);
     }
 
     private List<String> getSubjectsNames(List<SubjectEntity> subjects) {
@@ -241,15 +208,6 @@ public class ModifyEventBottomSheet extends CustomBottomSheet implements View.On
                 dismiss();
                 break;
         }
-    }
-
-    private void createTimePicker(TimeSetter timeSetter) {
-        Date dateNow = new Date();
-        TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), (timePicker, hour, minute) -> {
-            Date time = new Date(2019, 10, 10, hour, minute);
-            timeSetter.onTimeSet(time);
-        }, dateNow.getHours(), dateNow.getMinutes(), true);
-        timePickerDialog.show();
     }
 
     private void setDataToLocalEvent() {

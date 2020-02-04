@@ -55,11 +55,19 @@ public interface UserDao {
 
     @Query("SELECT grades.id, subjects.id as subject_id, date, subjects.name, grades.description " +
             "FROM grades JOIN subjects " +
+            "ON grades.subject_id=subjects.id ORDER BY date ASC")
+    LiveData<List<GradeDisplayEntity>> getGrades();
+
+    @Query("SELECT grades.id, subjects.id as subject_id, date, subjects.name, grades.description " +
+            "FROM grades JOIN subjects " +
             "ON grades.subject_id=subjects.id WHERE subject_id=(:subjectId) ORDER BY date ASC")
     LiveData<List<GradeDisplayEntity>> getGradesFromSubject(int subjectId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertGrade(GradeEntity grade);
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    void updateGrade(GradeEntity grade);
 
     @Delete
     void deleteGrade(GradeEntity grade);

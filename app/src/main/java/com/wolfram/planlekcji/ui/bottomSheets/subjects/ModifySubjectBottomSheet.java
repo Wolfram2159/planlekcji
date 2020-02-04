@@ -1,5 +1,6 @@
 package com.wolfram.planlekcji.ui.bottomSheets.subjects;
 
+import android.view.View;
 import android.widget.EditText;
 
 import androidx.lifecycle.ViewModelProviders;
@@ -18,7 +19,6 @@ public class ModifySubjectBottomSheet extends CustomBottomSheet {
 
     private SubjectEntity modifyingSubject = new SubjectEntity();
     private SubjectsFragmentViewModel viewModel;
-    private String tag;
     @BindView(R.id.subjects_name)
     EditText subjectName;
     @BindView(R.id.subjects_save)
@@ -34,20 +34,13 @@ public class ModifySubjectBottomSheet extends CustomBottomSheet {
     @Override
     protected void customizeDialog() {
         ButterKnife.bind(this, root);
-        tag = getTag();
 
-        viewModel = ViewModelProviders.of(getActivity()).get(SubjectsFragmentViewModel.class);
+        viewModel = ViewModelProviders.of(activity).get(SubjectsFragmentViewModel.class);
 
         if (tag.equals(SubjectsFragment.MODIFY)) setValuesToViews();
 
-        saveButton.setOnClickListener(v -> {
-            String name = subjectName.getText().toString();
-            modifyingSubject.setName(name);
-            viewModel.modifySubject(modifyingSubject, tag);
-            dismiss();
-        });
-
-        cancelButton.setOnClickListener(v -> dismiss());
+        saveButton.setOnClickListener(this);
+        cancelButton.setOnClickListener(this);
     }
 
     private void setValuesToViews() {
@@ -56,5 +49,24 @@ public class ModifySubjectBottomSheet extends CustomBottomSheet {
         this.modifyingSubject.setId(modSubjectId);
         String modSubjectName = modifyingSubject.getName();
         subjectName.setText(modSubjectName);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.subjects_save:
+                modifySubject();
+                break;
+            case R.id.subjects_cancel:
+                dismiss();
+                break;
+        }
+    }
+
+    private void modifySubject(){
+        String name = subjectName.getText().toString();
+        modifyingSubject.setName(name);
+        viewModel.modifySubject(modifyingSubject, tag);
+        dismiss();
     }
 }

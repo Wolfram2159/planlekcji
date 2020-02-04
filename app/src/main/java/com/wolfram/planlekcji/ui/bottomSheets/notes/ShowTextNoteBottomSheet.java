@@ -1,6 +1,7 @@
 package com.wolfram.planlekcji.ui.bottomSheets.notes;
 
 import android.content.Context;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
@@ -49,5 +50,10 @@ public class ShowTextNoteBottomSheet extends CustomBottomSheet {
             okButton.setText("Save");
             editButton.setText("Cancel");
         });
+    }
+
+    @Override
+    public void onClick(View view) {
+
     }
 }

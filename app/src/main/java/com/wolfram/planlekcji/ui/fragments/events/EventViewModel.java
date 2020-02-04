@@ -10,6 +10,7 @@ import com.wolfram.planlekcji.database.room.UserDao;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.database.room.entities.event.EventDisplayEntity;
 import com.wolfram.planlekcji.common.enums.Day;
+import com.wolfram.planlekcji.ui.fragments.subjects.SubjectsFragmentViewModel;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -99,6 +100,7 @@ public class EventViewModel extends AndroidViewModel {
 
     private Long insertSubject(SubjectEntity subject) {
         String name = subject.getName();
+        name = name.equals("") ? SubjectsFragmentViewModel.UNNAMED : name;
         SubjectEntity subjectToSave = new SubjectEntity(name);
         Callable<Long> insertCallable = () -> dao.insertSubject(subjectToSave);
         Long id = null;

@@ -1,5 +1,7 @@
 package com.wolfram.planlekcji.ui.bottomSheets.notes;
 
+import android.view.View;
+
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.button.MaterialButton;
@@ -30,5 +32,10 @@ public class ModifyImageNoteBottomSheet extends CustomBottomSheet {
             viewModel.deleteImageNote();
             dismiss();
         });
+    }
+
+    @Override
+    public void onClick(View view) {
+
     }
 }

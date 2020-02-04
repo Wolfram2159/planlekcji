@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.wolfram.planlekcji.R;
+import com.wolfram.planlekcji.common.others.SnackbarUtils;
 import com.wolfram.planlekcji.database.room.entities.event.EventDisplayEntity;
 import com.wolfram.planlekcji.ui.adapters.EventsRecyclerViewAdapter;
 import com.wolfram.planlekcji.ui.bottomSheets.ActionBottomSheet;
@@ -48,7 +49,7 @@ public class PagerAdapterFragment extends Fragment {
 
         viewModel.getResultState().observe(this, result -> {
             if (!result.isUsed()){
-                showSnackbar(result.getValue());
+                SnackbarUtils.showSnackBar(getActivity(), result.getValue());
                 viewModel.callMessageReceived();
             }
         });
@@ -83,9 +84,5 @@ public class PagerAdapterFragment extends Fragment {
             }
         });
         actionBottomSheet.show(getFragmentManager(), ActionBottomSheet.TAG);
-    }
-
-    private void showSnackbar(@NonNull String message){
-        Snackbar.make(recycler, message, Snackbar.LENGTH_SHORT).show();
     }
 }

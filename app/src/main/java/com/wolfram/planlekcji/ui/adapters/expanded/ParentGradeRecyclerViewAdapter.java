@@ -34,7 +34,6 @@ public class ParentGradeRecyclerViewAdapter extends RecyclerView.Adapter<ParentG
         gradeGroups = new ArrayList<>();
     }
 
-
     public void setGradeGroups(List<GradeGroup> gradeGroups) {
         this.gradeGroups = gradeGroups;
         notifyDataSetChanged();

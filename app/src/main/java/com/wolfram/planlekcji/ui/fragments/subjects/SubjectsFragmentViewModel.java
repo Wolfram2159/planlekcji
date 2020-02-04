@@ -35,7 +35,7 @@ public class SubjectsFragmentViewModel extends AndroidViewModel {
     private final String EXIST = "Subject already exist";
     private final String UPDATED = "Subject updated";
     private final String MERGED = "Subjects merged";
-    private final String UNNAMED = "unnamed";
+    public static final String UNNAMED = "unnamed";
     private final int CORRECT_ROW_COUNT = 1;
 
     // TODO: 2020-01-03 LiveData for state
@@ -69,6 +69,8 @@ public class SubjectsFragmentViewModel extends AndroidViewModel {
     }
 
     public void modifySubject(SubjectEntity subject, String tag){
+        event.setUsed(false);
+        if (subject.getName().equals("")) subject.setName(UNNAMED);
         if (tag.equals(SubjectsFragment.MODIFY)) {
             updateSubject(subject);
         } else {
@@ -77,8 +79,6 @@ public class SubjectsFragmentViewModel extends AndroidViewModel {
     }
 
     private void insertSubject(SubjectEntity subject) {
-        if (subject.getName().equals("")) subject.setName(UNNAMED);
-        event.setUsed(false);
         if (DatabaseUtils.checkIfDatabaseHasThisSubject(subject, subjectList)) {
             event.setValue(EXIST);
             setState(event);
@@ -97,8 +97,6 @@ public class SubjectsFragmentViewModel extends AndroidViewModel {
 
     private void updateSubject(SubjectEntity subject) {
         // TODO: 2020-01-01 merging others tables with merging subjects
-        if (subject.getName().equals("")) subject.setName(UNNAMED);
-        event.setUsed(false);
         if (DatabaseUtils.checkIfDatabaseHasThisSubject(subject, subjectList)) {
             deleteSubjectWithoutChangingState(modifyingSubject);
             event.setValue(MERGED);

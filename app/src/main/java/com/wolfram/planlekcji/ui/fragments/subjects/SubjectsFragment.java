@@ -9,6 +9,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.common.data.Event;
+import com.wolfram.planlekcji.common.others.SnackbarUtils;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.ui.adapters.SubjectsRecyclerViewAdapter;
 import com.wolfram.planlekcji.ui.bottomSheets.ActionBottomSheet;
@@ -72,7 +73,7 @@ public class SubjectsFragment extends Fragment {
         LiveData<Event<String>> resultState = viewModel.getResultState();
         resultState.observe(this, event -> {
             if (!event.isUsed()) {
-                showSnackbar(event.getValue());
+                SnackbarUtils.showSnackBar(getActivity(), event.getValue());
                 viewModel.callMessageReceived();
             }
         });
@@ -95,9 +96,5 @@ public class SubjectsFragment extends Fragment {
             }
         });
         actionBottomSheet.show(fragmentManager, ActionBottomSheet.TAG);
-    }
-
-    private void showSnackbar(@NonNull String message) {
-        Snackbar.make(fab, message, Snackbar.LENGTH_SHORT).show();
     }
 }

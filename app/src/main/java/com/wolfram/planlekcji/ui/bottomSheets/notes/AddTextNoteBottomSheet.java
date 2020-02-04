@@ -1,6 +1,7 @@
 package com.wolfram.planlekcji.ui.bottomSheets.notes;
 
 import android.app.DatePickerDialog;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -79,5 +80,10 @@ public class AddTextNoteBottomSheet extends CustomBottomSheet {
         cancel.setOnClickListener(view -> {
             dismiss();
         });
+    }
+
+    @Override
+    public void onClick(View view) {
+
     }
 }
