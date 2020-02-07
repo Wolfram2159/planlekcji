@@ -9,9 +9,7 @@ import android.widget.TextView;
 
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.common.data.Group;
-import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplayEntity;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeEntity;
-import com.wolfram.planlekcji.database.room.entities.grade.GradeGroup;
 
 import java.util.ArrayList;
 import java.util.List;

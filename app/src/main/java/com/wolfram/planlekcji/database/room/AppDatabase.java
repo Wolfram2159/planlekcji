@@ -2,6 +2,10 @@ package com.wolfram.planlekcji.database.room;
 
 import android.content.Context;
 
+import com.wolfram.planlekcji.database.room.dao.EventDao;
+import com.wolfram.planlekcji.database.room.dao.GradeDao;
+import com.wolfram.planlekcji.database.room.dao.NotesDao;
+import com.wolfram.planlekcji.database.room.dao.SubjectDao;
 import com.wolfram.planlekcji.database.room.entities.DateConverter;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.database.room.entities.event.EventEntity;
@@ -30,7 +34,10 @@ public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase appDatabase;
 
-    public abstract UserDao getUserDao();
+    public abstract SubjectDao getSubjectDao();
+    public abstract EventDao getEventDao();
+    public abstract GradeDao getGradeDao();
+    public abstract NotesDao getNotesDao();
 
     public static synchronized AppDatabase getInstance(Context context) {
         if (appDatabase == null) {

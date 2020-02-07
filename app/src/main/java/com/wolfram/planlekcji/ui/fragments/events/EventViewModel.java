@@ -6,7 +6,8 @@ import android.os.AsyncTask;
 import com.wolfram.planlekcji.common.data.Event;
 import com.wolfram.planlekcji.common.others.DatabaseUtils;
 import com.wolfram.planlekcji.database.room.AppDatabase;
-import com.wolfram.planlekcji.database.room.UserDao;
+import com.wolfram.planlekcji.database.room.dao.EventDao;
+import com.wolfram.planlekcji.database.room.dao.SubjectDao;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.database.room.entities.event.EventDisplayEntity;
 import com.wolfram.planlekcji.common.enums.Day;
@@ -30,7 +31,8 @@ import androidx.lifecycle.MediatorLiveData;
  */
 public class EventViewModel extends AndroidViewModel {
 
-    private UserDao dao;
+    private EventDao eventDao;
+    private SubjectDao subjectDao;
     private EnumMap<Day, LiveData<List<EventDisplayEntity>>> eventsFromDays;
     private EnumMap<Day, List<EventDisplayEntity>> events;
     private EventDisplayEntity modifyingEvent;
@@ -47,13 +49,14 @@ public class EventViewModel extends AndroidViewModel {
     public EventViewModel(@NonNull Application application) {
         super(application);
         AppDatabase appDatabase = AppDatabase.getInstance(application.getApplicationContext());
-        dao = appDatabase.getUserDao();
+        eventDao = appDatabase.getEventDao();
+        subjectDao = appDatabase.getSubjectDao();
         eventsFromDays = new EnumMap<>(Day.class);
         for (Day day : Day.values()) {
-            LiveData<List<EventDisplayEntity>> eventsFromDay = dao.getEventsFromDay(day.toString());
+            LiveData<List<EventDisplayEntity>> eventsFromDay = eventDao.getEventsFromDay(day.toString());
             eventsFromDays.put(day, eventsFromDay);
         }
-        subjectList = dao.getSubjects();
+        subjectList = subjectDao.getSubjects();
         privateResultState = new MediatorLiveData<>();
         resultState = privateResultState;
         stateEvent = new Event<>();
@@ -85,7 +88,7 @@ public class EventViewModel extends AndroidViewModel {
 
     public void deleteEvent(EventDisplayEntity event) {
         AsyncTask.execute(() -> {
-            dao.deleteEvent(event);
+            eventDao.deleteEvent(event);
             setState(DELETED);
         });
     }
@@ -102,7 +105,7 @@ public class EventViewModel extends AndroidViewModel {
         String name = subject.getName();
         name = name.equals("") ? SubjectsFragmentViewModel.UNNAMED : name;
         SubjectEntity subjectToSave = new SubjectEntity(name);
-        Callable<Long> insertCallable = () -> dao.insertSubject(subjectToSave);
+        Callable<Long> insertCallable = () -> subjectDao.insertSubject(subjectToSave);
         Long id = null;
 
         ExecutorService executorService = Executors.newFixedThreadPool(1);
@@ -130,12 +133,12 @@ public class EventViewModel extends AndroidViewModel {
         }
         if (tag.equals(EventFragment.MODIFY)) {
             AsyncTask.execute(() -> {
-                dao.updateEvent(eventToSave);
+                eventDao.updateEvent(eventToSave);
                 setState(UPDATED);
             });
         } else {
             AsyncTask.execute(() -> {
-                dao.insertEvent(eventToSave);
+                eventDao.insertEvent(eventToSave);
                 setState(CREATED);
             });
         }

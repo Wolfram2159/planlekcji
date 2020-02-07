@@ -7,7 +7,8 @@ import android.os.Environment;
 
 import com.wolfram.planlekcji.common.mapper.RoomMapper;
 import com.wolfram.planlekcji.database.room.AppDatabase;
-import com.wolfram.planlekcji.database.room.UserDao;
+import com.wolfram.planlekcji.database.room.dao.NotesDao;
+import com.wolfram.planlekcji.database.room.dao.SubjectDao;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.database.room.entities.notes.ImageNoteEntity;
 import com.wolfram.planlekcji.database.room.entities.notes.TextNoteEntity;
@@ -31,7 +32,8 @@ import androidx.lifecycle.LiveData;
 
 public class NotesFragmentViewModel extends AndroidViewModel {
 
-    private UserDao dao;
+    private NotesDao notesDao;
+    private SubjectDao subjectDao;
     private String currentPhotoPath;
     private Date currentDate;
     private TextNoteEntity textNote;
@@ -40,7 +42,9 @@ public class NotesFragmentViewModel extends AndroidViewModel {
 
     public NotesFragmentViewModel(@NonNull Application application) {
         super(application);
-        dao = AppDatabase.getInstance(application.getApplicationContext()).getUserDao();
+        AppDatabase appDatabase = AppDatabase.getInstance(application.getApplicationContext());
+        notesDao = appDatabase.getNotesDao();
+        subjectDao = appDatabase.getSubjectDao();
     }
 
     public String getCurrentPhotoPath() {
@@ -120,23 +124,23 @@ public class NotesFragmentViewModel extends AndroidViewModel {
     }
 
     public void insertImageNote(ImageNoteEntity imageNote) {
-        AsyncTask.execute(() -> dao.insertImageNote(imageNote));
+        AsyncTask.execute(() -> notesDao.insertImageNote(imageNote));
     }
 
     public void insertTextNote(TextNoteEntity textNote) {
-        AsyncTask.execute(() -> dao.insertTextNote(textNote));
+        AsyncTask.execute(() -> notesDao.insertTextNote(textNote));
     }
 
     public LiveData<List<SubjectEntity>> getSubjects() {
-        return dao.getSubjects();
+        return subjectDao.getSubjects();
     }
 
     public LiveData<List<ImageNoteEntity>> getImageNotesFromSubject(int subject_id) {
-        return dao.getImageNotesFromSubject(subject_id);
+        return notesDao.getImageNotesFromSubject(subject_id);
     }
 
     public LiveData<List<TextNoteEntity>> getTextNotesFromSubject(int subject_id) {
-        return dao.getTextNotesFromSubject(subject_id);
+        return notesDao.getTextNotesFromSubject(subject_id);
     }
 
     public void deleteImage() {
@@ -146,11 +150,11 @@ public class NotesFragmentViewModel extends AndroidViewModel {
     }
 
     public void deleteTextNote(TextNoteEntity note) {
-        AsyncTask.execute(() -> dao.deleteTextNote(note));
+        AsyncTask.execute(() -> notesDao.deleteTextNote(note));
     }
 
     public void deleteImageNote() {
-        AsyncTask.execute(() -> dao.deleteImageNote(imageNote));
+        AsyncTask.execute(() -> notesDao.deleteImageNote(imageNote));
         File imageToDelete = new File(imageNote.getPhotoPath());
         imageToDelete.delete();
     }

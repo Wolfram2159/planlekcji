@@ -4,20 +4,18 @@ import android.app.Application;
 import android.os.AsyncTask;
 
 import com.wolfram.planlekcji.common.data.Event;
-import com.wolfram.planlekcji.common.data.Group;
 import com.wolfram.planlekcji.database.room.AppDatabase;
-import com.wolfram.planlekcji.database.room.UserDao;
+import com.wolfram.planlekcji.database.room.dao.GradeDao;
+import com.wolfram.planlekcji.database.room.dao.SubjectDao;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplayEntity;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeEntity;
-import com.wolfram.planlekcji.database.room.entities.grade.GradeGroup;
 import com.wolfram.planlekcji.database.room.entities.grade.SubjectWithGrades;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
@@ -27,9 +25,8 @@ import androidx.lifecycle.MediatorLiveData;
  * @date 2019-09-21
  */
 public class GradesFragmentViewModel extends AndroidViewModel {
+    private GradeDao gradeDao;
     private GradeDisplayEntity modifyingGrade;
-
-    private UserDao dao;
 
     private LiveData<List<SubjectWithGrades>> subjectsWithGrades;
     private List<SubjectWithGrades> subjectsWithGradesList;
@@ -45,8 +42,9 @@ public class GradesFragmentViewModel extends AndroidViewModel {
 
     public GradesFragmentViewModel(@NonNull Application application) {
         super(application);
-        dao = AppDatabase.getInstance(application.getApplicationContext()).getUserDao();
-        subjectsWithGrades = dao.getSubjectsWithGrades();
+        AppDatabase appDatabase = AppDatabase.getInstance(application.getApplicationContext());
+        gradeDao = appDatabase.getGradeDao();
+        subjectsWithGrades = gradeDao.getSubjectsWithGrades();
         privateResultState = new MediatorLiveData<>();
         resultState = privateResultState;
         event = new Event<>();
@@ -65,7 +63,6 @@ public class GradesFragmentViewModel extends AndroidViewModel {
     public GradeDisplayEntity getModifyingGrade() {
         return modifyingGrade;
     }
-
 
     public LiveData<List<SubjectWithGrades>> getSubjectsWithGrades() {
         return subjectsWithGrades;
@@ -101,10 +98,9 @@ public class GradesFragmentViewModel extends AndroidViewModel {
         privateResultState.postValue(event);
     }
 
-
     public void deleteGrade() {
         AsyncTask.execute(() -> {
-            dao.deleteGrade(modifyingGrade);
+            gradeDao.deleteGrade(modifyingGrade);
             event.setUsed(false);
             event.setValue(DELETED);
             setState(event);
@@ -115,13 +111,13 @@ public class GradesFragmentViewModel extends AndroidViewModel {
         event.setUsed(false);
         if (tag.equals(GradesFragment.CREATE)) {
             AsyncTask.execute(() -> {
-                dao.insertGrade(grade);
+                gradeDao.insertGrade(grade);
                 event.setValue(CREATED);
                 setState(event);
             });
         } else if (tag.equals(GradesFragment.MODIFY)) {
             AsyncTask.execute(() -> {
-                dao.updateGrade(grade);
+                gradeDao.updateGrade(grade);
                 event.setValue(UPDATED);
                 setState(event);
             });

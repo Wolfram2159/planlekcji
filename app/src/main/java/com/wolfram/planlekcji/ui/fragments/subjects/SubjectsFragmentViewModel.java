@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import com.wolfram.planlekcji.common.data.Event;
 import com.wolfram.planlekcji.common.others.DatabaseUtils;
 import com.wolfram.planlekcji.database.room.AppDatabase;
-import com.wolfram.planlekcji.database.room.UserDao;
+import com.wolfram.planlekcji.database.room.dao.SubjectDao;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 
 import java.util.List;
@@ -22,7 +22,7 @@ import androidx.lifecycle.MediatorLiveData;
  */
 public class SubjectsFragmentViewModel extends AndroidViewModel {
 
-    private UserDao dao;
+    private SubjectDao dao;
     private List<SubjectEntity> subjectList;
     private LiveData<List<SubjectEntity>> subjects;
     private MediatorLiveData<Event<String>> privateResultState;
@@ -41,7 +41,7 @@ public class SubjectsFragmentViewModel extends AndroidViewModel {
     // TODO: 2020-01-03 LiveData for state
     public SubjectsFragmentViewModel(@NonNull Application application) {
         super(application);
-        dao = AppDatabase.getInstance(application.getApplicationContext()).getUserDao();
+        dao = AppDatabase.getInstance(application.getApplicationContext()).getSubjectDao();
         subjects = dao.getSubjects();
         privateResultState = new MediatorLiveData<>();
         resultState = privateResultState;
