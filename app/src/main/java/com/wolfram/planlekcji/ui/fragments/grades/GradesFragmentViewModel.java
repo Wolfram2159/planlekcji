@@ -4,12 +4,14 @@ import android.app.Application;
 import android.os.AsyncTask;
 
 import com.wolfram.planlekcji.common.data.Event;
+import com.wolfram.planlekcji.common.data.Group;
 import com.wolfram.planlekcji.database.room.AppDatabase;
 import com.wolfram.planlekcji.database.room.UserDao;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplayEntity;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeEntity;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeGroup;
+import com.wolfram.planlekcji.database.room.entities.grade.SubjectWithGrades;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,22 +27,13 @@ import androidx.lifecycle.MediatorLiveData;
  * @date 2019-09-21
  */
 public class GradesFragmentViewModel extends AndroidViewModel {
-
-    public interface GradeGroupSetter {
-
-        void setGradeGroups(List<GradeGroup> gradeGroups);
-    }
-
     private GradeDisplayEntity modifyingGrade;
 
     private UserDao dao;
-    private LiveData<List<SubjectEntity>> subjectsList;
 
+    private LiveData<List<SubjectWithGrades>> subjectsWithGrades;
+    private List<SubjectWithGrades> subjectsWithGradesList;
     private List<SubjectEntity> subjects;
-    private LiveData<List<GradeDisplayEntity>> gradesList;
-
-    private List<GradeDisplayEntity> grades;
-    private List<GradeGroup> gradeGroups;
 
     private LiveData<Event<String>> resultState;
     private MediatorLiveData<Event<String>> privateResultState;
@@ -53,29 +46,46 @@ public class GradesFragmentViewModel extends AndroidViewModel {
     public GradesFragmentViewModel(@NonNull Application application) {
         super(application);
         dao = AppDatabase.getInstance(application.getApplicationContext()).getUserDao();
-        subjectsList = dao.getSubjects();
-        gradesList = dao.getGrades();
-        this.gradeGroups = new ArrayList<>();
+        subjectsWithGrades = dao.getSubjectsWithGrades();
         privateResultState = new MediatorLiveData<>();
         resultState = privateResultState;
         event = new Event<>();
-
         subjects = new ArrayList<>();
-        grades = new ArrayList<>();
     }
 
-    public void setModifyingGrade(@Nullable GradeDisplayEntity modifyingGrade) {
-        this.modifyingGrade = modifyingGrade;
+    public void setModifyingGrade(@NonNull GradeEntity modifyingGrade) {
+        int subjectId = modifyingGrade.getSubject_id();
+        GradeDisplayEntity gradeDisplay = new GradeDisplayEntity(modifyingGrade);
+        for (SubjectEntity subject : subjects) {
+            if (subject.getId() == subjectId) gradeDisplay.setName(subject.getName());
+        }
+        this.modifyingGrade = gradeDisplay;
     }
 
     public GradeDisplayEntity getModifyingGrade() {
         return modifyingGrade;
     }
 
-    public void setSubjects(List<SubjectEntity> subjects) {
-        this.gradeGroups.clear();
-        this.subjects = subjects;
-        createGradeGroups();
+
+    public LiveData<List<SubjectWithGrades>> getSubjectsWithGrades() {
+        return subjectsWithGrades;
+    }
+
+    public void setSubjectsWithGradesList(List<SubjectWithGrades> subjectsWithGradesList) {
+        this.subjectsWithGradesList = subjectsWithGradesList;
+        makeSubjects();
+    }
+
+    private void makeSubjects() {
+        subjects.clear();
+        for (SubjectWithGrades subjectWithGrades : subjectsWithGradesList) {
+            SubjectEntity subject = subjectWithGrades.getSubject();
+            subjects.add(subject);
+        }
+    }
+
+    public List<SubjectEntity> getSubjects() {
+        return subjects;
     }
 
     public LiveData<Event<String>> getResultState() {
@@ -91,47 +101,6 @@ public class GradesFragmentViewModel extends AndroidViewModel {
         privateResultState.postValue(event);
     }
 
-    public List<SubjectEntity> getSubjects() {
-        return subjects;
-    }
-
-    private void createGradeGroups() {
-        for (SubjectEntity subject : subjects) {
-            GradeGroup group = new GradeGroup(subject.getName());
-            gradeGroups.add(group);
-        }
-    }
-
-    public void setGrades(@NonNull List<GradeDisplayEntity> grades, GradeGroupSetter gradeGroupSetter) {
-        this.grades = grades;
-        clearGroups();
-        addGradesToGroups();
-        gradeGroupSetter.setGradeGroups(gradeGroups);
-    }
-
-    private void clearGroups() {
-        for (GradeGroup gradeGroup : gradeGroups) {
-            gradeGroup.clearGroup();
-        }
-    }
-
-    private void addGradesToGroups() {
-        for (GradeDisplayEntity grade : grades) {
-            String name = grade.getName();
-            for (GradeGroup gradeGroup : gradeGroups) {
-                String title = gradeGroup.getTitle();
-                if (name.equals(title)) gradeGroup.addGrade(grade);
-            }
-        }
-    }
-
-    public LiveData<List<SubjectEntity>> getSubjectsList() {
-        return subjectsList;
-    }
-
-    public LiveData<List<GradeDisplayEntity>> getGradesList() {
-        return gradesList;
-    }
 
     public void deleteGrade() {
         AsyncTask.execute(() -> {

@@ -42,6 +42,7 @@ public class ModifyGradeBottomSheet extends CustomBottomSheet implements View.On
     private GradesFragmentViewModel viewModel;
     private GradeDisplayEntity modifyingGrade = new GradeDisplayEntity();
     private List<SubjectEntity> subjects;
+
     @Override
     protected int getResource() {
         return R.layout.grades_bottom_sheet;

@@ -6,6 +6,7 @@ import com.wolfram.planlekcji.common.others.DateUtils;
 
 import java.util.Date;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
@@ -26,6 +27,7 @@ import static androidx.room.ForeignKey.CASCADE;
         ))
 public class EventEntity {
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "event_id")
     protected Integer id;
 
     protected Integer subject_id;

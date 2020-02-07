@@ -3,6 +3,7 @@ package com.wolfram.planlekcji.database.room.entities;
 import com.wolfram.planlekcji.ui.adapters.tree.SubjectNode;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.Index;

@@ -7,6 +7,15 @@ package com.wolfram.planlekcji.database.room.entities.grade;
 public class GradeDisplayEntity extends GradeEntity {
     private String name;
 
+    public GradeDisplayEntity(){}
+
+    public GradeDisplayEntity(GradeEntity grade){
+        super(grade);
+        if (grade instanceof GradeDisplayEntity){
+            this.name = ((GradeDisplayEntity) grade).getName();
+        }
+    }
+
     @Override
     public String toString() {
         return "GradeDisplayEntity{" +

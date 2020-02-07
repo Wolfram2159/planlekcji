@@ -4,6 +4,7 @@ import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 
 import java.util.Date;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
@@ -25,6 +26,7 @@ import static androidx.room.ForeignKey.CASCADE;
 )
 public class GradeEntity {
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "grade_id")
     protected Integer id;
 
     protected int subject_id;
@@ -33,17 +35,18 @@ public class GradeEntity {
 
     protected Date date;
 
-    public GradeEntity() {
-    }
+    public GradeEntity() {}
 
     @Ignore
     public GradeEntity(int subject_id, String description) {
         this.subject_id = subject_id;
         this.description = description;
     }
+
     @Ignore
     public GradeEntity(GradeEntity grade){
         this.id = grade.id;
+        this.date = grade.date;
         this.subject_id = grade.subject_id;
         this.description = grade.description;
     }

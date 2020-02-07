@@ -8,15 +8,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wolfram.planlekcji.R;
+import com.wolfram.planlekcji.common.data.Group;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplayEntity;
+import com.wolfram.planlekcji.database.room.entities.grade.GradeEntity;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeGroup;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import static android.view.animation.Animation.RELATIVE_TO_SELF;
 
@@ -27,14 +33,14 @@ import static android.view.animation.Animation.RELATIVE_TO_SELF;
 
 public class ParentGradeRecyclerViewAdapter extends RecyclerView.Adapter<ParentGradeRecyclerViewAdapter.ViewHolder> {
 
-    private List<GradeGroup> gradeGroups;
+    private List<? extends Group<GradeEntity>> gradeGroups;
     private ChildGradeRecyclerViewAdapter.OnChildItemClickListener onChildItemClickListener;
 
     public ParentGradeRecyclerViewAdapter() {
         gradeGroups = new ArrayList<>();
     }
 
-    public void setGradeGroups(List<GradeGroup> gradeGroups) {
+    public void setGradeGroups(List<? extends Group<GradeEntity>> gradeGroups) {
         this.gradeGroups = gradeGroups;
         notifyDataSetChanged();
     }
@@ -53,7 +59,7 @@ public class ParentGradeRecyclerViewAdapter extends RecyclerView.Adapter<ParentG
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.title.setText(gradeGroups.get(position).getTitle());
-        holder.setGradesList(gradeGroups.get(position).getGradeList());
+        holder.setGradesList(gradeGroups.get(position).getList());
     }
 
     @Override
@@ -63,21 +69,23 @@ public class ParentGradeRecyclerViewAdapter extends RecyclerView.Adapter<ParentG
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView title;
-        private RecyclerView recyclerView;
+        @BindView(R.id.item_subject_name)
+        TextView title;
+        @BindView(R.id.child_recycler)
+        RecyclerView recyclerView;
+        @BindView(R.id.item_subject_arrow)
+        ImageView arrow;
+        @BindView(R.id.parent_item_main_constraint_layout)
+        View root;
         private ChildGradeRecyclerViewAdapter adapter;
-        private ImageView arrow;
 
-        void setGradesList(List<GradeDisplayEntity> gradesList) {
+        void setGradesList(@Nullable List<GradeEntity> gradesList) {
             adapter.setGradeList(gradesList);
         }
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
-            title = itemView.findViewById(R.id.item_subject_name);
-            recyclerView = itemView.findViewById(R.id.child_recycler);
-            arrow = itemView.findViewById(R.id.item_subject_arrow);
-            View root = itemView.findViewById(R.id.parent_item_main_constraint_layout);
+            ButterKnife.bind(this, itemView);
             LinearLayoutManager layoutManager = new LinearLayoutManager(title.getContext());
             recyclerView.setLayoutManager(layoutManager);
             adapter = new ChildGradeRecyclerViewAdapter();

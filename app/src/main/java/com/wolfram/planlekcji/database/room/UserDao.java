@@ -5,6 +5,7 @@ import com.wolfram.planlekcji.database.room.entities.event.EventDisplayEntity;
 import com.wolfram.planlekcji.database.room.entities.event.EventEntity;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplayEntity;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeEntity;
+import com.wolfram.planlekcji.database.room.entities.grade.SubjectWithGrades;
 import com.wolfram.planlekcji.database.room.entities.notes.ImageNoteEntity;
 import com.wolfram.planlekcji.database.room.entities.notes.TextNoteEntity;
 
@@ -39,7 +40,7 @@ public interface UserDao {
     @Delete
     int deleteSubject(SubjectEntity subject);
 
-    @Query("SELECT events.id, subjects.id as subject_id, name, start_time, end_time, localization, day " +
+    @Query("SELECT events.event_id, subjects.id as subject_id, name, start_time, end_time, localization, day " +
             "FROM events JOIN subjects ON events.subject_id=subjects.id " +
             "WHERE day = (:day) ORDER BY start_time ASC")
     LiveData<List<EventDisplayEntity>> getEventsFromDay(String day);
@@ -53,15 +54,18 @@ public interface UserDao {
     @Delete
     void deleteEvent(EventEntity e);
 
-    @Query("SELECT grades.id, subjects.id as subject_id, date, subjects.name, grades.description " +
+    @Query("SELECT grades.grade_id, subjects.id as subject_id, date, subjects.name, grades.description " +
             "FROM grades JOIN subjects " +
             "ON grades.subject_id=subjects.id ORDER BY date ASC")
     LiveData<List<GradeDisplayEntity>> getGrades();
 
-    @Query("SELECT grades.id, subjects.id as subject_id, date, subjects.name, grades.description " +
+    @Query("SELECT grades.grade_id, subjects.id as subject_id, date, subjects.name, grades.description " +
             "FROM grades JOIN subjects " +
-            "ON grades.subject_id=subjects.id WHERE subject_id=(:subjectId) ORDER BY date ASC")
+            "ON grades.subject_id=subjects.id WHERE grades.subject_id=(:subjectId) ORDER BY date ASC")
     LiveData<List<GradeDisplayEntity>> getGradesFromSubject(int subjectId);
+
+    @Query("SELECT * FROM subjects")
+    LiveData<List<SubjectWithGrades>> getSubjectsWithGrades();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertGrade(GradeEntity grade);

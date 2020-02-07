@@ -6,6 +6,7 @@ import com.wolfram.planlekcji.ui.adapters.tree.TextNoteNode;
 import java.util.Date;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
@@ -26,6 +27,7 @@ import static androidx.room.ForeignKey.CASCADE;
 )
 public class TextNoteEntity {
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "text_note_id")
     protected Integer id;
 
     protected int subject_id;

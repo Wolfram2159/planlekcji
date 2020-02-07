@@ -8,12 +8,17 @@ import android.widget.TextView;
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplayEntity;
 import com.wolfram.planlekcji.common.others.DateUtils;
+import com.wolfram.planlekcji.database.room.entities.grade.GradeEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * @author Wolfram
@@ -22,17 +27,17 @@ import androidx.recyclerview.widget.RecyclerView;
 public class ChildGradeRecyclerViewAdapter extends RecyclerView.Adapter<ChildGradeRecyclerViewAdapter.ViewHolder> {
 
     public interface OnChildItemClickListener {
-        void onClick(GradeDisplayEntity g);
+        void onClick(GradeEntity g);
     }
 
-    private List<GradeDisplayEntity> gradeList;
+    private List<GradeEntity> gradeList;
     private OnChildItemClickListener onChildItemClickListener;
 
     ChildGradeRecyclerViewAdapter() {
         this.gradeList = new ArrayList<>();
     }
 
-    void setGradeList(List<GradeDisplayEntity> gradeList) {
+    void setGradeList(List<GradeEntity> gradeList) {
         this.gradeList = gradeList;
         notifyDataSetChanged();
     }
@@ -50,7 +55,7 @@ public class ChildGradeRecyclerViewAdapter extends RecyclerView.Adapter<ChildGra
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        GradeDisplayEntity g = gradeList.get(position);
+        GradeEntity g = gradeList.get(position);
         holder.description.setText(g.getDescription());
         String date = DateUtils.getDateString(g.getDate());
         holder.date.setText(date);
@@ -63,20 +68,21 @@ public class ChildGradeRecyclerViewAdapter extends RecyclerView.Adapter<ChildGra
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView description;
-        private TextView date;
+        @BindView(R.id.item_grade_description)
+        TextView description;
+        @BindView(R.id.item_grade_date)
+        TextView date;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
-            description = itemView.findViewById(R.id.item_grade_description);
-            date = itemView.findViewById(R.id.item_grade_date);
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            GradeDisplayEntity g = gradeList.get(position);
+            GradeEntity g = gradeList.get(position);
             onChildItemClickListener.onClick(g);
         }
     }
