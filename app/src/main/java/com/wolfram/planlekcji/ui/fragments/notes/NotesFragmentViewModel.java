@@ -11,12 +11,14 @@ import com.wolfram.planlekcji.database.room.dao.NotesDao;
 import com.wolfram.planlekcji.database.room.dao.SubjectDao;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.database.room.entities.notes.ImageNoteEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.SubjectWithNotesEntity;
 import com.wolfram.planlekcji.database.room.entities.notes.TextNoteEntity;
 import com.wolfram.planlekcji.common.others.DateUtils;
 import com.wolfram.planlekcji.ui.adapters.tree.DirectoryNode;
 import com.wolfram.planlekcji.ui.adapters.tree.ImageNoteNode;
 import com.wolfram.planlekcji.ui.adapters.tree.RootNode;
 import com.wolfram.planlekcji.ui.adapters.tree.SubjectNode;
+import com.wolfram.planlekcji.ui.adapters.tree.SubjectWithNotes;
 import com.wolfram.planlekcji.ui.adapters.tree.TextNoteNode;
 import com.wolfram.planlekcji.ui.adapters.tree.TreeNode;
 
@@ -32,19 +34,30 @@ import androidx.lifecycle.LiveData;
 
 public class NotesFragmentViewModel extends AndroidViewModel {
 
+    public interface ParentSetter {
+        void setParent(TreeNode parent);
+    }
+
     private NotesDao notesDao;
     private SubjectDao subjectDao;
+
+    private LiveData<List<SubjectWithNotesEntity>> subjectWithNotesList;
+    private List<SubjectWithNotes> subjectsWithNotes;
+
     private String currentPhotoPath;
     private Date currentDate;
     private TextNoteEntity textNote;
     private ImageNoteEntity imageNote;
     private TreeNode parentOfTree = null;
+    private TreeNode actualParent;
 
     public NotesFragmentViewModel(@NonNull Application application) {
         super(application);
         AppDatabase appDatabase = AppDatabase.getInstance(application.getApplicationContext());
         notesDao = appDatabase.getNotesDao();
         subjectDao = appDatabase.getSubjectDao();
+        subjectWithNotesList = notesDao.getSubjectsWithNotes();
+        actualParent = new RootNode();
     }
 
     public String getCurrentPhotoPath() {
@@ -55,10 +68,74 @@ public class NotesFragmentViewModel extends AndroidViewModel {
         return new Date();
     }
 
-    public interface TreeObserver {
+    public LiveData<List<SubjectWithNotesEntity>> getSubjectWithNotesList() {
+        return subjectWithNotesList;
+    }
+
+    public void setSubjectsWithNotes(List<SubjectWithNotesEntity> subjectsWithNotes, ParentSetter setter) {
+        this.subjectsWithNotes = RoomMapper.convertSubjectWithNotesList(subjectsWithNotes);
+        TreeNode root = createTree();
+        if (actualParent != null) {
+            TreeNode newParent = root.getNodeFromTree(actualParent);
+            actualParent = newParent;
+            setter.setParent(newParent);
+        } else {
+            setter.setParent(root);
+        }
+    }
+
+    private TreeNode createTree() {
+        //create Tree always but implement searching actual parent or implement detecting changes
+        TreeNode root = new RootNode();
+        for (SubjectWithNotes subjectWithNotes : subjectsWithNotes) {
+            SubjectNode subjectNode = subjectWithNotes.getSubject();
+            List<TextNoteNode> textNotes = subjectWithNotes.getTextNodes();
+            DirectoryNode documents = createDocuments(textNotes);
+            subjectNode.addChildren(documents);
+            List<ImageNoteNode> imageNotes = subjectWithNotes.getImageNodes();
+            DirectoryNode pictures = createImages(imageNotes);
+            subjectNode.addChildren(pictures);
+            root.addChildren(subjectNode);
+        }
+        return root;
+    }
+
+    private DirectoryNode createDocuments(List<TextNoteNode> textNotes) {
+        DirectoryNode documents = new DirectoryNode("Documents");
+        for (TextNoteNode textNote : textNotes) {
+            documents.addChildren(textNote);
+        }
+        return documents;
+    }
+
+    private DirectoryNode createImages(List<ImageNoteNode> imageNotes) {
+        DirectoryNode pictures = new DirectoryNode("Pictures");
+        for (ImageNoteNode imageNote : imageNotes) {
+            pictures.addChildren(imageNote);
+        }
+        return pictures;
+    }
+
+    public void setActualParent(TreeNode actualParent) {
+        this.actualParent = actualParent;
+    }
+
+    public TreeNode getActualParent() {
+        return this.actualParent;
+    }
+
+    /*public interface TreeObserver {
         TreeNode getParent();
 
         void setParent(TreeNode parent);
+    }
+
+    public TreeNode getParentOfTree(@NonNull LifecycleOwner lifecycleOwner, TreeObserver treeObserver) {
+        if (parentOfTree == null) {
+            return createTree(lifecycleOwner, treeObserver);
+        } else {
+            return parentOfTree;
+        }
     }
 
     private TreeNode createTree(@NonNull LifecycleOwner lifecycleOwner, TreeObserver treeObserver) {
@@ -95,15 +172,7 @@ public class NotesFragmentViewModel extends AndroidViewModel {
             treeObserver.setParent(parentOfTree);
         });
         return parentOfTree;
-    }
-
-    public TreeNode getParentOfTree(@NonNull LifecycleOwner lifecycleOwner, TreeObserver treeObserver) {
-        if (parentOfTree == null) {
-            return createTree(lifecycleOwner, treeObserver);
-        } else {
-            return parentOfTree;
-        }
-    }
+    }*/
 
     @SuppressLint("SimpleDateFormat")
     public File createImageFile() throws IOException {

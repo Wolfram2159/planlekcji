@@ -8,7 +8,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.wolfram.planlekcji.database.room.entities.notes.ImageNoteEntity;
-import com.wolfram.planlekcji.database.room.entities.notes.SubjectWithNotes;
+import com.wolfram.planlekcji.database.room.entities.notes.SubjectWithNotesEntity;
 import com.wolfram.planlekcji.database.room.entities.notes.TextNoteEntity;
 
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
 @Dao
 public interface NotesDao {
     @Query("SELECT * FROM subjects")
-    LiveData<List<SubjectWithNotes>> getSubjectsWithNotes();
+    LiveData<List<SubjectWithNotesEntity>> getSubjectsWithNotes();
 
     @Query("SELECT * FROM imageNotes WHERE subject_id=(:subject_id)")
     LiveData<List<ImageNoteEntity>> getImageNotesFromSubject(int subject_id);

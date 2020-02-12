@@ -9,9 +9,11 @@ public class SubjectNode extends TreeNode {
     private String name;
     private static final int VIEW_TYPE = 4;
     private static final int GRID_SPAN_COUNT = 2;
+
     public SubjectNode(@NonNull SubjectEntity subject) {
         this.id = subject.getId();
         this.name = subject.getName();
+        this.nodeName = subject.getName();
     }
 
     @Override

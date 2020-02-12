@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public interface TreeAdapterListener {
-        void onPathChanged(String newPath);
+        void onParentChanged(TreeNode parent);
         void onGridChanged(int spanCount);
     }
 
@@ -61,7 +61,7 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public void setTreeAdapterListener(TreeAdapterListener treeAdapterListener) {
         this.treeAdapterListener = treeAdapterListener;
-        this.treeAdapterListener.onPathChanged(parent.getPath());
+        this.treeAdapterListener.onParentChanged(parent);
     }
 
     public void setParent(TreeNode parent) {
@@ -77,7 +77,7 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (parent.getParent() != null) {
             parent = parent.getParent();
             checkParentInstanceOf();
-            treeAdapterListener.onPathChanged(parent.getPath());
+            treeAdapterListener.onParentChanged(parent);
             notifyDataSetChanged();
         }
     }
@@ -156,13 +156,15 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         @Override
         public void onClick(View view) {
-            TreeNode newParent = parent.getChildrenList().get(getAdapterPosition());
+            int adapterPos = getAdapterPosition();
+            setNewParent(adapterPos);
+            /*TreeNode newParent = parent.getChildrenList().get(getAdapterPosition());
             if (newParent.getChildrenList() != null) {
                 parent = newParent;
                 checkParentInstanceOf();
-                treeAdapterListener.onPathChanged(parent.getPath());
+                treeAdapterListener.onParentChanged(parent.getPath());
                 notifyDataSetChanged();
-            }
+            }*/
         }
     }
 
@@ -178,13 +180,25 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         @Override
         public void onClick(View view) {
-            TreeNode newParent = parent.getChildrenList().get(getAdapterPosition());
+            int adapterPos = getAdapterPosition();
+            setNewParent(adapterPos);
+            /*TreeNode newParent = parent.getChildrenList().get(getAdapterPosition());
             if (newParent.getChildrenList() != null) {
                 parent = newParent;
                 checkParentInstanceOf();
-                treeAdapterListener.onPathChanged(parent.getPath());
+                treeAdapterListener.onParentChanged(parent.getPath());
                 notifyDataSetChanged();
-            }
+            }*/
+        }
+    }
+
+    private void setNewParent(int adapterPosition) {
+        TreeNode newParent = parent.getChildrenList().get(adapterPosition);
+        if (newParent.getChildrenList() != null) {
+            parent = newParent;
+            checkParentInstanceOf();
+            treeAdapterListener.onParentChanged(parent);
+            notifyDataSetChanged();
         }
     }
 

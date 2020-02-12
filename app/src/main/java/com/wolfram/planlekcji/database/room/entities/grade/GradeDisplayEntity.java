@@ -11,9 +11,11 @@ public class GradeDisplayEntity extends GradeEntity {
 
     public GradeDisplayEntity(GradeEntity grade){
         super(grade);
-        if (grade instanceof GradeDisplayEntity){
-            this.name = ((GradeDisplayEntity) grade).getName();
-        }
+    }
+
+    public GradeDisplayEntity(GradeDisplayEntity gradeDisplay){
+        super(gradeDisplay);
+        this.name = gradeDisplay.name;
     }
 
     @Override

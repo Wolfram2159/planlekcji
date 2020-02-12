@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.stfalcon.imageviewer.StfalconImageViewer;
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.common.mapper.RoomMapper;
+import com.wolfram.planlekcji.database.room.entities.notes.SubjectWithNotesEntity;
 import com.wolfram.planlekcji.ui.adapters.tree.ImageNoteNode;
 import com.wolfram.planlekcji.ui.adapters.tree.TextNoteNode;
 import com.wolfram.planlekcji.ui.adapters.tree.TreeAdapter;
@@ -39,16 +40,23 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class NotesFragment extends Fragment {
 
+    @BindView(R.id.notes_recycler)
+    RecyclerView recycler;
+    @BindView(R.id.notes_path)
+    TextView path;
+
     private NotesFragmentViewModel viewModel;
-    private RecyclerView recycler;
     private TreeAdapter adapter;
-    private TextView path;
 
     private StfalconImageViewer viewer;
 
@@ -57,18 +65,11 @@ public class NotesFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_notes, container, false);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_notes, container, false);
+        ButterKnife.bind(this, view);
 
         viewModel = ViewModelProviders.of(getActivity()).get(NotesFragmentViewModel.class);
         setHasOptionsMenu(true);
-
-        recycler = getActivity().findViewById(R.id.notes_recycler);
-        path = getActivity().findViewById(R.id.notes_path);
 
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
@@ -78,8 +79,13 @@ public class NotesFragment extends Fragment {
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
 
+        LiveData<List<SubjectWithNotesEntity>> subjectWithNotesList = viewModel.getSubjectWithNotesList();
+        subjectWithNotesList.observe(this, subjectWithNotes -> {
+            viewModel.setSubjectsWithNotes(subjectWithNotes, parent -> adapter.setParent(parent));
+        });
+
         // TODO: 2019-12-25 check if everything working properly, like editing, deleting etc
-        TreeNode rootNode = viewModel.getParentOfTree(this, new NotesFragmentViewModel.TreeObserver() {
+        /*TreeNode rootNode = viewModel.getParentOfTree(this, new NotesFragmentViewModel.TreeObserver() {
             @Override
             public TreeNode getParent() {
                 return adapter.getParent();
@@ -89,18 +95,23 @@ public class NotesFragment extends Fragment {
             public void setParent(TreeNode parent) {
                 adapter.setParent(parent);
             }
-        });
+        });*/
+
+
 
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 1);
-        adapter = new TreeAdapter(rootNode, Glide.with(this));
+        TreeNode initialRoot = viewModel.getActualParent();
+        adapter = new TreeAdapter(initialRoot, Glide.with(this));
 
         adapter.setTreeAdapterListener(new TreeAdapter.TreeAdapterListener() {
             @Override
-            public void onPathChanged(String newPath) {
+            public void onParentChanged(TreeNode parent) {
+                String newPath = parent.getPath();
                 Animation inAnim = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in);
                 inAnim.setDuration(800);
                 path.setText(newPath);
                 path.startAnimation(inAnim);
+                viewModel.setActualParent(parent);
             }
 
             @Override
@@ -151,7 +162,15 @@ public class NotesFragment extends Fragment {
 
         recycler.setLayoutManager(layoutManager);
         recycler.setAdapter(adapter);
+        return view;
     }
+
+/*    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+
+    }*/
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {

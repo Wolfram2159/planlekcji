@@ -1,6 +1,5 @@
 package com.wolfram.planlekcji.ui.adapters.tree;
 
-import java.util.ArrayList;
 
 public class RootNode extends TreeNode {
 
@@ -8,8 +7,8 @@ public class RootNode extends TreeNode {
     private final static int GRID_SPAN_COUNT = 1;
 
     public RootNode() {
+        super();
         this.parent = null;
-        this.childrenList = new ArrayList<>();
         this.nodeName = "PlanLekcji";
     }
 
