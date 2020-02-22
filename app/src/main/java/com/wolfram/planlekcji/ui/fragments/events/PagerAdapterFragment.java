@@ -12,6 +12,7 @@ import com.wolfram.planlekcji.database.room.entities.event.EventDisplayEntity;
 import com.wolfram.planlekcji.ui.adapters.EventsRecyclerViewAdapter;
 import com.wolfram.planlekcji.ui.bottomSheets.ActionBottomSheet;
 import com.wolfram.planlekcji.common.enums.Day;
+import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 import com.wolfram.planlekcji.ui.bottomSheets.events.ModifyEventBottomSheet;
 
 import java.util.List;
@@ -75,7 +76,7 @@ public class PagerAdapterFragment extends Fragment {
             public void onObjectModify() {
                 viewModel.setModifyingEvent(eventClicked);
                 ModifyEventBottomSheet modifyEventBottomSheet = new ModifyEventBottomSheet();
-                modifyEventBottomSheet.show(getFragmentManager(), EventFragment.MODIFY);
+                modifyEventBottomSheet.show(getFragmentManager(), CustomBottomSheet.MODIFY);
             }
 
             @Override
@@ -83,6 +84,6 @@ public class PagerAdapterFragment extends Fragment {
                 viewModel.deleteEvent(eventClicked);
             }
         });
-        actionBottomSheet.show(getFragmentManager(), ActionBottomSheet.TAG);
+        actionBottomSheet.show(getFragmentManager(), CustomBottomSheet.ACTION);
     }
 }

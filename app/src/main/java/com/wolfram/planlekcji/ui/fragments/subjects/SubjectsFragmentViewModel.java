@@ -8,6 +8,7 @@ import com.wolfram.planlekcji.common.others.DatabaseUtils;
 import com.wolfram.planlekcji.database.room.AppDatabase;
 import com.wolfram.planlekcji.database.room.dao.SubjectDao;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
+import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 
 import java.util.List;
 
@@ -71,7 +72,7 @@ public class SubjectsFragmentViewModel extends AndroidViewModel {
     public void modifySubject(SubjectEntity subject, String tag){
         event.setUsed(false);
         if (subject.getName().equals("")) subject.setName(UNNAMED);
-        if (tag.equals(SubjectsFragment.MODIFY)) {
+        if (tag.equals(CustomBottomSheet.MODIFY)) {
             updateSubject(subject);
         } else {
             insertSubject(subject);

@@ -13,6 +13,7 @@ import com.wolfram.planlekcji.common.others.SnackbarUtils;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.ui.adapters.SubjectsRecyclerViewAdapter;
 import com.wolfram.planlekcji.ui.bottomSheets.ActionBottomSheet;
+import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 import com.wolfram.planlekcji.ui.bottomSheets.subjects.ModifySubjectBottomSheet;
 
 import java.util.List;
@@ -38,8 +39,6 @@ public class SubjectsFragment extends Fragment {
     FloatingActionButton fab;
     private SubjectsFragmentViewModel viewModel;
     private FragmentManager fragmentManager;
-    public final static String CREATE = "CreateSubject";
-    public final static String MODIFY = "ModifySubject";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,7 +66,7 @@ public class SubjectsFragment extends Fragment {
 
         fab.setOnClickListener(v -> {
             ModifySubjectBottomSheet modifySubject = new ModifySubjectBottomSheet();
-            modifySubject.show(getFragmentManager(), CREATE);
+            modifySubject.show(getFragmentManager(), CustomBottomSheet.CREATE);
         });
 
         LiveData<Event<String>> resultState = viewModel.getResultState();
@@ -87,7 +86,7 @@ public class SubjectsFragment extends Fragment {
             public void onObjectModify() {
                 viewModel.setModifyingSubject(clickedSubject);
                 ModifySubjectBottomSheet modifySubjectBottomSheet = new ModifySubjectBottomSheet();
-                modifySubjectBottomSheet.show(fragmentManager, MODIFY);
+                modifySubjectBottomSheet.show(fragmentManager, CustomBottomSheet.MODIFY);
             }
 
             @Override
@@ -95,6 +94,6 @@ public class SubjectsFragment extends Fragment {
                 viewModel.deleteSubject(clickedSubject);
             }
         });
-        actionBottomSheet.show(fragmentManager, ActionBottomSheet.TAG);
+        actionBottomSheet.show(fragmentManager, CustomBottomSheet.ACTION);
     }
 }

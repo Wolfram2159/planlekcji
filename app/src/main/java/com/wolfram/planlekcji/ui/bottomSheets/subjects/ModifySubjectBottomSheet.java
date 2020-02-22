@@ -37,7 +37,7 @@ public class ModifySubjectBottomSheet extends CustomBottomSheet {
 
         viewModel = ViewModelProviders.of(activity).get(SubjectsFragmentViewModel.class);
 
-        if (tag.equals(SubjectsFragment.MODIFY)) setValuesToViews();
+        if (tag.equals(CustomBottomSheet.MODIFY)) setValuesToViews();
 
         saveButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);

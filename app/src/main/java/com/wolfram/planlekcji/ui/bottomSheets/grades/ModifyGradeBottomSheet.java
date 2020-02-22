@@ -59,7 +59,7 @@ public class ModifyGradeBottomSheet extends CustomBottomSheet implements View.On
 
         setupOnClickListeners();
 
-        if (tag.equals(GradesFragment.MODIFY)) setValuesToViews();
+        if (tag.equals(CustomBottomSheet.MODIFY)) setValuesToViews();
         else setInitialValuesToLocalGrade();
 
         setAdapterToView(new AutocompleteAdapterSetter() {

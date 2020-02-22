@@ -11,6 +11,7 @@ import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplayEntity;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeEntity;
 import com.wolfram.planlekcji.database.room.entities.grade.SubjectWithGrades;
+import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,13 +110,13 @@ public class GradesFragmentViewModel extends AndroidViewModel {
 
     public void modifyGrade(GradeEntity grade, String tag) {
         event.setUsed(false);
-        if (tag.equals(GradesFragment.CREATE)) {
+        if (tag.equals(CustomBottomSheet.CREATE)) {
             AsyncTask.execute(() -> {
                 gradeDao.insertGrade(grade);
                 event.setValue(CREATED);
                 setState(event);
             });
-        } else if (tag.equals(GradesFragment.MODIFY)) {
+        } else if (tag.equals(CustomBottomSheet.MODIFY)) {
             AsyncTask.execute(() -> {
                 gradeDao.updateGrade(grade);
                 event.setValue(UPDATED);

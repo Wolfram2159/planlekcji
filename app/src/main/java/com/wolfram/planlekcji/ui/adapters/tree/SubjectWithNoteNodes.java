@@ -11,12 +11,12 @@ import com.wolfram.planlekcji.database.room.entities.notes.TextNoteEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubjectWithNotes {
+public class SubjectWithNoteNodes {
     private SubjectNode subject;
     private List<TextNoteNode> textNodes;
     private List<ImageNoteNode> imageNodes;
 
-    public SubjectWithNotes(@NonNull SubjectWithNotesEntity subjectWithNotes) {
+    public SubjectWithNoteNodes(@NonNull SubjectWithNotesEntity subjectWithNotes) {
         SubjectEntity subjectEntity = subjectWithNotes.getSubject();
         assignSubject(subjectEntity);
         List<TextNoteEntity> textNotes = subjectWithNotes.getTextNotes();

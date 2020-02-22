@@ -70,7 +70,7 @@ public class ModifyEventBottomSheet extends CustomBottomSheet implements View.On
         setupAdapters();
         setupOnClickListeners();
 
-        if (tag.equals(EventFragment.MODIFY)) {
+        if (tag.equals(CustomBottomSheet.MODIFY)) {
             EventDisplayEntity modifyingEvent = viewModel.getModifyingEvent();
             setValuesToViews(modifyingEvent);
             setValuesToLocalEvent(modifyingEvent);

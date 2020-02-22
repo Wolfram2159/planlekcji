@@ -24,6 +24,7 @@ import com.wolfram.planlekcji.common.others.DateUtils;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 
 public class EditImageNoteBottomSheet extends CustomBottomSheet {
 
@@ -53,7 +54,7 @@ public class EditImageNoteBottomSheet extends CustomBottomSheet {
         Uri contentUri = Uri.fromFile(photoFile);
         photo.setImageURI(contentUri);
 
-        Date currentDate = viewModel.getCurrentDate();
+        Date currentDate = new Date();
         Date createDate = imageNote.getDate();
         String createTime = DateUtils.getDateString(createDate);
         date.setText(createTime);
@@ -68,15 +69,15 @@ public class EditImageNoteBottomSheet extends CustomBottomSheet {
             pickerDialog.show();
         });
 
-        viewModel.getSubjects().observe(this, subjects -> {
-            ArrayAdapter<SubjectEntity> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, subjects);
+        List<SubjectEntity> subjects = viewModel.getSubjects();
+        ArrayAdapter<SubjectEntity> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, subjects);
             subjectName.setAdapter(adapter);
             subjectName.setShowSoftInputOnFocus(false);
             for (SubjectEntity subject : subjects) {
                 if (subject.getId().equals(imageNote.getSubject_id()))
                     subjectName.setText(subject.getName());
             }
-        });
+
 
         subjectName.setOnItemClickListener((parent, view, pos, arg) -> {
             Object item = parent.getItemAtPosition(pos);

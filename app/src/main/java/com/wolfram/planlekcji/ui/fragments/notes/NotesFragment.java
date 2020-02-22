@@ -19,15 +19,18 @@ import com.bumptech.glide.Glide;
 import com.stfalcon.imageviewer.StfalconImageViewer;
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.common.mapper.RoomMapper;
+import com.wolfram.planlekcji.common.others.SnackbarUtils;
 import com.wolfram.planlekcji.database.room.entities.notes.SubjectWithNotesEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.TextNoteDisplayEntity;
 import com.wolfram.planlekcji.ui.adapters.tree.ImageNoteNode;
 import com.wolfram.planlekcji.ui.adapters.tree.TextNoteNode;
 import com.wolfram.planlekcji.ui.adapters.tree.TreeAdapter;
 import com.wolfram.planlekcji.ui.adapters.tree.TreeNode;
 import com.wolfram.planlekcji.database.room.entities.notes.ImageNoteEntity;
 import com.wolfram.planlekcji.database.room.entities.notes.TextNoteEntity;
+import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 import com.wolfram.planlekcji.ui.bottomSheets.notes.AddImageNoteBottomSheet;
-import com.wolfram.planlekcji.ui.bottomSheets.notes.AddTextNoteBottomSheet;
+import com.wolfram.planlekcji.ui.bottomSheets.notes.ModifyTextNoteBottomSheet;
 import com.wolfram.planlekcji.ui.bottomSheets.notes.ModifyImageNoteBottomSheet;
 import com.wolfram.planlekcji.ui.bottomSheets.notes.ShowTextNoteBottomSheet;
 
@@ -61,6 +64,7 @@ public class NotesFragment extends Fragment {
     private StfalconImageViewer viewer;
 
     private static final int REQUEST_TAKE_PHOTO = 1;
+    private final String NO_SUBJECTS = "Create subject first";
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -71,6 +75,13 @@ public class NotesFragment extends Fragment {
         viewModel = ViewModelProviders.of(getActivity()).get(NotesFragmentViewModel.class);
         setHasOptionsMenu(true);
 
+        setupBackCallback();
+        getData();
+        setupAdapter();
+        return view;
+    }
+
+    private void setupBackCallback() {
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -78,32 +89,22 @@ public class NotesFragment extends Fragment {
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+    }
+
+    private void getData() {
+        NotesFragmentViewModel.ParentSetter parentSetter = parent -> adapter.setParent(parent);
+        viewModel.setParentSetter(parentSetter);
 
         LiveData<List<SubjectWithNotesEntity>> subjectWithNotesList = viewModel.getSubjectWithNotesList();
-        subjectWithNotesList.observe(this, subjectWithNotes -> {
-            viewModel.setSubjectsWithNotes(subjectWithNotes, parent -> adapter.setParent(parent));
-        });
+        subjectWithNotesList.observe(this, viewModel::setSubjectsWithNotes);
+    }
 
-        // TODO: 2019-12-25 check if everything working properly, like editing, deleting etc
-        /*TreeNode rootNode = viewModel.getParentOfTree(this, new NotesFragmentViewModel.TreeObserver() {
-            @Override
-            public TreeNode getParent() {
-                return adapter.getParent();
-            }
-
-            @Override
-            public void setParent(TreeNode parent) {
-                adapter.setParent(parent);
-            }
-        });*/
-
-
-
-        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 1);
+    private void setupAdapter() {
         TreeNode initialRoot = viewModel.getActualParent();
+        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), initialRoot.getGridSpanCount());
         adapter = new TreeAdapter(initialRoot, Glide.with(this));
 
-        adapter.setTreeAdapterListener(new TreeAdapter.TreeAdapterListener() {
+        TreeAdapter.TreeChangedListener adapterListener = new TreeAdapter.TreeChangedListener() {
             @Override
             public void onParentChanged(TreeNode parent) {
                 String newPath = parent.getPath();
@@ -118,37 +119,29 @@ public class NotesFragment extends Fragment {
             public void onGridChanged(int spanCount) {
                 layoutManager.setSpanCount(spanCount);
             }
-        });
+        };
 
-        adapter.setTreeAdapterClickListener(new TreeAdapter.TreeAdapterClickListener() {
+        TreeAdapter.TreeAdapterClickListener clickListener = new TreeAdapter.TreeAdapterClickListener() {
             @Override
-            public void onNoteShow(TextNoteNode note) {
-                TextNoteEntity textNote = RoomMapper.convertTextNote(note);
-                ShowTextNoteBottomSheet bottomSheet = new ShowTextNoteBottomSheet();
-                viewModel.setTextNote(textNote);
-                bottomSheet.show(getFragmentManager(), "ShowTextBottomSheet");
+            public void onNoteShow(TextNoteEntity note) {
+                ShowTextNoteBottomSheet bottomSheet = new ShowTextNoteBottomSheet(note);
+                bottomSheet.show(getFragmentManager(), CustomBottomSheet.ACTION);
             }
 
             @Override
-            public void onNoteDelete(TextNoteNode note) {
-                TextNoteEntity textNote = RoomMapper.convertTextNote(note);
+            public void onNoteDelete(TextNoteEntity textNote) {
                 viewModel.deleteTextNote(textNote);
             }
 
             @Override
             public void onImageClick(List<String> imagePathList, Integer position, ImageView transitionImageView) {
                 // TODO: 2019-12-04 fullscreen with editing and deleteing
-                /*View fullscreen = getLayoutInflater().inflate(R.layout.fullscreen_image, null);
-                Button btn = fullscreen.findViewById(R.id.fullscreen_btn);*/
                 viewer = new StfalconImageViewer.Builder<>(getContext(), imagePathList, (imageView, imageUrl) -> {
                     Glide.with(NotesFragment.this).load(imageUrl).into(imageView);
                 }).withStartPosition(position)
                         .withImageChangeListener(imagePosition -> recycler.post(() -> recycler.smoothScrollToPosition(imagePosition)))
                         //.withOverlayView(fullscreen)
                         .show();
-                /*btn.setOnClickListener(view -> {
-                    viewer.dismiss();
-                });*/
             }
 
             @Override
@@ -156,21 +149,15 @@ public class NotesFragment extends Fragment {
                 ImageNoteEntity imageNote = RoomMapper.convertImageNote(imageNoteNode);
                 viewModel.setImageNote(imageNote);
                 ModifyImageNoteBottomSheet bottomSheet = new ModifyImageNoteBottomSheet();
-                bottomSheet.show(getFragmentManager(), "ModifyImageNote");
+                bottomSheet.show(getFragmentManager(), CustomBottomSheet.MODIFY);
             }
-        });
+        };
 
+        adapter.setTreeChangedListener(adapterListener);
+        adapter.setTreeAdapterClickListener(clickListener);
         recycler.setLayoutManager(layoutManager);
         recycler.setAdapter(adapter);
-        return view;
     }
-
-/*    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-
-    }*/
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
@@ -181,10 +168,12 @@ public class NotesFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.notes_camera:
-                onCameraClick();
+                if (viewModel.getSubjects().size() > 0) onCameraClick();
+                else SnackbarUtils.showSnackBar(getActivity(), NO_SUBJECTS);
                 return true;
             case R.id.notes_file:
-                onFileClick();
+                if (viewModel.getSubjects().size() > 0) onFileClick();
+                else SnackbarUtils.showSnackBar(getActivity(), NO_SUBJECTS);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -215,12 +204,12 @@ public class NotesFragment extends Fragment {
             viewModel.deleteImage();
         } else {
             AddImageNoteBottomSheet addImageNoteBottomSheet = new AddImageNoteBottomSheet();
-            addImageNoteBottomSheet.show(getFragmentManager(), "AddImageNoteBottomSheet");
+            addImageNoteBottomSheet.show(getFragmentManager(), CustomBottomSheet.CREATE);
         }
     }
 
     private void onFileClick() {
-        AddTextNoteBottomSheet bottomSheet = new AddTextNoteBottomSheet();
-        bottomSheet.show(getFragmentManager(), "AddTextNoteBottomSheet");
+        ModifyTextNoteBottomSheet bottomSheet = new ModifyTextNoteBottomSheet();
+        bottomSheet.show(getFragmentManager(), CustomBottomSheet.CREATE);
     }
 }

@@ -13,6 +13,7 @@ import com.wolfram.planlekcji.database.room.entities.grade.GradeEntity;
 import com.wolfram.planlekcji.database.room.entities.grade.SubjectWithGrades;
 import com.wolfram.planlekcji.ui.adapters.expanded.ParentGradeRecyclerViewAdapter;
 import com.wolfram.planlekcji.ui.bottomSheets.ActionBottomSheet;
+import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 import com.wolfram.planlekcji.ui.bottomSheets.grades.ModifyGradeBottomSheet;
 
 import java.util.List;
@@ -35,9 +36,6 @@ public class GradesFragment extends Fragment {
     RecyclerView recycler;
     private GradesFragmentViewModel viewModel;
     private FragmentManager fragmentManager;
-
-    public final static String CREATE = "CreateGrade";
-    public final static String MODIFY = "ModifyGrade";
 
     private final String NO_SUBJECTS = "Create subject first";
     @Override
@@ -75,7 +73,7 @@ public class GradesFragment extends Fragment {
         fab.setOnClickListener(v -> {
             if (viewModel.getSubjects().size() > 0) {
                 ModifyGradeBottomSheet bottomSheet = new ModifyGradeBottomSheet();
-                bottomSheet.show(fragmentManager, CREATE);
+                bottomSheet.show(fragmentManager, CustomBottomSheet.CREATE);
             } else {
                 SnackbarUtils.showSnackBar(getActivity(), NO_SUBJECTS);
             }
@@ -90,7 +88,7 @@ public class GradesFragment extends Fragment {
             public void onObjectModify() {
                 viewModel.setModifyingGrade(clickedGrade);
                 ModifyGradeBottomSheet modifyGradeBottomSheet = new ModifyGradeBottomSheet();
-                modifyGradeBottomSheet.show(fragmentManager, MODIFY);
+                modifyGradeBottomSheet.show(fragmentManager, CustomBottomSheet.MODIFY);
             }
 
             @Override
@@ -98,6 +96,6 @@ public class GradesFragment extends Fragment {
                 viewModel.deleteGrade();
             }
         });
-        actionBottomSheet.show(fragmentManager, ActionBottomSheet.TAG);
+        actionBottomSheet.show(fragmentManager, CustomBottomSheet.ACTION);
     }
 }

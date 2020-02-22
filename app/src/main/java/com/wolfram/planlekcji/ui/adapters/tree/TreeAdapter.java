@@ -9,7 +9,10 @@ import android.widget.TextView;
 import com.bumptech.glide.RequestManager;
 import com.google.android.material.button.MaterialButton;
 import com.wolfram.planlekcji.R;
+import com.wolfram.planlekcji.common.mapper.RoomMapper;
 import com.wolfram.planlekcji.common.others.DateUtils;
+import com.wolfram.planlekcji.database.room.entities.notes.TextNoteDisplayEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.TextNoteEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,14 +26,14 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public interface TreeAdapterListener {
+    public interface TreeChangedListener {
         void onParentChanged(TreeNode parent);
         void onGridChanged(int spanCount);
     }
 
     public interface TreeAdapterClickListener {
-        void onNoteShow(TextNoteNode note);
-        void onNoteDelete(TextNoteNode note);
+        void onNoteShow(TextNoteEntity note);
+        void onNoteDelete(TextNoteEntity note);
         void onImageClick(List<String> imagePathList, Integer position, ImageView transitionImage);
         void onImageLongClick(ImageNoteNode imageNote);
     }
@@ -41,14 +44,13 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     private TreeNode parent;
-    private TreeAdapterListener treeAdapterListener;
+    private TreeChangedListener treeChangedListener;
     private TreeAdapterClickListener treeAdapterClickListener;
     private RequestManager glide;
     private static final int TEXT_NOTE_NODE_VIEW_TYPE = 1;
     private static final int DIRECTORY_NODE_VIEW_TYPE = 2;
     private static final int IMAGE_NOTE_NODE_VIEW_TYPE = 3;
     private static final int SUBJECT_NODE_VIEW_TYPE = 4;
-
 
     public TreeAdapter(TreeNode parent, RequestManager glide) {
         this.parent = parent;
@@ -59,9 +61,9 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.treeAdapterClickListener = treeAdapterClickListener;
     }
 
-    public void setTreeAdapterListener(TreeAdapterListener treeAdapterListener) {
-        this.treeAdapterListener = treeAdapterListener;
-        this.treeAdapterListener.onParentChanged(parent);
+    public void setTreeChangedListener(TreeChangedListener treeChangedListener) {
+        this.treeChangedListener = treeChangedListener;
+        this.treeChangedListener.onParentChanged(parent);
     }
 
     public void setParent(TreeNode parent) {
@@ -69,22 +71,18 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    public TreeNode getParent() {
-        return parent;
-    }
-
     public void onBackPressed() {
         if (parent.getParent() != null) {
             parent = parent.getParent();
             checkParentInstanceOf();
-            treeAdapterListener.onParentChanged(parent);
+            treeChangedListener.onParentChanged(parent);
             notifyDataSetChanged();
         }
     }
 
     private void checkParentInstanceOf() {
         int gridSpanCount = parent.getGridSpanCount();
-        treeAdapterListener.onGridChanged(gridSpanCount);
+        treeChangedListener.onGridChanged(gridSpanCount);
     }
 
     @NonNull
@@ -158,13 +156,6 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public void onClick(View view) {
             int adapterPos = getAdapterPosition();
             setNewParent(adapterPos);
-            /*TreeNode newParent = parent.getChildrenList().get(getAdapterPosition());
-            if (newParent.getChildrenList() != null) {
-                parent = newParent;
-                checkParentInstanceOf();
-                treeAdapterListener.onParentChanged(parent.getPath());
-                notifyDataSetChanged();
-            }*/
         }
     }
 
@@ -182,13 +173,6 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public void onClick(View view) {
             int adapterPos = getAdapterPosition();
             setNewParent(adapterPos);
-            /*TreeNode newParent = parent.getChildrenList().get(getAdapterPosition());
-            if (newParent.getChildrenList() != null) {
-                parent = newParent;
-                checkParentInstanceOf();
-                treeAdapterListener.onParentChanged(parent.getPath());
-                notifyDataSetChanged();
-            }*/
         }
     }
 
@@ -197,7 +181,7 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (newParent.getChildrenList() != null) {
             parent = newParent;
             checkParentInstanceOf();
-            treeAdapterListener.onParentChanged(parent);
+            treeChangedListener.onParentChanged(parent);
             notifyDataSetChanged();
         }
     }
@@ -251,12 +235,13 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @Override
         public void onClick(View view) {
             TextNoteNode note = (TextNoteNode) parent.getChildrenList().get(getAdapterPosition());
+            TextNoteEntity textNoteEntity = RoomMapper.convertTextNote(note);
             switch (view.getId()) {
                 case R.id.note_text_item_btn_show:
-                    treeAdapterClickListener.onNoteShow(note);
+                    treeAdapterClickListener.onNoteShow(textNoteEntity);
                     break;
                 case R.id.note_text_item_btn_delete:
-                    treeAdapterClickListener.onNoteDelete(note);
+                    treeAdapterClickListener.onNoteDelete(textNoteEntity);
                     break;
                 default:
                     break;

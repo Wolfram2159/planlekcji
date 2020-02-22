@@ -18,37 +18,38 @@ import com.wolfram.planlekcji.ui.adapters.tree.DirectoryNode;
 import com.wolfram.planlekcji.ui.adapters.tree.ImageNoteNode;
 import com.wolfram.planlekcji.ui.adapters.tree.RootNode;
 import com.wolfram.planlekcji.ui.adapters.tree.SubjectNode;
-import com.wolfram.planlekcji.ui.adapters.tree.SubjectWithNotes;
+import com.wolfram.planlekcji.ui.adapters.tree.SubjectWithNoteNodes;
 import com.wolfram.planlekcji.ui.adapters.tree.TextNoteNode;
 import com.wolfram.planlekcji.ui.adapters.tree.TreeNode;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 
 public class NotesFragmentViewModel extends AndroidViewModel {
 
     public interface ParentSetter {
+
         void setParent(TreeNode parent);
     }
+    private ParentSetter parentSetter;
 
     private NotesDao notesDao;
+
     private SubjectDao subjectDao;
-
     private LiveData<List<SubjectWithNotesEntity>> subjectWithNotesList;
-    private List<SubjectWithNotes> subjectsWithNotes;
 
+    private List<SubjectWithNoteNodes> subjectsWithNotes;
+    private List<SubjectEntity> subjects;
     private String currentPhotoPath;
-    private Date currentDate;
-    private TextNoteEntity textNote;
+
     private ImageNoteEntity imageNote;
-    private TreeNode parentOfTree = null;
     private TreeNode actualParent;
 
     public NotesFragmentViewModel(@NonNull Application application) {
@@ -58,41 +59,54 @@ public class NotesFragmentViewModel extends AndroidViewModel {
         subjectDao = appDatabase.getSubjectDao();
         subjectWithNotesList = notesDao.getSubjectsWithNotes();
         actualParent = new RootNode();
+        subjects = new ArrayList<>();
+        //todo: check if parentSetter is null or create mock to avoid this situation?
+    }
+
+    public void setParentSetter(@NonNull ParentSetter parentSetter) {
+        this.parentSetter = parentSetter;
     }
 
     public String getCurrentPhotoPath() {
         return currentPhotoPath;
     }
 
-    public Date getCurrentDate() {
-        return new Date();
-    }
-
     public LiveData<List<SubjectWithNotesEntity>> getSubjectWithNotesList() {
         return subjectWithNotesList;
     }
 
-    public void setSubjectsWithNotes(List<SubjectWithNotesEntity> subjectsWithNotes, ParentSetter setter) {
+    public void setSubjectsWithNotes(List<SubjectWithNotesEntity> subjectsWithNotes) {
         this.subjectsWithNotes = RoomMapper.convertSubjectWithNotesList(subjectsWithNotes);
         TreeNode root = createTree();
         if (actualParent != null) {
-            TreeNode newParent = root.getNodeFromTree(actualParent);
-            actualParent = newParent;
-            setter.setParent(newParent);
+            actualParent = root.getNodeFromTree(actualParent);
+            parentSetter.setParent(actualParent);
         } else {
-            setter.setParent(root);
+            parentSetter.setParent(root);
+        }
+        createSubjects(subjectsWithNotes);
+    }
+
+    private void createSubjects(List<SubjectWithNotesEntity> subjectsWithNotes) {
+        subjects.clear();
+        for (SubjectWithNotesEntity subjectsWithNote : subjectsWithNotes) {
+            SubjectEntity subject = subjectsWithNote.getSubject();
+            subjects.add(subject);
         }
     }
 
+    public List<SubjectEntity> getSubjects() {
+        return subjects;
+    }
+
     private TreeNode createTree() {
-        //create Tree always but implement searching actual parent or implement detecting changes
         TreeNode root = new RootNode();
-        for (SubjectWithNotes subjectWithNotes : subjectsWithNotes) {
-            SubjectNode subjectNode = subjectWithNotes.getSubject();
-            List<TextNoteNode> textNotes = subjectWithNotes.getTextNodes();
+        for (SubjectWithNoteNodes subjectWithNoteNodes : subjectsWithNotes) {
+            SubjectNode subjectNode = subjectWithNoteNodes.getSubject();
+            List<TextNoteNode> textNotes = subjectWithNoteNodes.getTextNodes();
             DirectoryNode documents = createDocuments(textNotes);
             subjectNode.addChildren(documents);
-            List<ImageNoteNode> imageNotes = subjectWithNotes.getImageNodes();
+            List<ImageNoteNode> imageNotes = subjectWithNoteNodes.getImageNodes();
             DirectoryNode pictures = createImages(imageNotes);
             subjectNode.addChildren(pictures);
             root.addChildren(subjectNode);
@@ -124,60 +138,10 @@ public class NotesFragmentViewModel extends AndroidViewModel {
         return this.actualParent;
     }
 
-    /*public interface TreeObserver {
-        TreeNode getParent();
-
-        void setParent(TreeNode parent);
-    }
-
-    public TreeNode getParentOfTree(@NonNull LifecycleOwner lifecycleOwner, TreeObserver treeObserver) {
-        if (parentOfTree == null) {
-            return createTree(lifecycleOwner, treeObserver);
-        } else {
-            return parentOfTree;
-        }
-    }
-
-    private TreeNode createTree(@NonNull LifecycleOwner lifecycleOwner, TreeObserver treeObserver) {
-        parentOfTree = new RootNode();
-        getSubjects().observe(lifecycleOwner, subjects -> {
-            for (SubjectEntity subject : subjects) {
-                SubjectNode subjectNode = RoomMapper.convertSubject(subject);
-                TreeNode pictures = new DirectoryNode();
-                TreeNode documents = new DirectoryNode();
-                subjectNode.addChildren(pictures, "Pictures");
-                subjectNode.addChildren(documents, "Documents");
-                parentOfTree.addChildren(subjectNode, subjectNode.getName());
-
-                getImageNotesFromSubject(subjectNode.getId()).observe(lifecycleOwner, imageNotes -> {
-                    TreeNode actualRoot = treeObserver.getParent();
-                    pictures.clearChildrens();
-                    for (ImageNoteEntity imageNote : imageNotes) {
-                        ImageNoteNode imageNoteNode = RoomMapper.convertImageNote(imageNote);
-                        pictures.addChildren(imageNoteNode, "Photo");
-                    }
-                    treeObserver.setParent(actualRoot);
-                });
-
-                getTextNotesFromSubject(subjectNode.getId()).observe(lifecycleOwner, textNotes -> {
-                    TreeNode actualRoot = treeObserver.getParent();
-                    documents.clearChildrens();
-                    for (TextNoteEntity textNote : textNotes) {
-                        TextNoteNode textNoteNode = RoomMapper.convertTextNote(textNote);
-                        documents.addChildren(textNoteNode, "File");
-                    }
-                    treeObserver.setParent(actualRoot);
-                });
-            }
-            treeObserver.setParent(parentOfTree);
-        });
-        return parentOfTree;
-    }*/
-
     @SuppressLint("SimpleDateFormat")
     public File createImageFile() throws IOException {
         // Create an image file name
-        currentDate = new Date();
+        Date currentDate = new Date();
         String timeStamp = DateUtils.getTimeStringForSaveFile(currentDate);
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getApplication().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -200,18 +164,6 @@ public class NotesFragmentViewModel extends AndroidViewModel {
         AsyncTask.execute(() -> notesDao.insertTextNote(textNote));
     }
 
-    public LiveData<List<SubjectEntity>> getSubjects() {
-        return subjectDao.getSubjects();
-    }
-
-    public LiveData<List<ImageNoteEntity>> getImageNotesFromSubject(int subject_id) {
-        return notesDao.getImageNotesFromSubject(subject_id);
-    }
-
-    public LiveData<List<TextNoteEntity>> getTextNotesFromSubject(int subject_id) {
-        return notesDao.getTextNotesFromSubject(subject_id);
-    }
-
     public void deleteImage() {
         // TODO: 2019-10-24 check if the image is deleted
         File imageToDelete = new File(currentPhotoPath);
@@ -228,19 +180,19 @@ public class NotesFragmentViewModel extends AndroidViewModel {
         imageToDelete.delete();
     }
 
-    public void setTextNote(TextNoteEntity note) {
-        this.textNote = note;
-    }
-
-    public TextNoteEntity getTextNote() {
-        return this.textNote;
-    }
-
     public ImageNoteEntity getImageNote() {
         return imageNote;
     }
 
     public void setImageNote(ImageNoteEntity imageNote) {
         this.imageNote = imageNote;
+    }
+
+    public SubjectEntity getSubjectById(int id) {
+        for (SubjectEntity subject : subjects) {
+            int subjectId = subject.getId();
+            if (id == subjectId) return subject;
+        }
+        return null;
     }
 }

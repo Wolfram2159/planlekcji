@@ -10,7 +10,6 @@ import butterknife.ButterKnife;
 
 public class ActionBottomSheet extends CustomBottomSheet implements View.OnClickListener {
 
-    public final static String TAG = "ActionBottomSheeet";
     private OnActionListener onActionListener;
     @BindView(R.id.action_edit_btn)
     MaterialButton editButton;

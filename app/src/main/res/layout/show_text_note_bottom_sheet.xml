@@ -10,25 +10,38 @@
     app:behavior_peekHeight="0dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/show_text_note_edit_text_layout"
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/show_text_note_title"
+        style="@style/TextAppearance.MaterialComponents.Headline5"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:hint="Note"
+        android:padding="8dp"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Title"/>
 
-        <EditText
-            android:id="@+id/show_text_note_edit_text"
-            android:focusable="false"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:ignore="Autofill,LabelFor,TextFields" />
-    </com.google.android.material.textfield.TextInputLayout>
+    <TextView
+        android:id="@+id/show_text_note_value"
+        style="@style/TextAppearance.MaterialComponents.Body1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="200dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:padding="8dp"
+        android:scrollbars="vertical"
+        android:background="#eeeeee"
+        app:layout_constraintEnd_toEndOf="@id/show_text_note_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/show_text_note_title"
+        tools:text="Text \nfor \nexample"/>
+
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/show_text_note_btn_edit"
@@ -40,7 +53,7 @@
         android:text="Edit"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
         app:layout_constraintEnd_toStartOf="@+id/show_text_note_btn_ok"
-        app:layout_constraintTop_toBottomOf="@+id/show_text_note_edit_text_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/show_text_note_value" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/show_text_note_btn_ok"
@@ -52,6 +65,6 @@
         android:text="Ok"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/show_text_note_edit_text_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/show_text_note_value" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

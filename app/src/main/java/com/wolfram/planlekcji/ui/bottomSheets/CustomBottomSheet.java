@@ -30,6 +30,10 @@ public abstract class CustomBottomSheet extends BottomSheetDialogFragment implem
     protected Context context;
     protected FragmentActivity activity;
 
+    public final static String CREATE = "CreateBottomSheet";
+    public final static String MODIFY = "ModifyBottomSheet";
+    public final static String ACTION = "ActionBottomSheet";
+
     protected interface TimeSetter {
         void onTimeSet(Date time);
     }
@@ -46,9 +50,8 @@ public abstract class CustomBottomSheet extends BottomSheetDialogFragment implem
         tag = getTag();
         context = getContext();
         activity = getActivity();
-        View v = LayoutInflater.from(getContext()).inflate(getResource(), null);
-        root = v;
-        dialog.setContentView(v);
+        root = LayoutInflater.from(getContext()).inflate(getResource(), null);
+        dialog.setContentView(root);
         customizeDialog();
     }
 
@@ -68,7 +71,7 @@ public abstract class CustomBottomSheet extends BottomSheetDialogFragment implem
                 android.R.layout.simple_list_item_1,
                 list
         );
-        if (list.size() > 1 && !tag.equals(EventFragment.MODIFY)) textView.setText(list.get(0));
+        if (list.size() > 1 && !tag.equals(CustomBottomSheet.MODIFY)) textView.setText(list.get(0));
         textView.setAdapter(arrayAdapter);
         textView.setShowSoftInputOnFocus(false);
         textView.setOnItemClickListener(onItemClickListener);

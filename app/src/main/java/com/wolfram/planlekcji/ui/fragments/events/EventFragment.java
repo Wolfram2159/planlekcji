@@ -10,6 +10,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.ui.adapters.EventsViewPagerAdapter;
+import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 import com.wolfram.planlekcji.ui.bottomSheets.events.ModifyEventBottomSheet;
 
 import androidx.annotation.NonNull;
@@ -30,9 +31,6 @@ import butterknife.ButterKnife;
  */
 public class EventFragment extends Fragment {
 
-    public final static String CREATE = "CreateEvent";
-    public final static String MODIFY = "ModifyEvent";
-
     @BindView(R.id.events_fab)
     FloatingActionButton fab;
     @BindView(R.id.events_view_pager)
@@ -52,7 +50,7 @@ public class EventFragment extends Fragment {
 
         fab.setOnClickListener(v -> {
             ModifyEventBottomSheet bottomSheet = new ModifyEventBottomSheet();
-            bottomSheet.show(getFragmentManager(), CREATE);
+            bottomSheet.show(getFragmentManager(), CustomBottomSheet.CREATE);
         });
 
         EventsViewPagerAdapter pagerAdapter = new EventsViewPagerAdapter(getFragmentManager());

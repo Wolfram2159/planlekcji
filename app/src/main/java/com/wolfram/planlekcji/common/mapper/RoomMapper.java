@@ -6,7 +6,7 @@ import com.wolfram.planlekcji.database.room.entities.notes.SubjectWithNotesEntit
 import com.wolfram.planlekcji.database.room.entities.notes.TextNoteEntity;
 import com.wolfram.planlekcji.ui.adapters.tree.ImageNoteNode;
 import com.wolfram.planlekcji.ui.adapters.tree.SubjectNode;
-import com.wolfram.planlekcji.ui.adapters.tree.SubjectWithNotes;
+import com.wolfram.planlekcji.ui.adapters.tree.SubjectWithNoteNodes;
 import com.wolfram.planlekcji.ui.adapters.tree.TextNoteNode;
 
 import java.util.ArrayList;
@@ -40,16 +40,16 @@ public class RoomMapper {
         return new TextNoteEntity(sourceTextNoteNode);
     }
 
-    public static List<SubjectWithNotes> convertSubjectWithNotesList(List<SubjectWithNotesEntity> subjectWithNotesList) {
-        List<SubjectWithNotes> subjectWithNotes = new ArrayList<>();
+    public static List<SubjectWithNoteNodes> convertSubjectWithNotesList(List<SubjectWithNotesEntity> subjectWithNotesList) {
+        List<SubjectWithNoteNodes> subjectWithNotes = new ArrayList<>();
         for (SubjectWithNotesEntity subjectWithNotesEntity : subjectWithNotesList) {
-            SubjectWithNotes subject = convertSubjectWithNotes(subjectWithNotesEntity);
+            SubjectWithNoteNodes subject = convertSubjectWithNotes(subjectWithNotesEntity);
             subjectWithNotes.add(subject);
         }
         return subjectWithNotes;
     }
 
-    private static SubjectWithNotes convertSubjectWithNotes(SubjectWithNotesEntity subjectWithNotes) {
-        return new SubjectWithNotes(subjectWithNotes);
+    private static SubjectWithNoteNodes convertSubjectWithNotes(SubjectWithNotesEntity subjectWithNotes) {
+        return new SubjectWithNoteNodes(subjectWithNotes);
     }
 }

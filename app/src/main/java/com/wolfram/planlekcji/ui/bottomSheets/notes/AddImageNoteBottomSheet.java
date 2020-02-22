@@ -18,6 +18,7 @@ import com.wolfram.planlekcji.common.others.DateUtils;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 
 import androidx.lifecycle.ViewModelProviders;
 
@@ -46,11 +47,11 @@ public class AddImageNoteBottomSheet extends CustomBottomSheet {
         MaterialButton save = root.findViewById(R.id.notes_image_save);
         MaterialButton cancel = root.findViewById(R.id.notes_image_cancel);
 
-        viewModel.getSubjects().observe(this, subjects -> {
-            ArrayAdapter<SubjectEntity> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, subjects);
+        List<SubjectEntity> subjects = viewModel.getSubjects();
+        ArrayAdapter<SubjectEntity> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, subjects);
             subjectName.setAdapter(adapter);
             subjectName.setShowSoftInputOnFocus(false);
-        });
+
 
         subjectName.setOnItemClickListener((parent, view, pos, arg) -> {
             Object item = parent.getItemAtPosition(pos);
@@ -59,7 +60,7 @@ public class AddImageNoteBottomSheet extends CustomBottomSheet {
             }
         });
 
-        Date currentDate = viewModel.getCurrentDate();
+        Date currentDate = new Date();
         String createTime = DateUtils.getDateString(currentDate);
         date.setText(createTime);
         newImageNote.setDate(currentDate);

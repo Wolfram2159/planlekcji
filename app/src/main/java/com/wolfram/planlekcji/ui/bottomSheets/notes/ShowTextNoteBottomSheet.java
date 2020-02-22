@@ -1,19 +1,32 @@
 package com.wolfram.planlekcji.ui.bottomSheets.notes;
 
-import android.content.Context;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-
-import androidx.lifecycle.ViewModelProviders;
+import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.database.room.entities.notes.TextNoteEntity;
 import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
-import com.wolfram.planlekcji.ui.fragments.notes.NotesFragmentViewModel;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class ShowTextNoteBottomSheet extends CustomBottomSheet {
+    @BindView(R.id.show_text_note_btn_edit)
+    MaterialButton editButton;
+    @BindView(R.id.show_text_note_btn_ok)
+    MaterialButton okButton;
+    @BindView(R.id.show_text_note_value)
+    TextView noteValue;
+    @BindView(R.id.show_text_note_title)
+    TextView noteTitle;
+    private TextNoteEntity showingTextNote;
+
+    public ShowTextNoteBottomSheet(TextNoteEntity showingTextNote) {
+        this.showingTextNote = showingTextNote;
+    }
+
     @Override
     protected int getResource() {
         return R.layout.show_text_note_bottom_sheet;
@@ -21,39 +34,36 @@ public class ShowTextNoteBottomSheet extends CustomBottomSheet {
 
     @Override
     protected void customizeDialog() {
-        NotesFragmentViewModel viewModel = ViewModelProviders.of(getActivity()).get(NotesFragmentViewModel.class);
+        ButterKnife.bind(this, root);
+        noteValue.setMovementMethod(new ScrollingMovementMethod());
 
-        MaterialButton editButton = root.findViewById(R.id.show_text_note_btn_edit);
-        MaterialButton okButton = root.findViewById(R.id.show_text_note_btn_ok);
+        enterData();
+        setupButtons();
+    }
 
-        EditText noteValue = root.findViewById(R.id.show_text_note_edit_text);
+    private void enterData() {
+        String message = showingTextNote.getMessage();
+        noteValue.setText(message);
+        String title = showingTextNote.getTitle();
+        noteTitle.setText(title);
+    }
 
-        TextNoteEntity textNote = viewModel.getTextNote();
-
-        noteValue.setText(textNote.getMessage());
-
-        okButton.setOnClickListener(view -> {
-            if (okButton.getText().toString().equals("Save")){
-                textNote.setMessage(noteValue.getText().toString());
-                viewModel.insertTextNote(textNote);
-            }
-            dismiss();
-        });
-        editButton.setOnClickListener(view -> {
-            if (editButton.getText().toString().equals("Cancel")){
-                dismiss();
-            }
-            noteValue.setFocusableInTouchMode(true);
-            noteValue.requestFocus();
-            InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.showSoftInput(noteValue, InputMethodManager.SHOW_IMPLICIT);
-            okButton.setText("Save");
-            editButton.setText("Cancel");
-        });
+    private void setupButtons() {
+        okButton.setOnClickListener(this);
+        editButton.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-
+        switch (view.getId()){
+            case R.id.show_text_note_btn_ok:
+                dismiss();
+                break;
+            case R.id.show_text_note_btn_edit:
+                ModifyTextNoteBottomSheet bottomSheet = new ModifyTextNoteBottomSheet(showingTextNote);
+                bottomSheet.show(getFragmentManager(), CustomBottomSheet.MODIFY);
+                dismiss();
+                break;
+        }
     }
 }

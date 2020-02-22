@@ -11,6 +11,7 @@ import com.wolfram.planlekcji.database.room.dao.SubjectDao;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.database.room.entities.event.EventDisplayEntity;
 import com.wolfram.planlekcji.common.enums.Day;
+import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 import com.wolfram.planlekcji.ui.fragments.subjects.SubjectsFragmentViewModel;
 
 import java.util.EnumMap;
@@ -131,7 +132,7 @@ public class EventViewModel extends AndroidViewModel {
                 eventToSave.setSubject_id(subjectId);
             }
         }
-        if (tag.equals(EventFragment.MODIFY)) {
+        if (tag.equals(CustomBottomSheet.MODIFY)) {
             AsyncTask.execute(() -> {
                 eventDao.updateEvent(eventToSave);
                 setState(UPDATED);
