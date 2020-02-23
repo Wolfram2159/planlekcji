@@ -18,12 +18,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.stfalcon.imageviewer.StfalconImageViewer;
 import com.wolfram.planlekcji.R;
+import com.wolfram.planlekcji.common.data.Event;
 import com.wolfram.planlekcji.common.mapper.RoomMapper;
 import com.wolfram.planlekcji.common.others.SnackbarUtils;
 import com.wolfram.planlekcji.database.room.entities.notes.SubjectWithNotesEntity;
 import com.wolfram.planlekcji.database.room.entities.notes.TextNoteDisplayEntity;
 import com.wolfram.planlekcji.ui.adapters.tree.ImageNoteNode;
-import com.wolfram.planlekcji.ui.adapters.tree.TextNoteNode;
 import com.wolfram.planlekcji.ui.adapters.tree.TreeAdapter;
 import com.wolfram.planlekcji.ui.adapters.tree.TreeNode;
 import com.wolfram.planlekcji.database.room.entities.notes.ImageNoteEntity;
@@ -97,6 +97,14 @@ public class NotesFragment extends Fragment {
 
         LiveData<List<SubjectWithNotesEntity>> subjectWithNotesList = viewModel.getSubjectWithNotesList();
         subjectWithNotesList.observe(this, viewModel::setSubjectsWithNotes);
+
+        LiveData<Event<String>> textNoteEvent = viewModel.getTextNoteEvent();
+        textNoteEvent.observe(this, event -> {
+            if (!event.isUsed()) {
+                SnackbarUtils.showSnackBar(getActivity(), event.getValue());
+                viewModel.callMessageReceived();
+            }
+        });
     }
 
     private void setupAdapter() {
@@ -123,7 +131,7 @@ public class NotesFragment extends Fragment {
 
         TreeAdapter.TreeAdapterClickListener clickListener = new TreeAdapter.TreeAdapterClickListener() {
             @Override
-            public void onNoteShow(TextNoteEntity note) {
+            public void onNoteShow(TextNoteDisplayEntity note) {
                 ShowTextNoteBottomSheet bottomSheet = new ShowTextNoteBottomSheet(note);
                 bottomSheet.show(getFragmentManager(), CustomBottomSheet.ACTION);
             }

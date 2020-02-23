@@ -6,6 +6,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.wolfram.planlekcji.database.room.entities.notes.ImageNoteEntity;
 import com.wolfram.planlekcji.database.room.entities.notes.SubjectWithNotesEntity;
@@ -29,6 +30,9 @@ public interface NotesDao {
 
     @Query("SELECT * FROM textNotes WHERE subject_id=(:subject_id)")
     LiveData<List<TextNoteEntity>> getTextNotesFromSubject(int subject_id);
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    void updateTextNote(TextNoteEntity texteNote);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertTextNote(TextNoteEntity textNote);

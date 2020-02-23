@@ -25,6 +25,14 @@ public class TextNoteNode extends TreeNode {
         this.date = textNote.getDate();
     }
 
+    public String getSubjectName() {
+        TreeNode parent = getParent();
+        while(!parent.isSubjectNode()) {
+            parent = parent.getParent();
+        }
+        return parent.getNodeName();
+    }
+
     @Override
     public int getViewType() {
         return VIEW_TYPE;

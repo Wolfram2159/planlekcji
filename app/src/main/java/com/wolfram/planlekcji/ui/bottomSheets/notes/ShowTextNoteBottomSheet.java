@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.database.room.entities.notes.TextNoteEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.TextNoteDisplayEntity;
 import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 
 import butterknife.BindView;
@@ -21,9 +21,9 @@ public class ShowTextNoteBottomSheet extends CustomBottomSheet {
     TextView noteValue;
     @BindView(R.id.show_text_note_title)
     TextView noteTitle;
-    private TextNoteEntity showingTextNote;
+    private TextNoteDisplayEntity showingTextNote;
 
-    public ShowTextNoteBottomSheet(TextNoteEntity showingTextNote) {
+    public ShowTextNoteBottomSheet(TextNoteDisplayEntity showingTextNote) {
         this.showingTextNote = showingTextNote;
     }
 

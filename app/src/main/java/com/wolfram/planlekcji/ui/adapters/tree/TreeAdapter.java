@@ -32,7 +32,7 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public interface TreeAdapterClickListener {
-        void onNoteShow(TextNoteEntity note);
+        void onNoteShow(TextNoteDisplayEntity note);
         void onNoteDelete(TextNoteEntity note);
         void onImageClick(List<String> imagePathList, Integer position, ImageView transitionImage);
         void onImageLongClick(ImageNoteNode imageNote);
@@ -235,7 +235,7 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @Override
         public void onClick(View view) {
             TextNoteNode note = (TextNoteNode) parent.getChildrenList().get(getAdapterPosition());
-            TextNoteEntity textNoteEntity = RoomMapper.convertTextNote(note);
+            TextNoteDisplayEntity textNoteEntity = RoomMapper.convertTextNote(note);
             switch (view.getId()) {
                 case R.id.note_text_item_btn_show:
                     treeAdapterClickListener.onNoteShow(textNoteEntity);

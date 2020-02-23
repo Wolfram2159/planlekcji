@@ -95,7 +95,7 @@ public class GradesFragmentViewModel extends AndroidViewModel {
         setState(event);
     }
 
-    public void setState(Event<String> event) {
+    private void setState(Event<String> event) {
         privateResultState.postValue(event);
     }
 
@@ -111,17 +111,25 @@ public class GradesFragmentViewModel extends AndroidViewModel {
     public void modifyGrade(GradeEntity grade, String tag) {
         event.setUsed(false);
         if (tag.equals(CustomBottomSheet.CREATE)) {
-            AsyncTask.execute(() -> {
-                gradeDao.insertGrade(grade);
-                event.setValue(CREATED);
-                setState(event);
-            });
+            insertGrade(grade);
         } else if (tag.equals(CustomBottomSheet.MODIFY)) {
-            AsyncTask.execute(() -> {
-                gradeDao.updateGrade(grade);
-                event.setValue(UPDATED);
-                setState(event);
-            });
+            updateGrade(grade);
         }
+    }
+
+    private void insertGrade(GradeEntity grade) {
+        AsyncTask.execute(() -> {
+            gradeDao.insertGrade(grade);
+            event.setValue(CREATED);
+            setState(event);
+        });
+    }
+
+    private void updateGrade(GradeEntity grade) {
+        AsyncTask.execute(() -> {
+            gradeDao.updateGrade(grade);
+            event.setValue(UPDATED);
+            setState(event);
+        });
     }
 }

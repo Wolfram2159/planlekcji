@@ -7,7 +7,7 @@ import android.widget.EditText;
 import com.google.android.material.button.MaterialButton;
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
-import com.wolfram.planlekcji.database.room.entities.notes.TextNoteEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.TextNoteDisplayEntity;
 import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 import com.wolfram.planlekcji.ui.fragments.notes.NotesFragmentViewModel;
 import com.wolfram.planlekcji.common.others.DateUtils;
@@ -32,7 +32,7 @@ public class ModifyTextNoteBottomSheet extends CustomBottomSheet {
     @BindView(R.id.notes_text_cancel)
     MaterialButton cancel;
     @BindView(R.id.notes_text_name)
-    AutoCompleteTextView subjectName;
+    AutoCompleteTextView subjectPicker;
     @BindView(R.id.notes_text_date)
     EditText date;
     @BindView(R.id.notes_text_title)
@@ -41,14 +41,14 @@ public class ModifyTextNoteBottomSheet extends CustomBottomSheet {
     EditText message;
 
     private NotesFragmentViewModel viewModel;
-    private TextNoteEntity modifyingTextNote;
+    private TextNoteDisplayEntity modifyingTextNote;
     private List<SubjectEntity> subjects;
 
     public ModifyTextNoteBottomSheet() {
-        this.modifyingTextNote = new TextNoteEntity();
+        this.modifyingTextNote = new TextNoteDisplayEntity();
     }
 
-    public ModifyTextNoteBottomSheet(TextNoteEntity modifyingTextNote) {
+    public ModifyTextNoteBottomSheet(TextNoteDisplayEntity modifyingTextNote) {
         this.modifyingTextNote = modifyingTextNote;
     }
 
@@ -74,7 +74,7 @@ public class ModifyTextNoteBottomSheet extends CustomBottomSheet {
         setAdapterToView(new AutocompleteAdapterSetter() {
             @Override
             public AutoCompleteTextView getAdapterView() {
-                return subjectName;
+                return subjectPicker;
             }
 
             @Override
@@ -105,8 +105,8 @@ public class ModifyTextNoteBottomSheet extends CustomBottomSheet {
         title.setText(textNoteTitle);
         String textNoteMessage = modifyingTextNote.getMessage();
         message.setText(textNoteMessage);
-        int textNoteSubjectId = modifyingTextNote.getSubject_id();
-        // TODO: 2020-02-21 how to get subject name to display it
+        String subjectName = modifyingTextNote.getName();
+        subjectPicker.setText(subjectName);
     }
 
     private void setInitialValues() {
@@ -116,7 +116,7 @@ public class ModifyTextNoteBottomSheet extends CustomBottomSheet {
         modifyingTextNote.setDate(currentDate);
         SubjectEntity firstSubject = subjects.get(0);
         String firstSubjectName = firstSubject.getName();
-        subjectName.setText(firstSubjectName);
+        subjectPicker.setText(firstSubjectName);
         int firstSubjectId = firstSubject.getId();
         modifyingTextNote.setSubject_id(firstSubjectId);
     }
@@ -131,11 +131,8 @@ public class ModifyTextNoteBottomSheet extends CustomBottomSheet {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.notes_text_save:
-                String textNoteTitle = title.getText().toString();
-                modifyingTextNote.setTitle(textNoteTitle);
-                String message = this.message.getText().toString();
-                modifyingTextNote.setMessage(message);
-                viewModel.insertTextNote(modifyingTextNote);
+                getValuesFromViews();
+                viewModel.modifyTextNote(modifyingTextNote, tag);
                 dismiss();
                 break;
             case R.id.notes_text_date:
@@ -149,5 +146,12 @@ public class ModifyTextNoteBottomSheet extends CustomBottomSheet {
                 dismiss();
                 break;
         }
+    }
+
+    private void getValuesFromViews() {
+        String textNoteTitle = title.getText().toString();
+        modifyingTextNote.setTitle(textNoteTitle);
+        String noteMessage = message.getText().toString();
+        modifyingTextNote.setMessage(noteMessage);
     }
 }

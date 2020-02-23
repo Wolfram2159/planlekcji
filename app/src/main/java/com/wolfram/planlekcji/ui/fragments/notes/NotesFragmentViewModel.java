@@ -5,6 +5,7 @@ import android.app.Application;
 import android.os.AsyncTask;
 import android.os.Environment;
 
+import com.wolfram.planlekcji.common.data.Event;
 import com.wolfram.planlekcji.common.mapper.RoomMapper;
 import com.wolfram.planlekcji.database.room.AppDatabase;
 import com.wolfram.planlekcji.database.room.dao.NotesDao;
@@ -21,6 +22,7 @@ import com.wolfram.planlekcji.ui.adapters.tree.SubjectNode;
 import com.wolfram.planlekcji.ui.adapters.tree.SubjectWithNoteNodes;
 import com.wolfram.planlekcji.ui.adapters.tree.TextNoteNode;
 import com.wolfram.planlekcji.ui.adapters.tree.TreeNode;
+import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +33,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 
 public class NotesFragmentViewModel extends AndroidViewModel {
 
@@ -39,28 +42,54 @@ public class NotesFragmentViewModel extends AndroidViewModel {
         void setParent(TreeNode parent);
     }
     private ParentSetter parentSetter;
-
     private NotesDao notesDao;
 
-    private SubjectDao subjectDao;
-    private LiveData<List<SubjectWithNotesEntity>> subjectWithNotesList;
-
-    private List<SubjectWithNoteNodes> subjectsWithNotes;
     private List<SubjectEntity> subjects;
+
+    private LiveData<List<SubjectWithNotesEntity>> subjectWithNotesList;
+    private List<SubjectWithNoteNodes> subjectsWithNotes;
+    private Event<String> textNoteEvent;
+    private LiveData<Event<String>> textNoteObservableEvent;
+    private MediatorLiveData<Event<String>> privateTextNoteEvent;
     private String currentPhotoPath;
 
     private ImageNoteEntity imageNote;
     private TreeNode actualParent;
 
+    public static final String TEXT_NOTE_CREATED = "Text note created";
+    public static final String TEXT_NOTE_UPDATED = "Text note updated";
+    public static final String TEXT_NOTE_DELETED = "Text note deleted";
+
     public NotesFragmentViewModel(@NonNull Application application) {
         super(application);
         AppDatabase appDatabase = AppDatabase.getInstance(application.getApplicationContext());
         notesDao = appDatabase.getNotesDao();
-        subjectDao = appDatabase.getSubjectDao();
         subjectWithNotesList = notesDao.getSubjectsWithNotes();
         actualParent = new RootNode();
         subjects = new ArrayList<>();
+        textNoteEvent = new Event<>();
+        privateTextNoteEvent = new MediatorLiveData<>();
+        textNoteObservableEvent = privateTextNoteEvent;
         //todo: check if parentSetter is null or create mock to avoid this situation?
+    }
+
+    public LiveData<Event<String>> getTextNoteEvent() {
+        return textNoteObservableEvent;
+    }
+
+    public void callMessageReceived() {
+        textNoteEvent.setUsed(true);
+        setTextNoteState(textNoteEvent);
+    }
+
+    private void setTextNoteState(String value, boolean used) {
+        textNoteEvent.setValue(value);
+        textNoteEvent.setUsed(used);
+        privateTextNoteEvent.postValue(textNoteEvent);
+    }
+
+    private void setTextNoteState(Event<String> event) {
+        privateTextNoteEvent.postValue(event);
     }
 
     public void setParentSetter(@NonNull ParentSetter parentSetter) {
@@ -84,19 +113,7 @@ public class NotesFragmentViewModel extends AndroidViewModel {
         } else {
             parentSetter.setParent(root);
         }
-        createSubjects(subjectsWithNotes);
-    }
-
-    private void createSubjects(List<SubjectWithNotesEntity> subjectsWithNotes) {
-        subjects.clear();
-        for (SubjectWithNotesEntity subjectsWithNote : subjectsWithNotes) {
-            SubjectEntity subject = subjectsWithNote.getSubject();
-            subjects.add(subject);
-        }
-    }
-
-    public List<SubjectEntity> getSubjects() {
-        return subjects;
+        setSubjects(subjectsWithNotes);
     }
 
     private TreeNode createTree() {
@@ -130,6 +147,18 @@ public class NotesFragmentViewModel extends AndroidViewModel {
         return pictures;
     }
 
+    private void setSubjects(List<SubjectWithNotesEntity> subjectsWithNotes) {
+        subjects.clear();
+        for (SubjectWithNotesEntity subjectsWithNote : subjectsWithNotes) {
+            SubjectEntity subject = subjectsWithNote.getSubject();
+            subjects.add(subject);
+        }
+    }
+
+    public List<SubjectEntity> getSubjects() {
+        return subjects;
+    }
+
     public void setActualParent(TreeNode actualParent) {
         this.actualParent = actualParent;
     }
@@ -160,8 +189,29 @@ public class NotesFragmentViewModel extends AndroidViewModel {
         AsyncTask.execute(() -> notesDao.insertImageNote(imageNote));
     }
 
-    public void insertTextNote(TextNoteEntity textNote) {
-        AsyncTask.execute(() -> notesDao.insertTextNote(textNote));
+    public void modifyTextNote(TextNoteEntity textNote, String tag) {
+        switch (tag) {
+            case CustomBottomSheet.CREATE:
+                insertTextNote(textNote);
+                break;
+            case CustomBottomSheet.MODIFY:
+                updateTextNote(textNote);
+                break;
+        }
+    }
+
+    private void insertTextNote(TextNoteEntity textNote) {
+        AsyncTask.execute(() -> {
+            notesDao.insertTextNote(textNote);
+            setTextNoteState(TEXT_NOTE_CREATED, false);
+        });
+    }
+
+    private void updateTextNote(TextNoteEntity textNote) {
+        AsyncTask.execute(() -> {
+            notesDao.updateTextNote(textNote);
+            setTextNoteState(TEXT_NOTE_UPDATED, false);
+        });
     }
 
     public void deleteImage() {
@@ -171,7 +221,10 @@ public class NotesFragmentViewModel extends AndroidViewModel {
     }
 
     public void deleteTextNote(TextNoteEntity note) {
-        AsyncTask.execute(() -> notesDao.deleteTextNote(note));
+        AsyncTask.execute(() -> {
+            notesDao.deleteTextNote(note);
+            setTextNoteState(TEXT_NOTE_DELETED, false);
+        });
     }
 
     public void deleteImageNote() {
@@ -186,13 +239,5 @@ public class NotesFragmentViewModel extends AndroidViewModel {
 
     public void setImageNote(ImageNoteEntity imageNote) {
         this.imageNote = imageNote;
-    }
-
-    public SubjectEntity getSubjectById(int id) {
-        for (SubjectEntity subject : subjects) {
-            int subjectId = subject.getId();
-            if (id == subjectId) return subject;
-        }
-        return null;
     }
 }

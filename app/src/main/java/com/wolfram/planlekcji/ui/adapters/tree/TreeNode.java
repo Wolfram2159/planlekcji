@@ -39,7 +39,7 @@ public abstract class TreeNode implements TreeAdapter.TreeAdapterParent {
     }
 
     public boolean isRoot() {
-        return (this.parent == null);
+        return this instanceof RootNode;
     }
 
     private List<TreeNode> getAllNodes(TreeNode root) {
@@ -74,18 +74,13 @@ public abstract class TreeNode implements TreeAdapter.TreeAdapterParent {
         return thisPath.equals(nodePath);
     }
 
-    public void addChildren(TreeNode treeNode, String nodeName) {
-        treeNode.setNodeName(nodeName);
-        addChildren(treeNode);
-    }
-
     public void addChildren(TreeNode treeNode) {
         treeNode.setParent(this);
         childrenList.add(treeNode);
     }
 
-    public void clearChildrens() {
-        childrenList.clear();
+    protected boolean isSubjectNode() {
+        return this instanceof SubjectNode;
     }
 
     public List<TreeNode> getChildrenList() {
