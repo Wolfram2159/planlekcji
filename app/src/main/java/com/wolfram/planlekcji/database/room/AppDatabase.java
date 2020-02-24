@@ -10,8 +10,8 @@ import com.wolfram.planlekcji.database.room.entities.DateConverter;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.database.room.entities.event.EventEntity;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeEntity;
-import com.wolfram.planlekcji.database.room.entities.notes.ImageNoteEntity;
-import com.wolfram.planlekcji.database.room.entities.notes.TextNoteEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.image.ImageNoteEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.text.TextNoteEntity;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;

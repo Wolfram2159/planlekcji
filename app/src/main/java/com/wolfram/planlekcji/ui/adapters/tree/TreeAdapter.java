@@ -11,8 +11,10 @@ import com.google.android.material.button.MaterialButton;
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.common.mapper.RoomMapper;
 import com.wolfram.planlekcji.common.others.DateUtils;
-import com.wolfram.planlekcji.database.room.entities.notes.TextNoteDisplayEntity;
-import com.wolfram.planlekcji.database.room.entities.notes.TextNoteEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.image.ImageNoteDisplayEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.image.ImageNoteEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.text.TextNoteDisplayEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.text.TextNoteEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +37,7 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         void onNoteShow(TextNoteDisplayEntity note);
         void onNoteDelete(TextNoteEntity note);
         void onImageClick(List<String> imagePathList, Integer position, ImageView transitionImage);
-        void onImageLongClick(ImageNoteNode imageNote);
+        void onImageLongClick(ImageNoteDisplayEntity imageNote);
     }
 
     public interface TreeAdapterParent {
@@ -178,12 +180,10 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private void setNewParent(int adapterPosition) {
         TreeNode newParent = parent.getChildrenList().get(adapterPosition);
-        if (newParent.getChildrenList() != null) {
-            parent = newParent;
-            checkParentInstanceOf();
-            treeChangedListener.onParentChanged(parent);
-            notifyDataSetChanged();
-        }
+        parent = newParent;
+        checkParentInstanceOf();
+        treeChangedListener.onParentChanged(parent);
+        notifyDataSetChanged();
     }
 
     public class TreeImageNoteVH extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
@@ -211,7 +211,8 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         @Override
         public boolean onLongClick(View view) {
-            ImageNoteNode imageNote = (ImageNoteNode) parent.getChildrenList().get(getAdapterPosition());
+            ImageNoteNode imageNoteNodes = (ImageNoteNode) parent.getChildrenList().get(getAdapterPosition());
+            ImageNoteDisplayEntity imageNote = RoomMapper.convertImageNote(imageNoteNodes);
             treeAdapterClickListener.onImageLongClick(imageNote);
             return true;
         }

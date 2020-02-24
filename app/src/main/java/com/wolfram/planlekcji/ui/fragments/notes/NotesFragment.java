@@ -22,17 +22,17 @@ import com.wolfram.planlekcji.common.data.Event;
 import com.wolfram.planlekcji.common.mapper.RoomMapper;
 import com.wolfram.planlekcji.common.others.SnackbarUtils;
 import com.wolfram.planlekcji.database.room.entities.notes.SubjectWithNotesEntity;
-import com.wolfram.planlekcji.database.room.entities.notes.TextNoteDisplayEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.image.ImageNoteDisplayEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.text.TextNoteDisplayEntity;
 import com.wolfram.planlekcji.ui.adapters.tree.ImageNoteNode;
 import com.wolfram.planlekcji.ui.adapters.tree.TreeAdapter;
 import com.wolfram.planlekcji.ui.adapters.tree.TreeNode;
-import com.wolfram.planlekcji.database.room.entities.notes.ImageNoteEntity;
-import com.wolfram.planlekcji.database.room.entities.notes.TextNoteEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.image.ImageNoteEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.text.TextNoteEntity;
 import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
-import com.wolfram.planlekcji.ui.bottomSheets.notes.AddImageNoteBottomSheet;
-import com.wolfram.planlekcji.ui.bottomSheets.notes.ModifyTextNoteBottomSheet;
-import com.wolfram.planlekcji.ui.bottomSheets.notes.ModifyImageNoteBottomSheet;
-import com.wolfram.planlekcji.ui.bottomSheets.notes.ShowTextNoteBottomSheet;
+import com.wolfram.planlekcji.ui.bottomSheets.notes.image.ModifyImageNoteBottomSheet;
+import com.wolfram.planlekcji.ui.bottomSheets.notes.text.ModifyTextNoteBottomSheet;
+import com.wolfram.planlekcji.ui.bottomSheets.notes.text.ShowTextNoteBottomSheet;
 
 import java.io.File;
 import java.io.IOException;
@@ -153,10 +153,8 @@ public class NotesFragment extends Fragment {
             }
 
             @Override
-            public void onImageLongClick(ImageNoteNode imageNoteNode) {
-                ImageNoteEntity imageNote = RoomMapper.convertImageNote(imageNoteNode);
-                viewModel.setImageNote(imageNote);
-                ModifyImageNoteBottomSheet bottomSheet = new ModifyImageNoteBottomSheet();
+            public void onImageLongClick(ImageNoteDisplayEntity imageNote) {
+                ModifyImageNoteBottomSheet bottomSheet = new ModifyImageNoteBottomSheet(imageNote);
                 bottomSheet.show(getFragmentManager(), CustomBottomSheet.MODIFY);
             }
         };
@@ -190,13 +188,7 @@ public class NotesFragment extends Fragment {
 
     private void onCameraClick() {
         Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File photoFile = null;
-        try {
-            photoFile = viewModel.createImageFile();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        // Continue only if the File was successfully created
+        File photoFile = createPhotoFile();
         if (photoFile != null) {
             Uri photoURI = FileProvider.getUriForFile(getContext(),
                     "com.example.android.fileprovider",
@@ -206,13 +198,23 @@ public class NotesFragment extends Fragment {
         }
     }
 
+    private File createPhotoFile() {
+        try {
+            return viewModel.createImageFile();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == 0) {
             viewModel.deleteImage();
         } else {
-            AddImageNoteBottomSheet addImageNoteBottomSheet = new AddImageNoteBottomSheet();
-            addImageNoteBottomSheet.show(getFragmentManager(), CustomBottomSheet.CREATE);
+            String photoPath = viewModel.getPhotoPath();
+            ModifyImageNoteBottomSheet modifyImageNoteBottomSheet = new ModifyImageNoteBottomSheet(photoPath);
+            modifyImageNoteBottomSheet.show(getFragmentManager(), CustomBottomSheet.CREATE);
         }
     }
 

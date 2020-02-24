@@ -2,6 +2,8 @@ package com.wolfram.planlekcji.ui.adapters.tree;
 
 import androidx.annotation.Nullable;
 
+import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
+
 import java.util.ArrayList;
 import java.util.List;
 

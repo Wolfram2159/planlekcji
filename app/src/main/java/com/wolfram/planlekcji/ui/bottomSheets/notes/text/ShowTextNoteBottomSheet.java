@@ -1,4 +1,4 @@
-package com.wolfram.planlekcji.ui.bottomSheets.notes;
+package com.wolfram.planlekcji.ui.bottomSheets.notes.text;
 
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.database.room.entities.notes.TextNoteDisplayEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.text.TextNoteDisplayEntity;
 import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 
 import butterknife.BindView;

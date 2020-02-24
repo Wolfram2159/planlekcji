@@ -1,10 +1,11 @@
 package com.wolfram.planlekcji.common.mapper;
 
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
-import com.wolfram.planlekcji.database.room.entities.notes.ImageNoteEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.image.ImageNoteDisplayEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.image.ImageNoteEntity;
 import com.wolfram.planlekcji.database.room.entities.notes.SubjectWithNotesEntity;
-import com.wolfram.planlekcji.database.room.entities.notes.TextNoteDisplayEntity;
-import com.wolfram.planlekcji.database.room.entities.notes.TextNoteEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.text.TextNoteDisplayEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.text.TextNoteEntity;
 import com.wolfram.planlekcji.ui.adapters.tree.ImageNoteNode;
 import com.wolfram.planlekcji.ui.adapters.tree.SubjectNode;
 import com.wolfram.planlekcji.ui.adapters.tree.SubjectWithNoteNodes;
@@ -29,8 +30,8 @@ public class RoomMapper {
         return new ImageNoteNode(sourceImageNote);
     }
 
-    public static ImageNoteEntity convertImageNote(ImageNoteNode sourceImageNoteNode) {
-        return new ImageNoteEntity(sourceImageNoteNode);
+    public static ImageNoteDisplayEntity convertImageNote(ImageNoteNode sourceImageNoteNode) {
+        return new ImageNoteDisplayEntity(sourceImageNoteNode);
     }
 
     public static TextNoteNode convertTextNote(TextNoteEntity sourceTextNote) {

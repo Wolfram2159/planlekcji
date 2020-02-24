@@ -4,11 +4,12 @@ import androidx.annotation.NonNull;
 
 import com.wolfram.planlekcji.common.mapper.RoomMapper;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
-import com.wolfram.planlekcji.database.room.entities.notes.ImageNoteEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.image.ImageNoteEntity;
 import com.wolfram.planlekcji.database.room.entities.notes.SubjectWithNotesEntity;
-import com.wolfram.planlekcji.database.room.entities.notes.TextNoteEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.text.TextNoteEntity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SubjectWithNoteNodes {
@@ -35,6 +36,11 @@ public class SubjectWithNoteNodes {
             TextNoteNode textNoteNode = RoomMapper.convertTextNote(textNote);
             this.textNodes.add(textNoteNode);
         }
+        sortTextNotes();
+    }
+
+    private void sortTextNotes() {
+        Collections.sort(textNodes, (firstNode, secondNode) -> firstNode.getDate().compareTo(secondNode.getDate()));
     }
 
     private void assignImageNotes(List<ImageNoteEntity> imageNotesEntity) {
@@ -43,6 +49,11 @@ public class SubjectWithNoteNodes {
             ImageNoteNode imageNoteNode = RoomMapper.convertImageNote(imageNoteEntity);
             this.imageNodes.add(imageNoteNode);
         }
+        sortImageNotes();
+    }
+
+    private void sortImageNotes() {
+        Collections.sort(imageNodes, (firstNode, secondNode) -> firstNode.getDate().compareTo(secondNode.getDate()));
     }
 
     public SubjectNode getSubject() {

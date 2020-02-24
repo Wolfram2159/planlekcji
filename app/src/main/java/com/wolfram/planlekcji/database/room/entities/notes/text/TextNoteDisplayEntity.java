@@ -1,5 +1,6 @@
-package com.wolfram.planlekcji.database.room.entities.notes;
+package com.wolfram.planlekcji.database.room.entities.notes.text;
 
+import com.wolfram.planlekcji.database.room.entities.notes.text.TextNoteEntity;
 import com.wolfram.planlekcji.ui.adapters.tree.TextNoteNode;
 
 /**

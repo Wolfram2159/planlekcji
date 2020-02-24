@@ -1,6 +1,5 @@
 package com.wolfram.planlekcji.ui.fragments.notes;
 
-import android.annotation.SuppressLint;
 import android.app.Application;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -9,11 +8,11 @@ import com.wolfram.planlekcji.common.data.Event;
 import com.wolfram.planlekcji.common.mapper.RoomMapper;
 import com.wolfram.planlekcji.database.room.AppDatabase;
 import com.wolfram.planlekcji.database.room.dao.NotesDao;
-import com.wolfram.planlekcji.database.room.dao.SubjectDao;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
-import com.wolfram.planlekcji.database.room.entities.notes.ImageNoteEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.image.ImageNoteDisplayEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.image.ImageNoteEntity;
 import com.wolfram.planlekcji.database.room.entities.notes.SubjectWithNotesEntity;
-import com.wolfram.planlekcji.database.room.entities.notes.TextNoteEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.text.TextNoteEntity;
 import com.wolfram.planlekcji.common.others.DateUtils;
 import com.wolfram.planlekcji.ui.adapters.tree.DirectoryNode;
 import com.wolfram.planlekcji.ui.adapters.tree.ImageNoteNode;
@@ -40,26 +39,26 @@ public class NotesFragmentViewModel extends AndroidViewModel {
     public interface ParentSetter {
 
         void setParent(TreeNode parent);
+
     }
     private ParentSetter parentSetter;
     private NotesDao notesDao;
-
     private List<SubjectEntity> subjects;
 
     private LiveData<List<SubjectWithNotesEntity>> subjectWithNotesList;
+
     private List<SubjectWithNoteNodes> subjectsWithNotes;
     private Event<String> textNoteEvent;
     private LiveData<Event<String>> textNoteObservableEvent;
     private MediatorLiveData<Event<String>> privateTextNoteEvent;
-    private String currentPhotoPath;
-
+    private String photoPath;
     private ImageNoteEntity imageNote;
-    private TreeNode actualParent;
 
+    private TreeNode actualParent;
     public static final String TEXT_NOTE_CREATED = "Text note created";
+
     public static final String TEXT_NOTE_UPDATED = "Text note updated";
     public static final String TEXT_NOTE_DELETED = "Text note deleted";
-
     public NotesFragmentViewModel(@NonNull Application application) {
         super(application);
         AppDatabase appDatabase = AppDatabase.getInstance(application.getApplicationContext());
@@ -94,10 +93,6 @@ public class NotesFragmentViewModel extends AndroidViewModel {
 
     public void setParentSetter(@NonNull ParentSetter parentSetter) {
         this.parentSetter = parentSetter;
-    }
-
-    public String getCurrentPhotoPath() {
-        return currentPhotoPath;
     }
 
     public LiveData<List<SubjectWithNotesEntity>> getSubjectWithNotesList() {
@@ -167,9 +162,7 @@ public class NotesFragmentViewModel extends AndroidViewModel {
         return this.actualParent;
     }
 
-    @SuppressLint("SimpleDateFormat")
     public File createImageFile() throws IOException {
-        // Create an image file name
         Date currentDate = new Date();
         String timeStamp = DateUtils.getTimeStringForSaveFile(currentDate);
         String imageFileName = "JPEG_" + timeStamp + "_";
@@ -181,12 +174,16 @@ public class NotesFragmentViewModel extends AndroidViewModel {
         );
 
         // Save a file: path for use with ACTION_VIEW intents
-        currentPhotoPath = image.getAbsolutePath();
+        setPhotoPath(image);
         return image;
     }
 
-    public void insertImageNote(ImageNoteEntity imageNote) {
-        AsyncTask.execute(() -> notesDao.insertImageNote(imageNote));
+    private void setPhotoPath(File photoFile) {
+        this.photoPath = photoFile.getAbsolutePath();
+    }
+
+    public String getPhotoPath() {
+        return photoPath;
     }
 
     public void modifyTextNote(TextNoteEntity textNote, String tag) {
@@ -214,9 +211,28 @@ public class NotesFragmentViewModel extends AndroidViewModel {
         });
     }
 
+    public void modifyImageNote(ImageNoteEntity imageNote, String tag) {
+        switch (tag) {
+            case CustomBottomSheet.CREATE:
+                insertImageNote(imageNote);
+                break;
+            case CustomBottomSheet.MODIFY:
+                updateImageNote(imageNote);
+                break;
+        }
+    }
+
+    private void insertImageNote(ImageNoteEntity imageNote) {
+        AsyncTask.execute(() -> notesDao.insertImageNote(imageNote));
+    }
+
+    private void updateImageNote(ImageNoteEntity imageNote) {
+        AsyncTask.execute(() -> notesDao.updateImageNote(imageNote));
+    }
+
     public void deleteImage() {
         // TODO: 2019-10-24 check if the image is deleted
-        File imageToDelete = new File(currentPhotoPath);
+        File imageToDelete = new File(photoPath);
         imageToDelete.delete();
     }
 

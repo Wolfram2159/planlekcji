@@ -127,16 +127,6 @@ public class ModifyEventBottomSheet extends CustomBottomSheet implements View.On
         editTimeEnd.setOnClickListener(this);
     }
 
-    private List<String> getSubjectsNames(List<SubjectEntity> subjects) {
-        final String NEW_SUBJECT = "Add new subject...";
-        List<String> names = new ArrayList<>();
-        for (SubjectEntity subject : subjects) {
-            names.add(subject.toString());
-        }
-        names.add(NEW_SUBJECT);
-        return names;
-    }
-
     private void showKeyboard() {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);

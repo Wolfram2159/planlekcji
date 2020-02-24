@@ -2,9 +2,7 @@ package com.wolfram.planlekcji.ui.adapters.tree;
 
 import androidx.annotation.NonNull;
 
-import com.wolfram.planlekcji.common.mapper.RoomMapper;
-import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
-import com.wolfram.planlekcji.database.room.entities.notes.TextNoteEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.text.TextNoteEntity;
 
 import java.util.Date;
 

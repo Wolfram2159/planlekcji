@@ -4,6 +4,9 @@ import androidx.room.Embedded;
 import androidx.room.Relation;
 
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.image.ImageNoteEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.text.TextNoteEntity;
+
 import java.util.List;
 
 public class SubjectWithNotesEntity {

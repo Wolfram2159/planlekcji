@@ -11,11 +11,13 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.ui.fragments.events.EventFragment;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -96,5 +98,14 @@ public abstract class CustomBottomSheet extends BottomSheetDialogFragment implem
                 },
                 (1900 + dateNow.getYear()), dateNow.getMonth(), dateNow.getDate());
         datePickerDialog.show();
+    }
+
+    protected List<String> getSubjectsNames(List<SubjectEntity> subjects) {
+        List<String> subjectsNames = new ArrayList<>();
+        for (SubjectEntity subject : subjects) {
+            String subjectName = subject.getName();
+            subjectsNames.add(subjectName);
+        }
+        return subjectsNames;
     }
 }

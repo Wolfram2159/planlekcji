@@ -1,4 +1,4 @@
-package com.wolfram.planlekcji.database.room.entities.notes;
+package com.wolfram.planlekcji.database.room.entities.notes.image;
 
 import com.wolfram.planlekcji.ui.adapters.tree.ImageNoteNode;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;

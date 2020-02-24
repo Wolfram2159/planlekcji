@@ -1,4 +1,4 @@
-package com.wolfram.planlekcji.ui.bottomSheets.notes;
+package com.wolfram.planlekcji.ui.bottomSheets.notes.text;
 
 import android.view.View;
 import android.widget.AutoCompleteTextView;
@@ -7,7 +7,7 @@ import android.widget.EditText;
 import com.google.android.material.button.MaterialButton;
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
-import com.wolfram.planlekcji.database.room.entities.notes.TextNoteDisplayEntity;
+import com.wolfram.planlekcji.database.room.entities.notes.text.TextNoteDisplayEntity;
 import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 import com.wolfram.planlekcji.ui.fragments.notes.NotesFragmentViewModel;
 import com.wolfram.planlekcji.common.others.DateUtils;
@@ -66,7 +66,7 @@ public class ModifyTextNoteBottomSheet extends CustomBottomSheet {
 
         setupSubjectAdapter();
         if (tag.equals(CustomBottomSheet.MODIFY)) setValuesToViews();
-        else setInitialValues();
+        else if (tag.equals(CustomBottomSheet.CREATE)) setInitialValues();
         setupButtons();
     }
 
@@ -86,15 +86,6 @@ public class ModifyTextNoteBottomSheet extends CustomBottomSheet {
             int subjectId = clickedSubject.getId();
             modifyingTextNote.setSubject_id(subjectId);
         });
-    }
-
-    private List<String> getSubjectsNames(List<SubjectEntity> subjects) {
-        List<String> subjectsNames = new ArrayList<>();
-        for (SubjectEntity subject : subjects) {
-            String subjectName = subject.getName();
-            subjectsNames.add(subjectName);
-        }
-        return subjectsNames;
     }
 
     private void setValuesToViews() {

@@ -89,15 +89,6 @@ public class ModifyGradeBottomSheet extends CustomBottomSheet implements View.On
         modifyingGrade.setSubject_id(firstSubject.getId());
     }
 
-    private List<String> getSubjectsNames(List<SubjectEntity> subjects){
-        List<String> names = new ArrayList<>();
-        for (SubjectEntity subject : subjects) {
-            String name = subject.getName();
-            names.add(name);
-        }
-        return names;
-    }
-
     private void setupOnClickListeners() {
         date.setOnClickListener(this);
         saveButton.setOnClickListener(this);
