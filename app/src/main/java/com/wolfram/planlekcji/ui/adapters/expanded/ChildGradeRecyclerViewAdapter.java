@@ -6,15 +6,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplayEntity;
-import com.wolfram.planlekcji.common.others.DateUtils;
+import com.wolfram.planlekcji.common.utility.DateUtils;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import butterknife.BindView;

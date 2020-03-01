@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.common.others.SnackbarUtils;
+import com.wolfram.planlekcji.common.utility.SnackbarUtils;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeEntity;
 import com.wolfram.planlekcji.database.room.entities.grade.SubjectWithGrades;
 import com.wolfram.planlekcji.ui.adapters.expanded.ParentGradeRecyclerViewAdapter;

@@ -10,9 +10,8 @@ import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.database.room.entities.notes.text.TextNoteDisplayEntity;
 import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 import com.wolfram.planlekcji.ui.fragments.notes.NotesFragmentViewModel;
-import com.wolfram.planlekcji.common.others.DateUtils;
+import com.wolfram.planlekcji.common.utility.DateUtils;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 

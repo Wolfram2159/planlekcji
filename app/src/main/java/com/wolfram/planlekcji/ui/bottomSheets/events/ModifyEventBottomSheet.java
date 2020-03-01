@@ -1,31 +1,26 @@
 package com.wolfram.planlekcji.ui.bottomSheets.events;
 
-import android.app.TimePickerDialog;
-import android.content.Context;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
+import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
 import com.google.android.material.button.MaterialButton;
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.common.data.Event;
+import com.wolfram.planlekcji.common.enums.TextViewType;
+import com.wolfram.planlekcji.common.utility.UiUtils;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.database.room.entities.event.EventDisplayEntity;
 import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
-import com.wolfram.planlekcji.ui.fragments.events.EventFragment;
 import com.wolfram.planlekcji.ui.fragments.events.EventViewModel;
 import com.wolfram.planlekcji.common.enums.Day;
-import com.wolfram.planlekcji.common.others.DateUtils;
+import com.wolfram.planlekcji.common.utility.DateUtils;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import butterknife.BindView;
@@ -41,6 +36,7 @@ public class ModifyEventBottomSheet extends CustomBottomSheet implements View.On
     private EventDisplayEntity localEvent = new EventDisplayEntity();
     private Event<EventDisplayEntity> eventToSave = new Event<>();
     private List<SubjectEntity> subjects;
+    private List<Day> days;
     @BindView(R.id.event_day)
     AutoCompleteTextView dayPicker;
     @BindView(R.id.event_name)
@@ -66,6 +62,7 @@ public class ModifyEventBottomSheet extends CustomBottomSheet implements View.On
         viewModel = ViewModelProviders.of(activity).get(EventViewModel.class);
         ButterKnife.bind(this, root);
         subjects = viewModel.getSubjects();
+        days = Day.getDays();
 
         setupAdapters();
         setupOnClickListeners();
@@ -80,44 +77,16 @@ public class ModifyEventBottomSheet extends CustomBottomSheet implements View.On
     }
 
     private void setupAdapters() {
-        setAdapterToView(new AutocompleteAdapterSetter() {
-            @Override
-            public AutoCompleteTextView getAdapterView() {
-                return dayPicker;
-            }
+        UiUtils.setAdapterToTextView(dayPicker, days, TextViewType.DayPicker, tag, this::onDayItemClick);
+        UiUtils.setAdapterToTextView(subjectPicker, subjects, TextViewType.SubjectPicker, tag);
+    }
 
-            @Override
-            public List<String> getList() {
-                return Day.getNames();
-            }
-        });
-
-        List<SubjectEntity> subjects = viewModel.getSubjects();
-        List<String> subjectNames = getSubjectsNames(subjects);
-        setAdapterToView(
-                new AutocompleteAdapterSetter() {
-                    @Override
-                    public AutoCompleteTextView getAdapterView() {
-                        return subjectPicker;
-                    }
-
-                    @Override
-                    public List<String> getList() {
-                        return subjectNames;
-                    }
-                },
-                (adapterView, view, i, l) -> {
-                    if (i == (subjectNames.size() - 1)) {
-                        subjectPicker.setShowSoftInputOnFocus(true);
-                        subjectPicker.setText("");
-                        showKeyboard();
-                        eventToSave.setUsed(false);
-                    } else {
-                        SubjectEntity pickedSubject = subjects.get(i);
-                        localEvent.setSubject(pickedSubject);
-                        eventToSave.setUsed(true);
-                    }
-                });
+    private void onDayItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Adapter adapter = adapterView.getAdapter();
+        Object clickedItem = adapter.getItem(i);
+        if (clickedItem instanceof Day) {
+            localEvent.setDay((Day) clickedItem);
+        }
     }
 
     private void setupOnClickListeners() {
@@ -125,11 +94,6 @@ public class ModifyEventBottomSheet extends CustomBottomSheet implements View.On
         cancelButton.setOnClickListener(this);
         editTimeStart.setOnClickListener(this);
         editTimeEnd.setOnClickListener(this);
-    }
-
-    private void showKeyboard() {
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
 
     private void setValuesToViews(EventDisplayEntity modifyingEvent) {

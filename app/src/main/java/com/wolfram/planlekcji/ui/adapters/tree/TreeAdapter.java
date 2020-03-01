@@ -10,9 +10,8 @@ import com.bumptech.glide.RequestManager;
 import com.google.android.material.button.MaterialButton;
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.common.mapper.RoomMapper;
-import com.wolfram.planlekcji.common.others.DateUtils;
+import com.wolfram.planlekcji.common.utility.DateUtils;
 import com.wolfram.planlekcji.database.room.entities.notes.image.ImageNoteDisplayEntity;
-import com.wolfram.planlekcji.database.room.entities.notes.image.ImageNoteEntity;
 import com.wolfram.planlekcji.database.room.entities.notes.text.TextNoteDisplayEntity;
 import com.wolfram.planlekcji.database.room.entities.notes.text.TextNoteEntity;
 

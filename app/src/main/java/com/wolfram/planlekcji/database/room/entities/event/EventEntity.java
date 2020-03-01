@@ -2,7 +2,7 @@ package com.wolfram.planlekcji.database.room.entities.event;
 
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.common.enums.Day;
-import com.wolfram.planlekcji.common.others.DateUtils;
+import com.wolfram.planlekcji.common.utility.DateUtils;
 
 import java.util.Date;
 

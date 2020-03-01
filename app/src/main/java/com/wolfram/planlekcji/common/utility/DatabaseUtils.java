@@ -1,9 +1,10 @@
-package com.wolfram.planlekcji.common.others;
+package com.wolfram.planlekcji.common.utility;
 
 import com.wolfram.planlekcji.common.data.Event;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public final class DatabaseUtils {
     private DatabaseUtils(){}
@@ -30,5 +31,16 @@ public final class DatabaseUtils {
             }
         }
         return subjectFromDatabase;
+    }
+
+    public static SubjectEntity getSubjectFromDb(SubjectEntity subject, List<SubjectEntity> subjects) {
+        String localName = subject.getName();
+        for (SubjectEntity savedSubject : subjects) {
+            String savedName = savedSubject.getName();
+            if (savedName.equals(localName)) {
+                return savedSubject;
+            }
+        }
+        throw new NoSuchElementException();
     }
 }

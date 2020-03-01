@@ -9,13 +9,11 @@ import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplayEntity;
 import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
-import com.wolfram.planlekcji.ui.fragments.grades.GradesFragment;
 import com.wolfram.planlekcji.ui.fragments.grades.GradesFragmentViewModel;
-import com.wolfram.planlekcji.common.others.DateUtils;
+import com.wolfram.planlekcji.common.utility.DateUtils;
 
 import androidx.lifecycle.ViewModelProviders;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 

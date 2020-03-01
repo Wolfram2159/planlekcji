@@ -4,7 +4,7 @@ import android.app.Application;
 import android.os.AsyncTask;
 
 import com.wolfram.planlekcji.common.data.Event;
-import com.wolfram.planlekcji.common.others.DatabaseUtils;
+import com.wolfram.planlekcji.common.utility.DatabaseUtils;
 import com.wolfram.planlekcji.database.room.AppDatabase;
 import com.wolfram.planlekcji.database.room.dao.EventDao;
 import com.wolfram.planlekcji.database.room.dao.SubjectDao;

@@ -5,9 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.common.others.SnackbarUtils;
+import com.wolfram.planlekcji.common.utility.SnackbarUtils;
 import com.wolfram.planlekcji.database.room.entities.event.EventDisplayEntity;
 import com.wolfram.planlekcji.ui.adapters.EventsRecyclerViewAdapter;
 import com.wolfram.planlekcji.ui.bottomSheets.ActionBottomSheet;

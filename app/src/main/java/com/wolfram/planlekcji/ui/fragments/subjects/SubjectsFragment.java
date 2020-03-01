@@ -6,10 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.common.data.Event;
-import com.wolfram.planlekcji.common.others.SnackbarUtils;
+import com.wolfram.planlekcji.common.utility.SnackbarUtils;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.ui.adapters.SubjectsRecyclerViewAdapter;
 import com.wolfram.planlekcji.ui.bottomSheets.ActionBottomSheet;
@@ -19,7 +18,6 @@ import com.wolfram.planlekcji.ui.bottomSheets.subjects.ModifySubjectBottomSheet;
 import java.util.List;
 import java.util.Objects;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LiveData;
