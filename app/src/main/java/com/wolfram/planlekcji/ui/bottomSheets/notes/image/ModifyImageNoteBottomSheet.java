@@ -2,12 +2,15 @@ package com.wolfram.planlekcji.ui.bottomSheets.notes.image;
 
 import android.net.Uri;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.google.android.material.button.MaterialButton;
 import com.wolfram.planlekcji.R;
+import com.wolfram.planlekcji.common.enums.ViewType;
+import com.wolfram.planlekcji.common.utility.UiUtils;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.database.room.entities.notes.image.ImageNoteDisplayEntity;
 import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
@@ -72,24 +75,16 @@ public class ModifyImageNoteBottomSheet extends CustomBottomSheet {
         if (tag.equals(CustomBottomSheet.CREATE)) setInitialValues();
         else if (tag.equals(CustomBottomSheet.MODIFY)) setValuesToViews();
 
-        setupButtons();
+        setupViewsListeners();
     }
 
     private void setupSubjectAdapter() {
-        setAdapterToView(new AutocompleteAdapterSetter() {
-            @Override
-            public AutoCompleteTextView getAdapterView() {
-                return subjectNameView;
+        UiUtils.setAdapterToTextView(subjectNameView, subjects, ViewType.NoEditableSubjectPicker, tag, (adapterView, view, pos, arg) -> {
+            Adapter adapter = adapterView.getAdapter();
+            Object clickedItem = adapter.getItem(pos);
+            if (clickedItem instanceof SubjectEntity) {
+                modifyingImageNote.setSubject((SubjectEntity) clickedItem);
             }
-
-            @Override
-            public List<String> getList() {
-                return getSubjectsNames(subjects);
-            }
-        }, (parent, view, pos, arg) -> {
-            SubjectEntity clickedSubject = subjects.get(pos);
-            int subjectId = clickedSubject.getId();
-            modifyingImageNote.setSubject_id(subjectId);
         });
     }
 
@@ -119,10 +114,14 @@ public class ModifyImageNoteBottomSheet extends CustomBottomSheet {
         photoView.setImageURI(photoUri);
     }
 
-    private void setupButtons() {
+    private void setupViewsListeners() {
         saveButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
-        dateView.setOnClickListener(this);
+        UiUtils.setupDatePicker(dateView, pickedDate -> {
+            String textDate = DateUtils.getDateString(pickedDate);
+            dateView.setText(textDate);
+            modifyingImageNote.setDate(pickedDate);
+        }, ViewType.DatePicker);
     }
 
     @Override
@@ -134,13 +133,6 @@ public class ModifyImageNoteBottomSheet extends CustomBottomSheet {
                 break;
             case R.id.notes_image_cancel:
                 dismiss();
-                break;
-            case R.id.notes_image_date:
-                createDatePicker(pickedDate -> {
-                    String textDate = DateUtils.getDateString(pickedDate);
-                    dateView.setText(textDate);
-                    modifyingImageNote.setDate(pickedDate);
-                });
                 break;
         }
     }

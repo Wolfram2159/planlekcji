@@ -2,6 +2,7 @@ package com.wolfram.planlekcji.database.room.entities.notes.image;
 
 import androidx.annotation.NonNull;
 
+import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.ui.adapters.tree.ImageNoteNode;
 
 /**
@@ -25,5 +26,10 @@ public class ImageNoteDisplayEntity extends ImageNoteEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setSubject(SubjectEntity subject) {
+        this.subject_id = subject.getId();
+        this.name = subject.getName();
     }
 }

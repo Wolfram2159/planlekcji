@@ -61,8 +61,7 @@
         <EditText
             android:id="@+id/event_time_start"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:focusable="false" />
+            android:layout_height="match_parent" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -81,11 +80,7 @@
         <EditText
             android:id="@+id/event_time_end"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:editable="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false" />
+            android:layout_height="match_parent" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout

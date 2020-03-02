@@ -1,5 +1,6 @@
 package com.wolfram.planlekcji.database.room.entities.notes.text;
 
+import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.database.room.entities.notes.text.TextNoteEntity;
 import com.wolfram.planlekcji.ui.adapters.tree.TextNoteNode;
 
@@ -24,5 +25,10 @@ public class TextNoteDisplayEntity extends TextNoteEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setSubject(SubjectEntity subject) {
+        this.subject_id = subject.getId();
+        this.name = subject.getName();
     }
 }

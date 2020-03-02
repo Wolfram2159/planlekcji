@@ -16,6 +16,7 @@ import com.wolfram.planlekcji.ui.fragments.subjects.SubjectsFragmentViewModel;
 
 import java.util.EnumMap;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -119,18 +120,17 @@ public class EventViewModel extends AndroidViewModel {
         return id;
     }
 
-    public void modifyEvent(Event<EventDisplayEntity> event, String tag) {
+    public void modifyEvent(EventDisplayEntity eventToSave, String tag) {
         // TODO: 2020-01-03 check if subject exist, if -> set it id to stateEvent, else create new SubjectEntity and set it id
-        EventDisplayEntity eventToSave = event.getValue();
-        SubjectEntity eventSubject = eventToSave.getSubject();
-        Event<SubjectEntity> subjectFromDatabase = DatabaseUtils.getSubjectFromDatabase(eventSubject, subjects);
-        if (!event.isUsed()) {
-            if (subjectFromDatabase.isUsed()) {
-                eventToSave.setSubject(subjectFromDatabase.getValue());
-            } else {
-                Integer subjectId = insertSubject(eventSubject).intValue();
-                eventToSave.setSubject_id(subjectId);
-            }
+        if (eventToSave.getName().equals("")) eventToSave.setName(SubjectsFragmentViewModel.UNNAMED);
+        try {
+            SubjectEntity eventSubject = eventToSave.getSubject();
+            SubjectEntity subjectFromDatabase = DatabaseUtils.getSubjectFromDatabase(eventSubject, subjects);
+            eventToSave.setSubject(subjectFromDatabase);
+        } catch (NoSuchElementException ex) {
+            Long subjectId = insertSubject(eventToSave.getSubject());
+            Integer intSubjectId = subjectId.intValue();
+            eventToSave.setSubject_id(intSubjectId);
         }
         if (tag.equals(CustomBottomSheet.MODIFY)) {
             AsyncTask.execute(() -> {
@@ -145,7 +145,7 @@ public class EventViewModel extends AndroidViewModel {
         }
     }
 
-    private void setState(String message){
+    private void setState(String message) {
         stateEvent.setValue(message);
         stateEvent.setUsed(false);
         privateResultState.postValue(stateEvent);

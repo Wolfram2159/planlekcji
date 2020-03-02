@@ -8,8 +8,7 @@ import android.widget.EditText;
 
 import com.google.android.material.button.MaterialButton;
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.common.data.Event;
-import com.wolfram.planlekcji.common.enums.TextViewType;
+import com.wolfram.planlekcji.common.enums.ViewType;
 import com.wolfram.planlekcji.common.utility.UiUtils;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.database.room.entities.event.EventDisplayEntity;
@@ -33,10 +32,10 @@ import butterknife.ButterKnife;
 public class ModifyEventBottomSheet extends CustomBottomSheet implements View.OnClickListener {
 
     private EventViewModel viewModel;
-    private EventDisplayEntity localEvent = new EventDisplayEntity();
-    private Event<EventDisplayEntity> eventToSave = new Event<>();
+    private EventDisplayEntity modifyingEvent = new EventDisplayEntity();
     private List<SubjectEntity> subjects;
     private List<Day> days;
+
     @BindView(R.id.event_day)
     AutoCompleteTextView dayPicker;
     @BindView(R.id.event_name)
@@ -65,38 +64,46 @@ public class ModifyEventBottomSheet extends CustomBottomSheet implements View.On
         days = Day.getDays();
 
         setupAdapters();
-        setupOnClickListeners();
+        setupViewsListeners();
 
         if (tag.equals(CustomBottomSheet.MODIFY)) {
-            EventDisplayEntity modifyingEvent = viewModel.getModifyingEvent();
-            setValuesToViews(modifyingEvent);
-            setValuesToLocalEvent(modifyingEvent);
+            modifyingEvent = viewModel.getModifyingEvent();
+            setValuesToViews();
+            setValuesToLocalEvent();
         } else {
             setInitialValuesToLocalEvent();
         }
     }
 
     private void setupAdapters() {
-        UiUtils.setAdapterToTextView(dayPicker, days, TextViewType.DayPicker, tag, this::onDayItemClick);
-        UiUtils.setAdapterToTextView(subjectPicker, subjects, TextViewType.SubjectPicker, tag);
+        UiUtils.setAdapterToTextView(dayPicker, days, ViewType.DayPicker, tag, this::onDayItemClick);
+        UiUtils.setAdapterToTextView(subjectPicker, subjects, ViewType.SubjectPicker, tag);
     }
 
     private void onDayItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Adapter adapter = adapterView.getAdapter();
         Object clickedItem = adapter.getItem(i);
         if (clickedItem instanceof Day) {
-            localEvent.setDay((Day) clickedItem);
+            modifyingEvent.setDay((Day) clickedItem);
         }
     }
 
-    private void setupOnClickListeners() {
+    private void setupViewsListeners() {
         saveButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
-        editTimeStart.setOnClickListener(this);
-        editTimeEnd.setOnClickListener(this);
+        UiUtils.setupDatePicker(editTimeStart, timeStart -> {
+            String tStart = DateUtils.getTimeString(timeStart);
+            editTimeStart.setText(tStart);
+            modifyingEvent.setStart_time(timeStart);
+        }, ViewType.TimePicker);
+        UiUtils.setupDatePicker(editTimeEnd, timeEnd -> {
+            String tEnd = DateUtils.getTimeString(timeEnd);
+            editTimeEnd.setText(tEnd);
+            modifyingEvent.setEnd_time(timeEnd);
+        }, ViewType.TimePicker);
     }
 
-    private void setValuesToViews(EventDisplayEntity modifyingEvent) {
+    private void setValuesToViews() {
         subjectPicker.setText(modifyingEvent.getName(), false);
 
         String startTime = DateUtils.getTimeString(modifyingEvent.getStart_time());
@@ -111,25 +118,21 @@ public class ModifyEventBottomSheet extends CustomBottomSheet implements View.On
         dayPicker.setText(dayPicker.getAdapter().getItem(position).toString(), false);
     }
 
-    private void setValuesToLocalEvent(EventDisplayEntity modifyingEvent) {
-        localEvent.setId(modifyingEvent.getId());
-        localEvent.setStart_time(modifyingEvent.getStart_time());
-        localEvent.setEnd_time(modifyingEvent.getEnd_time());
-        localEvent.setSubject(modifyingEvent.getSubject());
-        eventToSave.setUsed(true);
+    private void setValuesToLocalEvent() {
+        modifyingEvent.setId(modifyingEvent.getId());
+        modifyingEvent.setStart_time(modifyingEvent.getStart_time());
+        modifyingEvent.setEnd_time(modifyingEvent.getEnd_time());
+        modifyingEvent.setSubject(modifyingEvent.getSubject());
     }
 
     private void setInitialValuesToLocalEvent() {
         Date now = new Date();
-        localEvent.setStart_time(now);
-        localEvent.setEnd_time(now);
-        localEvent.setDay(Day.Monday);
+        modifyingEvent.setStart_time(now);
+        modifyingEvent.setEnd_time(now);
+        modifyingEvent.setDay(Day.Monday);
         if (subjects.size() > 0) {
             SubjectEntity firstSubject = subjects.get(0);
-            localEvent.setSubject(firstSubject);
-            eventToSave.setUsed(true);
-        } else {
-            eventToSave.setUsed(false);
+            modifyingEvent.setSubject(firstSubject);
         }
         String timeString = DateUtils.getTimeString(now);
         editTimeEnd.setText(timeString);
@@ -139,23 +142,9 @@ public class ModifyEventBottomSheet extends CustomBottomSheet implements View.On
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.event_time_start:
-                createTimePicker(timeStart -> {
-                    String tStart = DateUtils.getTimeString(timeStart);
-                    editTimeStart.setText(tStart);
-                    localEvent.setStart_time(timeStart);
-                });
-                break;
-            case R.id.event_time_end:
-                createTimePicker(timeEnd -> {
-                    String tEnd = DateUtils.getTimeString(timeEnd);
-                    editTimeEnd.setText(tEnd);
-                    localEvent.setEnd_time(timeEnd);
-                });
-                break;
             case R.id.event_save:
                 setDataToLocalEvent();
-                viewModel.modifyEvent(eventToSave, tag);
+                viewModel.modifyEvent(modifyingEvent, tag);
                 dismiss();
                 break;
             case R.id.event_cancel:
@@ -169,10 +158,8 @@ public class ModifyEventBottomSheet extends CustomBottomSheet implements View.On
         Day day = Day.valueOf(dayPicker.getText().toString());
         String localization = subjectLocalization.getText().toString();
 
-        localEvent.setName(subjectName);
-        localEvent.setDay(day);
-        localEvent.setLocalization(localization);
-
-        eventToSave.setValue(localEvent);
+        modifyingEvent.setName(subjectName);
+        modifyingEvent.setDay(day);
+        modifyingEvent.setLocalization(localization);
     }
 }

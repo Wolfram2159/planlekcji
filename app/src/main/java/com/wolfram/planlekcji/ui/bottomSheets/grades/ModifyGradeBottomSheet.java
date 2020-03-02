@@ -1,11 +1,14 @@
 package com.wolfram.planlekcji.ui.bottomSheets.grades;
 
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
 import com.google.android.material.button.MaterialButton;
 import com.wolfram.planlekcji.R;
+import com.wolfram.planlekcji.common.enums.ViewType;
+import com.wolfram.planlekcji.common.utility.UiUtils;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeDisplayEntity;
 import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
@@ -55,26 +58,11 @@ public class ModifyGradeBottomSheet extends CustomBottomSheet implements View.On
         viewModel = ViewModelProviders.of(activity).get(GradesFragmentViewModel.class);
         subjects = viewModel.getSubjects();
 
-        setupOnClickListeners();
+        setupViewsListeners();
+        setupAdapters();
 
         if (tag.equals(CustomBottomSheet.MODIFY)) setValuesToViews();
         else setInitialValuesToLocalGrade();
-
-        setAdapterToView(new AutocompleteAdapterSetter() {
-            @Override
-            public AutoCompleteTextView getAdapterView() {
-                return subjectPicker;
-            }
-
-            @Override
-            public List<String> getList() {
-                return getSubjectsNames(subjects);
-            }
-        }, (parent, view, pos, arg) -> {
-            SubjectEntity clickedSubject = subjects.get(pos);
-            int subjectId = clickedSubject.getId();
-            modifyingGrade.setSubject_id(subjectId);
-        });
     }
 
     private void setInitialValuesToLocalGrade() {
@@ -83,14 +71,27 @@ public class ModifyGradeBottomSheet extends CustomBottomSheet implements View.On
         String dateNow = DateUtils.getDateString(now);
         date.setText(dateNow);
         SubjectEntity firstSubject = subjects.get(0);
-        subjectPicker.setText(firstSubject.getName());
         modifyingGrade.setSubject_id(firstSubject.getId());
     }
 
-    private void setupOnClickListeners() {
-        date.setOnClickListener(this);
+    private void setupViewsListeners() {
+        UiUtils.setupDatePicker(date, pickedDate -> {
+            String dateString = DateUtils.getDateString(pickedDate);
+            date.setText(dateString);
+            modifyingGrade.setDate(pickedDate);
+        }, ViewType.DatePicker);
         saveButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
+    }
+
+    private void setupAdapters() {
+        UiUtils.setAdapterToTextView(subjectPicker, subjects, ViewType.NoEditableSubjectPicker, tag, (adapterView, view, pos, arg) -> {
+            Adapter adapter = adapterView.getAdapter();
+            Object item = adapter.getItem(pos);
+            if (item instanceof SubjectEntity) {
+                modifyingGrade.setSubject((SubjectEntity) item);
+            }
+        });
     }
 
     private void setValuesToViews() {
@@ -107,13 +108,6 @@ public class ModifyGradeBottomSheet extends CustomBottomSheet implements View.On
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.grade_date:
-                createDatePicker(pickedDate -> {
-                    String dateString = DateUtils.getDateString(pickedDate);
-                    date.setText(dateString);
-                    modifyingGrade.setDate(pickedDate);
-                });
-                break;
             case R.id.grade_save:
                 String desc = description.getText().toString();
                 modifyingGrade.setDescription(desc);

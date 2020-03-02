@@ -1,11 +1,14 @@
 package com.wolfram.planlekcji.ui.bottomSheets.notes.text;
 
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
 import com.google.android.material.button.MaterialButton;
 import com.wolfram.planlekcji.R;
+import com.wolfram.planlekcji.common.enums.ViewType;
+import com.wolfram.planlekcji.common.utility.UiUtils;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.database.room.entities.notes.text.TextNoteDisplayEntity;
 import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
@@ -66,24 +69,16 @@ public class ModifyTextNoteBottomSheet extends CustomBottomSheet {
         setupSubjectAdapter();
         if (tag.equals(CustomBottomSheet.MODIFY)) setValuesToViews();
         else if (tag.equals(CustomBottomSheet.CREATE)) setInitialValues();
-        setupButtons();
+        setupViewsListeners();
     }
 
     private void setupSubjectAdapter() {
-        setAdapterToView(new AutocompleteAdapterSetter() {
-            @Override
-            public AutoCompleteTextView getAdapterView() {
-                return subjectPicker;
+        UiUtils.setAdapterToTextView(subjectPicker, subjects, ViewType.NoEditableSubjectPicker, tag, (adapterView, view, pos, arg) -> {
+            Adapter adapter = adapterView.getAdapter();
+            Object clickedItem = adapter.getItem(pos);
+            if (clickedItem instanceof SubjectEntity) {
+                modifyingTextNote.setSubject((SubjectEntity) clickedItem);
             }
-
-            @Override
-            public List<String> getList() {
-                return getSubjectsNames(subjects);
-            }
-        }, (parent, view, pos, arg) -> {
-            SubjectEntity clickedSubject = subjects.get(pos);
-            int subjectId = clickedSubject.getId();
-            modifyingTextNote.setSubject_id(subjectId);
         });
     }
 
@@ -95,8 +90,6 @@ public class ModifyTextNoteBottomSheet extends CustomBottomSheet {
         title.setText(textNoteTitle);
         String textNoteMessage = modifyingTextNote.getMessage();
         message.setText(textNoteMessage);
-        String subjectName = modifyingTextNote.getName();
-        subjectPicker.setText(subjectName);
     }
 
     private void setInitialValues() {
@@ -105,16 +98,18 @@ public class ModifyTextNoteBottomSheet extends CustomBottomSheet {
         date.setText(createTime);
         modifyingTextNote.setDate(currentDate);
         SubjectEntity firstSubject = subjects.get(0);
-        String firstSubjectName = firstSubject.getName();
-        subjectPicker.setText(firstSubjectName);
         int firstSubjectId = firstSubject.getId();
         modifyingTextNote.setSubject_id(firstSubjectId);
     }
 
-    private void setupButtons() {
+    private void setupViewsListeners() {
         cancel.setOnClickListener(this);
         save.setOnClickListener(this);
-        date.setOnClickListener(this);
+        UiUtils.setupDatePicker(date, pickedDate -> {
+            String textDate = DateUtils.getDateString(pickedDate);
+            date.setText(textDate);
+            modifyingTextNote.setDate(pickedDate);
+        }, ViewType.DatePicker);
     }
 
     @Override
@@ -124,13 +119,6 @@ public class ModifyTextNoteBottomSheet extends CustomBottomSheet {
                 getValuesFromViews();
                 viewModel.modifyTextNote(modifyingTextNote, tag);
                 dismiss();
-                break;
-            case R.id.notes_text_date:
-                createDatePicker(pickedDate -> {
-                    String textDate = DateUtils.getDateString(pickedDate);
-                    date.setText(textDate);
-                    modifyingTextNote.setDate(pickedDate);
-                });
                 break;
             case R.id.notes_text_cancel:
                 dismiss();
