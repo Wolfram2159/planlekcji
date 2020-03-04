@@ -32,7 +32,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/notes_image_save"
-        style="@style/Widget.MaterialComponents.Button"
+        style="@style/MainButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -40,7 +40,6 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="Save"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
         app:icon="@drawable/icon_save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,21 +48,20 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/notes_image_cancel"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        style="@style/SecondButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:text="Cancel"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toBottomOf="@+id/notes_image_date_layout" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/notes_image_name_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+        style="@style/AutoCompleteTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -79,12 +77,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:completionThreshold="0"
-            android:gravity="center"
             tools:ignore="LabelFor" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/notes_image_date_layout"
+        style="@style/EditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -99,10 +97,6 @@
             android:id="@+id/notes_image_date"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:focusable="false"
-            android:gravity="center"
-            android:importantForAutofill="no"
-            android:inputType="date"
             tools:ignore="LabelFor" />
 
     </com.google.android.material.textfield.TextInputLayout>

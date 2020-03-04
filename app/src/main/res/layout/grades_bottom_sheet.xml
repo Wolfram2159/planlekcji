@@ -12,28 +12,26 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/grade_cancel"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        style="@style/SecondButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="Cancel"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/grade_save"
         app:layout_constraintTop_toBottomOf="@+id/grade_date_layout" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/grade_save"
-        style="@style/Widget.MaterialComponents.Button"
+        style="@style/MainButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="Save"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
         app:icon="@drawable/icon_save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,7 +39,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/grade_name_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+        style="@style/AutoCompleteTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -56,13 +54,12 @@
             android:id="@+id/grade_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:completionThreshold="0"
-            tools:ignore="LabelFor" />
+            android:completionThreshold="0" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/grade_desc_layout"
+        style="@style/EditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -76,15 +73,15 @@
         <EditText
             android:id="@+id/grade_desc"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:importantForAutofill="no"
+            android:layout_height="match_parent" />
+            <!--android:importantForAutofill="no"
             android:inputType="text"
-            tools:ignore="LabelFor" />
+            tools:ignore="LabelFor"-->
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/grade_date_layout"
+        style="@style/EditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -98,11 +95,6 @@
         <EditText
             android:id="@+id/grade_date"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:focusable="false"
-            android:importantForAutofill="no"
-            android:inputType="date"
-            tools:ignore="LabelFor" />
+            android:layout_height="match_parent" />
     </com.google.android.material.textfield.TextInputLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

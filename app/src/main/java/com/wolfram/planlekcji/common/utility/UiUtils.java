@@ -59,16 +59,21 @@ public final class UiUtils {
         Context context = datePicker.getContext();
         datePicker.setOnFocusChangeListener((view, isFocused) -> {
             if (isFocused) {
-                switch (viewType) {
-                    case DatePicker:
-                        createDatePicker(dateSetter, context);
-                        break;
-                    case TimePicker:
-                        createTimePicker(dateSetter, context);
-                        break;
-                }
+                createPicker(viewType, dateSetter, context);
             }
         });
+        datePicker.setOnClickListener(view -> createPicker(viewType, dateSetter, context));
+    }
+
+    private static void createPicker(ViewType viewType, DateSetter dateSetter, Context context) {
+        switch (viewType) {
+            case DatePicker:
+                createDatePicker(dateSetter, context);
+                break;
+            case TimePicker:
+                createTimePicker(dateSetter, context);
+                break;
+        }
     }
 
     private static void createTimePicker(DateSetter dateSetter, Context context) {

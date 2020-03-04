@@ -18,28 +18,26 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/event_cancel"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        style="@style/SecondButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="Cancel"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/event_save"
         app:layout_constraintTop_toBottomOf="@+id/event_localization_layout" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/event_save"
-        style="@style/Widget.MaterialComponents.Button"
+        style="@style/MainButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="Save"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
         app:icon="@drawable/icon_save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -47,7 +45,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/event_time_start_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/EditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -66,7 +64,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/event_time_end_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/EditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -85,7 +83,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/event_localization_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/EditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -104,7 +102,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/event_name_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        style="@style/AutoCompleteTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -125,7 +123,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/event_day_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        style="@style/AutoCompleteTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

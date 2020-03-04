@@ -18,13 +18,12 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/action_delete_btn"
-        style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+        style="@style/ActionButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="0dp"
         android:padding="12dp"
         android:text="DELETE"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
         app:icon="@drawable/icon_delete_black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
@@ -32,13 +31,12 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/action_edit_btn"
-        style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+        style="@style/ActionButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="0dp"
         android:padding="12dp"
         android:text="EDIT"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
         app:icon="@drawable/icon_edit"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="parent"
