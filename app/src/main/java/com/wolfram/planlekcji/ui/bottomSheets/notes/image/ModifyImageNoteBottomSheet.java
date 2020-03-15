@@ -132,6 +132,10 @@ public class ModifyImageNoteBottomSheet extends CustomBottomSheet {
                 dismiss();
                 break;
             case R.id.notes_image_cancel:
+                if (tag.equals(CustomBottomSheet.CREATE)) {
+                    String photoPath = modifyingImageNote.getPhotoPath();
+                    viewModel.deleteImage(photoPath);
+                }
                 dismiss();
                 break;
         }

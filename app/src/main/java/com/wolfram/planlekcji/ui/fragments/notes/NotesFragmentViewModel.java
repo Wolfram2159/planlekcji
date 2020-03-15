@@ -36,10 +36,9 @@ import androidx.lifecycle.MediatorLiveData;
 public class NotesFragmentViewModel extends AndroidViewModel {
 
     public interface ParentSetter {
-
         void setParent(TreeNode parent);
-
     }
+
     private ParentSetter parentSetter;
     private NotesDao notesDao;
     private List<SubjectEntity> subjects;
@@ -58,6 +57,7 @@ public class NotesFragmentViewModel extends AndroidViewModel {
 
     public static final String TEXT_NOTE_UPDATED = "Text note updated";
     public static final String TEXT_NOTE_DELETED = "Text note deleted";
+
     public NotesFragmentViewModel(@NonNull Application application) {
         super(application);
         AppDatabase appDatabase = AppDatabase.getInstance(application.getApplicationContext());
@@ -161,24 +161,16 @@ public class NotesFragmentViewModel extends AndroidViewModel {
         return this.actualParent;
     }
 
-    public File createImageFile() throws IOException {
+    public String createNewPhotoString() {
         Date currentDate = new Date();
         String timeStamp = DateUtils.getTimeStringForSaveFile(currentDate);
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getApplication().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix, png files saving much more, saving time there */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        setPhotoPath(image);
-        return image;
+        String photoName = "JPEG_" + timeStamp + ".jpg";
+        setPhotoPath(photoName);
+        return photoName;
     }
 
-    private void setPhotoPath(File photoFile) {
-        this.photoPath = photoFile.getAbsolutePath();
+    private void setPhotoPath(String path) {
+        this.photoPath = getApplication().getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + path;
     }
 
     public String getPhotoPath() {
@@ -229,10 +221,11 @@ public class NotesFragmentViewModel extends AndroidViewModel {
         AsyncTask.execute(() -> notesDao.updateImageNote(imageNote));
     }
 
-    public void deleteImage() {
-        // TODO: 2019-10-24 check if the image is deleted
-        File imageToDelete = new File(photoPath);
-        imageToDelete.delete();
+    public void deleteImage(String path) {
+        File imageToDelete = new File(path);
+        if (imageToDelete.exists()) {
+            imageToDelete.delete();
+        }
     }
 
     public void deleteTextNote(TextNoteEntity note) {

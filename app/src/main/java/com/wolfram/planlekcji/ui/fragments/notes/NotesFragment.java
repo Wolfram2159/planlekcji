@@ -1,5 +1,6 @@
 package com.wolfram.planlekcji.ui.fragments.notes;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import com.wolfram.planlekcji.common.utility.SnackbarUtils;
 import com.wolfram.planlekcji.database.room.entities.notes.SubjectWithNotesEntity;
 import com.wolfram.planlekcji.database.room.entities.notes.image.ImageNoteDisplayEntity;
 import com.wolfram.planlekcji.database.room.entities.notes.text.TextNoteDisplayEntity;
+import com.wolfram.planlekcji.ui.activities.CameraActivity;
 import com.wolfram.planlekcji.ui.adapters.tree.TreeAdapter;
 import com.wolfram.planlekcji.ui.adapters.tree.TreeNode;
 import com.wolfram.planlekcji.database.room.entities.notes.text.TextNoteEntity;
@@ -60,9 +62,8 @@ public class NotesFragment extends Fragment {
 
     private StfalconImageViewer viewer;
 
-    private static final int REQUEST_TAKE_PHOTO = 1;
     private final String NO_SUBJECTS = "Create subject first";
-
+    private final int REQUEST_CODE = 1;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -184,34 +185,22 @@ public class NotesFragment extends Fragment {
     }
 
     private void onCameraClick() {
-        Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File photoFile = createPhotoFile();
-        if (photoFile != null) {
-            Uri photoURI = FileProvider.getUriForFile(getContext(),
-                    "com.example.android.fileprovider",
-                    photoFile);
-            camera.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-            startActivityForResult(camera, REQUEST_TAKE_PHOTO);
-        }
-    }
-
-    private File createPhotoFile() {
-        try {
-            return viewModel.createImageFile();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
+        Intent cameraIntent = new Intent(getActivity(), CameraActivity.class);
+        String photoName = viewModel.createNewPhotoString();
+        cameraIntent.putExtra(CameraActivity.NAME, photoName);
+        startActivityForResult(cameraIntent, REQUEST_CODE);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (resultCode == 0) {
-            viewModel.deleteImage();
-        } else {
+        if (requestCode == REQUEST_CODE) {
             String photoPath = viewModel.getPhotoPath();
-            ModifyImageNoteBottomSheet modifyImageNoteBottomSheet = new ModifyImageNoteBottomSheet(photoPath);
-            modifyImageNoteBottomSheet.show(getFragmentManager(), CustomBottomSheet.CREATE);
+            if (resultCode == Activity.RESULT_CANCELED) {
+                viewModel.deleteImage(photoPath);
+            } else if (resultCode == Activity.RESULT_OK) {
+                ModifyImageNoteBottomSheet modifyImageNoteBottomSheet = new ModifyImageNoteBottomSheet(photoPath);
+                modifyImageNoteBottomSheet.show(getFragmentManager(), CustomBottomSheet.CREATE);
+            }
         }
     }
 
