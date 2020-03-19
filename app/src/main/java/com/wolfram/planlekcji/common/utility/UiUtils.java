@@ -1,8 +1,10 @@
 package com.wolfram.planlekcji.common.utility;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -11,6 +13,7 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.wolfram.planlekcji.common.enums.ViewType;
 import com.wolfram.planlekcji.ui.bottomSheets.CustomBottomSheet;
 
@@ -92,5 +95,10 @@ public final class UiUtils {
             dateSetter.setDate(date);
         }, (1900 + dateNow.getYear()), dateNow.getMonth(), dateNow.getDate());
         datePickerDialog.show();
+    }
+
+    public static void showSnackBar(Activity activity, String message){
+        View rootView = activity.getWindow().getDecorView().findViewById(android.R.id.content);
+        Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).show();
     }
 }

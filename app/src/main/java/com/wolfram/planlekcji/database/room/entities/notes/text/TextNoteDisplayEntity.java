@@ -31,4 +31,8 @@ public class TextNoteDisplayEntity extends TextNoteEntity {
         this.subject_id = subject.getId();
         this.name = subject.getName();
     }
+
+    public SubjectEntity getSubject() {
+        return new SubjectEntity(this.subject_id, this.name);
+    }
 }

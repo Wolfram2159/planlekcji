@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.common.data.Event;
-import com.wolfram.planlekcji.common.utility.SnackbarUtils;
+import com.wolfram.planlekcji.common.utility.UiUtils;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.ui.adapters.SubjectsRecyclerViewAdapter;
 import com.wolfram.planlekcji.ui.bottomSheets.ActionBottomSheet;
@@ -70,7 +70,7 @@ public class SubjectsFragment extends Fragment {
         LiveData<Event<String>> resultState = viewModel.getResultState();
         resultState.observe(this, event -> {
             if (!event.isUsed()) {
-                SnackbarUtils.showSnackBar(getActivity(), event.getValue());
+                UiUtils.showSnackBar(getActivity(), event.getValue());
                 viewModel.callMessageReceived();
             }
         });

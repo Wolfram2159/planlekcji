@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.common.utility.SnackbarUtils;
+import com.wolfram.planlekcji.common.utility.UiUtils;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeEntity;
 import com.wolfram.planlekcji.database.room.entities.grade.SubjectWithGrades;
 import com.wolfram.planlekcji.ui.adapters.expanded.ParentGradeRecyclerViewAdapter;
@@ -65,7 +65,7 @@ public class GradesFragment extends Fragment {
 
         viewModel.getResultState().observe(this, result -> {
             if (!result.isUsed()){
-                SnackbarUtils.showSnackBar(getActivity(), result.getValue());
+                UiUtils.showSnackBar(getActivity(), result.getValue());
                 viewModel.callMessageReceived();
             }
         });
@@ -75,7 +75,7 @@ public class GradesFragment extends Fragment {
                 ModifyGradeBottomSheet bottomSheet = new ModifyGradeBottomSheet();
                 bottomSheet.show(fragmentManager, CustomBottomSheet.CREATE);
             } else {
-                SnackbarUtils.showSnackBar(getActivity(), NO_SUBJECTS);
+                UiUtils.showSnackBar(getActivity(), NO_SUBJECTS);
             }
         });
         return view;

@@ -62,30 +62,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        camera.onStart();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        camera.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        camera.onPause();
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        camera.onStop();
-        super.onStop();
-    }
-
-    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         camera.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -126,5 +102,29 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                 endActivityForResult(Activity.RESULT_CANCELED);
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        camera.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        camera.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        camera.onPause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        camera.onStop();
+        super.onStop();
     }
 }

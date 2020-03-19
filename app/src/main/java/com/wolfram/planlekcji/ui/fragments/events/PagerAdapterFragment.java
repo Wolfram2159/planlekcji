@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wolfram.planlekcji.R;
-import com.wolfram.planlekcji.common.utility.SnackbarUtils;
+import com.wolfram.planlekcji.common.utility.UiUtils;
 import com.wolfram.planlekcji.database.room.entities.event.EventDisplayEntity;
 import com.wolfram.planlekcji.ui.adapters.EventsRecyclerViewAdapter;
 import com.wolfram.planlekcji.ui.bottomSheets.ActionBottomSheet;
@@ -49,7 +49,7 @@ public class PagerAdapterFragment extends Fragment {
 
         viewModel.getResultState().observe(this, result -> {
             if (!result.isUsed()){
-                SnackbarUtils.showSnackBar(getActivity(), result.getValue());
+                UiUtils.showSnackBar(getActivity(), result.getValue());
                 viewModel.callMessageReceived();
             }
         });

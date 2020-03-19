@@ -6,6 +6,8 @@
     android:layout_height="wrap_content"
     android:clipToPadding="true"
     android:padding="6dp"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     app:behavior_peekHeight="0dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 

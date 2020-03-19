@@ -48,6 +48,7 @@ public class ModifyTextNoteBottomSheet extends CustomBottomSheet {
 
     public ModifyTextNoteBottomSheet() {
         this.modifyingTextNote = new TextNoteDisplayEntity();
+        this.modifyingTextNote.setName("");
     }
 
     public ModifyTextNoteBottomSheet(TextNoteDisplayEntity modifyingTextNote) {

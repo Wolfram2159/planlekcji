@@ -2,9 +2,7 @@ package com.wolfram.planlekcji.ui.fragments.notes;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,7 +18,7 @@ import com.bumptech.glide.Glide;
 import com.stfalcon.imageviewer.StfalconImageViewer;
 import com.wolfram.planlekcji.R;
 import com.wolfram.planlekcji.common.data.Event;
-import com.wolfram.planlekcji.common.utility.SnackbarUtils;
+import com.wolfram.planlekcji.common.utility.UiUtils;
 import com.wolfram.planlekcji.database.room.entities.notes.SubjectWithNotesEntity;
 import com.wolfram.planlekcji.database.room.entities.notes.image.ImageNoteDisplayEntity;
 import com.wolfram.planlekcji.database.room.entities.notes.text.TextNoteDisplayEntity;
@@ -33,14 +31,11 @@ import com.wolfram.planlekcji.ui.bottomSheets.notes.image.ModifyImageNoteBottomS
 import com.wolfram.planlekcji.ui.bottomSheets.notes.text.ModifyTextNoteBottomSheet;
 import com.wolfram.planlekcji.ui.bottomSheets.notes.text.ShowTextNoteBottomSheet;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
@@ -99,8 +94,16 @@ public class NotesFragment extends Fragment {
         LiveData<Event<String>> textNoteEvent = viewModel.getTextNoteEvent();
         textNoteEvent.observe(this, event -> {
             if (!event.isUsed()) {
-                SnackbarUtils.showSnackBar(getActivity(), event.getValue());
-                viewModel.callMessageReceived();
+                UiUtils.showSnackBar(getActivity(), event.getValue());
+                viewModel.callTextNoteMessageReceived();
+            }
+        });
+
+        LiveData<Event<String>> imageNoteEvent = viewModel.getImageNoteEvent();
+        imageNoteEvent.observe(this, event -> {
+            if (!event.isUsed()) {
+                UiUtils.showSnackBar(getActivity(), event.getValue());
+                viewModel.callImageNoteMessageReceived();
             }
         });
     }
@@ -173,11 +176,11 @@ public class NotesFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.notes_camera:
                 if (viewModel.getSubjects().size() > 0) onCameraClick();
-                else SnackbarUtils.showSnackBar(getActivity(), NO_SUBJECTS);
+                else UiUtils.showSnackBar(getActivity(), NO_SUBJECTS);
                 return true;
             case R.id.notes_file:
                 if (viewModel.getSubjects().size() > 0) onFileClick();
-                else SnackbarUtils.showSnackBar(getActivity(), NO_SUBJECTS);
+                else UiUtils.showSnackBar(getActivity(), NO_SUBJECTS);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

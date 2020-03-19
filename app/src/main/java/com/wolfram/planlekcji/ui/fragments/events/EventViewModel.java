@@ -129,7 +129,7 @@ public class EventViewModel extends AndroidViewModel {
             eventToSave.setSubject(subjectFromDatabase);
         } catch (NoSuchElementException ex) {
             Long subjectId = insertSubject(eventToSave.getSubject());
-            Integer intSubjectId = subjectId.intValue();
+            int intSubjectId = subjectId.intValue();
             eventToSave.setSubject_id(intSubjectId);
         }
         if (tag.equals(CustomBottomSheet.MODIFY)) {

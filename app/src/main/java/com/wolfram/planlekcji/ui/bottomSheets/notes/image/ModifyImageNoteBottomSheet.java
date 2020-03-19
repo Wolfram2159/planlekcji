@@ -53,6 +53,7 @@ public class ModifyImageNoteBottomSheet extends CustomBottomSheet {
     public ModifyImageNoteBottomSheet(String photoPath) {
         this.modifyingImageNote = new ImageNoteDisplayEntity();
         this.modifyingImageNote.setPhotoPath(photoPath);
+        this.modifyingImageNote.setName("");
     }
 
     public ModifyImageNoteBottomSheet(@NonNull ImageNoteDisplayEntity modifyingImageNote) {
