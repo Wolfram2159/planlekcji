@@ -12,9 +12,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
-import android.widget.Button;
 
 import com.camerakit.CameraKitView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.wolfram.planlekcji.R;
 
 import java.io.File;
@@ -23,13 +23,18 @@ import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class CameraActivity extends AppCompatActivity implements View.OnClickListener {
 
     @BindView(R.id.camera)
     CameraKitView camera;
     @BindView(R.id.camera_capture_image)
-    Button takePhoto;
+    FloatingActionButton takePhotoBtn;
+    @BindView(R.id.camera_back)
+    FloatingActionButton backBtn;
+    @BindView(R.id.camera_toggle)
+    FloatingActionButton swapBtn;
     private String photoName;
 
     public static final String NAME = "photoName";
@@ -45,7 +50,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !hasPermissions()) requestPermissions();
         photoName = getIntent().getStringExtra(NAME);
         if (photoName == null) endActivityForResult(Activity.RESULT_CANCELED);
-        takePhoto.setOnClickListener(this);
+        setupClickListeners();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -76,11 +81,23 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         finish();
     }
 
+    private void setupClickListeners() {
+        takePhotoBtn.setOnClickListener(this);
+        backBtn.setOnClickListener(this);
+        swapBtn.setOnClickListener(this);
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.camera_capture_image:
                 captureImage();
+                break;
+            case R.id.camera_toggle:
+                camera.toggleFacing();
+                break;
+            case R.id.camera_back:
+                endActivityForResult(Activity.RESULT_CANCELED);
                 break;
         }
     }

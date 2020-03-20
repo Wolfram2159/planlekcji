@@ -186,7 +186,6 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public class TreeImageNoteVH extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
-        // TODO: 2019-11-17 how to delete imageNote ?
         private ImageView image;
         private TextView date;
 

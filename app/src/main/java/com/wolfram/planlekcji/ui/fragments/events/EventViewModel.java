@@ -121,7 +121,6 @@ public class EventViewModel extends AndroidViewModel {
     }
 
     public void modifyEvent(EventDisplayEntity eventToSave, String tag) {
-        // TODO: 2020-01-03 check if subject exist, if -> set it id to stateEvent, else create new SubjectEntity and set it id
         if (eventToSave.getName().equals("")) eventToSave.setName(SubjectsFragmentViewModel.UNNAMED);
         try {
             SubjectEntity eventSubject = eventToSave.getSubject();

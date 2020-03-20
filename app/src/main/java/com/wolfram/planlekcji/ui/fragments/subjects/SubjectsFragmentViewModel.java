@@ -39,7 +39,6 @@ public class SubjectsFragmentViewModel extends AndroidViewModel {
     public static final String UNNAMED = "unnamed";
     private final int CORRECT_ROW_COUNT = 1;
 
-    // TODO: 2020-01-03 LiveData for state
     public SubjectsFragmentViewModel(@NonNull Application application) {
         super(application);
         dao = AppDatabase.getInstance(application.getApplicationContext()).getSubjectDao();
