@@ -35,7 +35,7 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public interface TreeAdapterClickListener {
         void onNoteShow(TextNoteDisplayEntity note);
         void onNoteDelete(TextNoteEntity note);
-        void onImageClick(List<String> imagePathList, Integer position, ImageView transitionImage);
+        void onImageClick(List<ImageNoteNode> imagePathList, Integer position, ImageView transitionImage);
         void onImageLongClick(ImageNoteDisplayEntity imageNote);
     }
 
@@ -199,10 +199,10 @@ public class TreeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         @Override
         public void onClick(View view) {
-            List<String> pathList = new ArrayList<>();
+            List<ImageNoteNode> pathList = new ArrayList<>();
             for (TreeNode treeNode : parent.getChildrenList()) {
-                ImageNoteNode imageNote = (ImageNoteNode) treeNode;
-                pathList.add(imageNote.getPhotoPath());
+                ImageNoteNode imageNode = (ImageNoteNode) treeNode;
+                pathList.add(imageNode);
             }
             treeAdapterClickListener.onImageClick(pathList, getAdapterPosition(), image);
         }

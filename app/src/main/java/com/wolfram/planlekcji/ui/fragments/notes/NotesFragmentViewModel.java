@@ -324,9 +324,8 @@ public class NotesFragmentViewModel extends AndroidViewModel {
     public void deleteImageNote(ImageNoteDisplayEntity imageNoteToDelete) {
         AsyncTask.execute(() -> {
             notesDao.deleteImageNote(imageNoteToDelete);
+            deleteImage(imageNoteToDelete.getPhotoPath());
             setImageNoteState(IMAGE_NOTE_DELETED, false);
         });
-        File imageToDelete = new File(imageNoteToDelete.getPhotoPath());
-        imageToDelete.delete();
     }
 }

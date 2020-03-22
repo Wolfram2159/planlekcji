@@ -24,7 +24,7 @@
         android:layout_margin="0dp"
         android:padding="12dp"
         android:text="DELETE"
-        app:icon="@drawable/icon_delete_black"
+        app:icon="@drawable/icon_delete"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="parent" />
