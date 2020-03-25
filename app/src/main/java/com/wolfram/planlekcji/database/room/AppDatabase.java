@@ -2,11 +2,12 @@ package com.wolfram.planlekcji.database.room;
 
 import android.content.Context;
 
+import com.wolfram.planlekcji.database.room.converter.DayConverter;
 import com.wolfram.planlekcji.database.room.dao.EventDao;
 import com.wolfram.planlekcji.database.room.dao.GradeDao;
 import com.wolfram.planlekcji.database.room.dao.NotesDao;
 import com.wolfram.planlekcji.database.room.dao.SubjectDao;
-import com.wolfram.planlekcji.database.room.entities.DateConverter;
+import com.wolfram.planlekcji.database.room.converter.DateConverter;
 import com.wolfram.planlekcji.database.room.entities.SubjectEntity;
 import com.wolfram.planlekcji.database.room.entities.event.EventEntity;
 import com.wolfram.planlekcji.database.room.entities.grade.GradeEntity;
@@ -27,7 +28,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
  * @date 2019-07-31
  */
 @Database(entities = {EventEntity.class, SubjectEntity.class, GradeEntity.class, ImageNoteEntity.class, TextNoteEntity.class}, version = 4)
-@TypeConverters({DateConverter.class})
+@TypeConverters({DateConverter.class, DayConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
     @Ignore
     private final static String APPDATABASE_NAME = "plan.db";

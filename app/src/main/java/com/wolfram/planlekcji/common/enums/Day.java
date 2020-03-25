@@ -10,33 +10,43 @@ import java.util.List;
  */
 public enum Day {
     // TODO: 2020-02-29 rework this, @TypeConverter for saving enum in db
-    Monday(2),
-    Tuesday,
-    Wednesday,
-    Thursday,
-    Friday;
+    Monday("Mon", true),
+    Tuesday("Tue", true),
+    Wednesday("Wed", true),
+    Thursday("Thu", true),
+    Friday("Fri", true),
+    Saturday("Sat", false),
+    Sunday("Sun", false);
 
-    private int a;
     private String shortName;
+    private boolean used;
 
-    Day() {
+    Day(String shortName, boolean used) {
+        this.shortName = shortName;
+        this.used = used;
     }
 
-    Day(int a) {
-        this.a = a;
+    public void setUsed(boolean used) {
+        this.used = used;
     }
 
-    public static List<String> getNames() {
-        Day[] values = Day.values();
-        List<String> dayNames = new ArrayList<>();
-        for (Day value : values) {
-            dayNames.add(value.toString());
+    public static int getDaysCount() {
+        int count = 0;
+        for (int i = 0; i < values().length; i++) {
+            if (values()[i].used) count++;
         }
-        return dayNames;
+        return count;
+    }
+
+    public static CharSequence getShortNameOfDay(int position) {
+        return values()[position].shortName;
     }
 
     public static List<Day> getDays() {
-        Day[] values = Day.values();
-        return Arrays.asList(values);
+        List<Day> usedDays = new ArrayList<>();
+        for (int i = 0; i < values().length; i++) {
+            if (values()[i].used) usedDays.add(values()[i]);
+        }
+        return usedDays;
     }
 }

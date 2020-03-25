@@ -42,7 +42,7 @@ public class PagerAdapterFragment extends Fragment {
         View view = inflater.inflate(R.layout.pager_adapter_fragment, container, false);
 
         Bundle args = getArguments();
-        int pos = Objects.requireNonNull(args).getInt(POSITION);
+        int position = Objects.requireNonNull(args).getInt(POSITION);
 
         ButterKnife.bind(this, view);
         viewModel = ViewModelProviders.of(getActivity()).get(EventViewModel.class);
@@ -56,7 +56,7 @@ public class PagerAdapterFragment extends Fragment {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recycler.setLayoutManager(layoutManager);
-        Day day = Day.values()[pos];
+        Day day = Day.values()[position];
 
         EventsRecyclerViewAdapter adapter = new EventsRecyclerViewAdapter();
         adapter.setOnItemClickListener(this::showActionBottomSheet);

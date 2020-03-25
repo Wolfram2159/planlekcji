@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import com.wolfram.planlekcji.ui.fragments.events.PagerAdapterFragment;
 import com.wolfram.planlekcji.common.enums.Day;
-import com.wolfram.planlekcji.common.enums.ShortDay;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -24,21 +23,21 @@ public class EventsViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @NonNull
     @Override
-    public Fragment getItem(int i) {
+    public Fragment getItem(int position) {
         Fragment fragment = new PagerAdapterFragment();
         Bundle args = new Bundle();
-        args.putInt(PagerAdapterFragment.POSITION, i);
+        args.putInt(PagerAdapterFragment.POSITION, position);
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public int getCount() {
-        return Day.values().length;
+        return Day.getDaysCount();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return ShortDay.values()[position].toString();
+        return Day.getShortNameOfDay(position);
     }
 }

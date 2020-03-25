@@ -114,8 +114,8 @@ public class ModifyEventBottomSheet extends CustomBottomSheet implements View.On
 
         subjectLocalization.setText(modifyingEvent.getLocalization());
 
-        int position = Day.valueOf(modifyingEvent.getDay()).ordinal();
-        dayPicker.setText(dayPicker.getAdapter().getItem(position).toString(), false);
+        Day modifyingEventDay = modifyingEvent.getDay();
+        dayPicker.setText(modifyingEventDay.toString(), false);
     }
 
     private void setValuesToLocalEvent() {

@@ -38,7 +38,7 @@ public class EventEntity {
 
     protected String localization;
 
-    protected String day;
+    protected Day day;
 
     public EventEntity() {
 
@@ -112,15 +112,11 @@ public class EventEntity {
         this.localization = localization;
     }
 
-    public String getDay() {
+    public Day getDay() {
         return day;
     }
 
-    public void setDay(String day) {
-        this.day = day;
-    }
-
     public void setDay(Day day) {
-        this.day = day.toString();
+        this.day = day;
     }
 }
